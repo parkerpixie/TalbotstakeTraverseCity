@@ -44,11 +44,11 @@ const shops=[
 ];
 
 const houseGalleryData=[
-{id:'exterior',title:'Exterior, yard and waterfront',kicker:'Welcome home',description:'The house sits directly on West Bay with a broad lawn, shoreline, dock, porch and several outdoor gathering spots.',images:['IMG_9768.jpeg','IMG_9769.jpeg','IMG_9770.jpeg','IMG_9775.jpeg','IMG_9779.jpeg','IMG_9788.jpeg','IMG_9789.jpeg','IMG_9792.jpeg','IMG_9793.jpeg','IMG_9795.jpeg','IMG_9796.jpeg','IMG_9797.jpeg','IMG_9798.jpeg','IMG_9799.jpeg','IMG_9800.jpeg','IMG_9814.jpeg','IMG_9817.jpeg']},
+{id:'exterior',title:'Exterior, yard and waterfront',kicker:'Welcome home',description:'The house sits directly on West Bay with a broad lawn, shoreline, dock, porch and several outdoor gathering spots.',images:['IMG_9769.jpeg','IMG_9775.jpeg','IMG_9779.jpeg','IMG_9788.jpeg','IMG_9789.jpeg','IMG_9792.jpeg','IMG_9793.jpeg','IMG_9795.jpeg','IMG_9796.jpeg','IMG_9797.jpeg','IMG_9799.jpeg','IMG_9800.jpeg','IMG_9814.jpeg','IMG_9817.jpeg']},
 {id:'game-room',title:'Garage game room',kicker:'Rainy-day headquarters',description:'Shuffleboard, television, seating and a wide-open view toward the bay make this the second family living room.',images:['IMG_9771.jpeg','IMG_9782.jpeg']},
-{id:'kitchen-living',title:'Kitchen, dining and living spaces',kicker:'The gathering zone',description:'The open floor plan includes quartz counters, stainless appliances, a long island, dining space and comfortable living areas.',images:['IMG_9777.jpeg','IMG_9778.jpeg','IMG_9783.jpeg','IMG_9785.jpeg','IMG_9786.jpeg']},
+{id:'kitchen-living',title:'Kitchen, dining and living spaces',kicker:'The gathering zone',description:'The open floor plan includes quartz counters, stainless appliances, a long island, dining space and comfortable living areas.',images:['IMG_9768.jpeg','IMG_9777.jpeg','IMG_9778.jpeg','IMG_9783.jpeg','IMG_9785.jpeg','IMG_9786.jpeg','IMG_9798.jpeg']},
 {id:'bathrooms',title:'Bathrooms',kicker:'Two full baths',description:'The listing confirms two full bathrooms, including one tub-or-shower bath and one shower-only bath.',images:['IMG_9784.jpeg','IMG_9791.jpeg']},
-{id:'bedrooms',title:'Queen bedrooms',kicker:'Sleep spaces',description:'The property has three queen bedrooms. These are the bedroom photographs currently available from the listing.',images:['IMG_9780.jpeg','IMG_9787.jpeg','IMG_9790.jpeg']},
+{id:'bedrooms',title:'Queen bedrooms',kicker:'Sleep spaces',description:'The property has three queen bedrooms. These are the bedroom photographs currently available from the listing.',images:['IMG_9770.jpeg','IMG_9780.jpeg','IMG_9787.jpeg','IMG_9790.jpeg']},
 {id:'patio-hot-tub',title:'Patio, hot tub and outdoor hangouts',kicker:'After the day trip',description:'The seven-person hot tub, backyard, patio and outdoor seating give the house several easy ways to end the day.',images:['IMG_9794.jpeg','IMG_9795.jpeg','IMG_9796.jpeg']},
 {id:'maps',title:'Maps and location',kicker:'Where we are',description:'The house is on West Bay along M-22, roughly six miles north of Traverse City and 7.5 miles south of Suttons Bay.',images:['IMG_9806.png','IMG_9807.jpeg','IMG_9815.png']}
 ];
@@ -61,7 +61,6 @@ let plan=JSON.parse(localStorage.getItem('tcPlanV2')||'{"morning":[],"afternoon"
 let activeRestaurantTags=[];
 const dialog=document.getElementById('travelerDialog');
 const toast=document.getElementById('toast');
-
 function showTab(name){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.dataset.panel===name));document.querySelectorAll('.bottom-nav [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));window.scrollTo({top:0,behavior:'smooth'});}
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.preset){activeRestaurantTags=[b.dataset.preset];renderRestaurantChips();renderRestaurants();}showTab(b.dataset.tab);}));
 document.getElementById('enterApp').addEventListener('click',()=>{document.getElementById('landing').hidden=true;document.getElementById('appShell').hidden=false;showTab('home');});
