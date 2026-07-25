@@ -1,0 +1,19 @@
+{
+  "name": "The Talbots Take Traverse City",
+  "short_name": "Talbots TC",
+  "description": "The Talbot family Traverse City trip planner and vacation guide.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f1e7",
+  "theme_color": "#0b3443",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
