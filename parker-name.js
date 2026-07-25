@@ -14,6 +14,9 @@ shops.forEach((shop) => {
   }
 });
 
+const foldedLeafIndex = shops.findIndex((shop) => shop.id === 'folded-leaf');
+if (foldedLeafIndex !== -1) shops.splice(foldedLeafIndex, 1);
+
 if (selectedTraveler === 'Jen') {
   selectedTraveler = 'Parker';
   localStorage.setItem('tcTraveler', 'Parker');
