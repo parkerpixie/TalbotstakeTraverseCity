@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0c2b3a" />
+  <meta name="description" content="The Talbots Take Traverse City family trip app." />
+  <title>The Talbots Take Traverse City</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Home">
+      <span class="brand-mark">⚓</span>
+      <span><strong>The Talbots Take</strong><small>Traverse City</small></span>
+    </a>
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="main-nav" aria-label="Primary navigation">
+      <a href="#house">The House</a>
+      <a href="#explore">Explore</a>
+      <a href="#favorites">Favorites</a>
+      <a href="#itinerary">Trip Plan</a>
+    </nav>
+    <button class="profile-pill" id="profilePill">Choose traveler</button>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-image dummy-image" role="img" aria-label="Placeholder for a sweeping West Bay photo">
+        <span>Future hero photo: West Bay at golden hour</span>
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="eyebrow">August 23–27, 2026 · West Bay, Michigan</p>
+        <h1>The Talbots Take<br><em>Traverse City</em></h1>
+        <p class="hero-copy">Four nights on the water. Five travelers. One very serious shuffleboard rivalry.</p>
+        <div class="countdown" aria-label="Trip countdown">
+          <div><strong id="days">0</strong><span>Days</span></div>
+          <div><strong id="hours">0</strong><span>Hours</span></div>
+          <div><strong id="minutes">0</strong><span>Minutes</span></div>
+        </div>
+        <div class="hero-actions">
+          <button class="button button-primary" id="openTraveler">Plan my trip</button>
+          <a class="button button-ghost" href="#house">See where we're staying</a>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#welcome" aria-label="Scroll to welcome section">↓</a>
+    </section>
+
+    <section class="welcome section" id="welcome">
+      <div>
+        <p class="eyebrow dark">Welcome aboard</p>
+        <h2>Your private family getaway app</h2>
+      </div>
+      <p class="intro">Pick your name and the site reshuffles around what sounds best to you. Scenic wandering, game-room glory, excellent food, curious shops, quiet porch time, and enough lake views to make your camera roll groan.</p>
+      <div class="traveler-strip" id="travelerStrip"></div>
+    </section>
+
+    <section class="house-showcase" id="house">
+      <div class="house-copy">
+        <p class="eyebrow">Our home base</p>
+        <h2>Majestic views, cozy corners, and West Bay right outside.</h2>
+        <p>This remodeled waterfront home sits between Traverse City and Suttons Bay, close enough for an easy coffee run and far enough away to feel gloriously Up North.</p>
+        <div class="amenity-grid">
+          <span>🌊 Waterfront</span><span>♨️ 7-person hot tub</span><span>🔥 Fire pit</span><span>🎯 Game room</span><span>🐾 Pet friendly</span><span>🛏️ 3 queen bedrooms</span>
+        </div>
+        <button class="text-link" data-toast="Full house tour coming as soon as the real photos are added.">Take the full house tour →</button>
+      </div>
+      <div class="house-collage">
+        <div class="dummy-image tall"><span>Future photo: front porch and hydrangeas</span></div>
+        <div class="dummy-image"><span>Future photo: open kitchen</span></div>
+        <div class="dummy-image"><span>Future photo: living room bay view</span></div>
+      </div>
+    </section>
+
+    <section class="mood-section section">
+      <div class="section-heading">
+        <div><p class="eyebrow dark">Choose today's mood</p><h2>What kind of day are we having?</h2></div>
+        <p>No committee meeting required. Pick a vibe and let the app do the sorting.</p>
+      </div>
+      <div class="mood-grid">
+        <button class="mood-card" data-mood="relax"><span>🌅</span><strong>Slow & Scenic</strong><small>Porches, water, gentle wandering</small></button>
+        <button class="mood-card" data-mood="eat"><span>🍒</span><strong>Eat Something Great</strong><small>Local favorites and sweet detours</small></button>
+        <button class="mood-card" data-mood="shop"><span>🛍️</span><strong>Browse & Discover</strong><small>Shops, art, books, curious finds</small></button>
+        <button class="mood-card" data-mood="adventure"><span>🛶</span><strong>Go Adventuring</strong><small>Water, dunes, trails, tiny towns</small></button>
+      </div>
+    </section>
+
+    <section class="explore-section section" id="explore">
+      <div class="section-heading">
+        <div><p class="eyebrow dark">Trip idea explorer</p><h2>Find your next favorite stop</h2></div>
+        <p id="personalizedMessage">Showing a little bit of everything for everyone.</p>
+      </div>
+      <div class="filter-bar">
+        <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search shops, food, beaches, rainy-day ideas…" /></label>
+        <select id="categoryFilter" aria-label="Filter by category">
+          <option value="all">All categories</option>
+          <option value="food">Food</option>
+          <option value="shopping">Shopping</option>
+          <option value="outdoors">Outdoors</option>
+          <option value="scenic">Scenic</option>
+          <option value="games">Games</option>
+        </select>
+        <select id="energyFilter" aria-label="Filter by energy">
+          <option value="all">Any energy</option>
+          <option value="low">Low-key</option>
+          <option value="medium">A little active</option>
+          <option value="high">Adventure mode</option>
+        </select>
+      </div>
+      <div class="card-grid" id="activityGrid"></div>
+    </section>
+
+    <section class="favorites-section" id="favorites">
+      <div class="favorites-panel">
+        <p class="eyebrow">Family shortlist</p>
+        <h2>Our collective “yes, absolutely” list</h2>
+        <p>Tap the heart on any idea and it will appear here. Favorites are saved on this device in the prototype.</p>
+        <div id="favoriteList" class="favorite-list"><p class="empty-state">Nothing saved yet. Go heart something delightful.</p></div>
+      </div>
+      <div class="dummy-image favorites-image"><span>Future photo: dock leading into West Bay</span></div>
+    </section>
+
+    <section class="itinerary-section section" id="itinerary">
+      <div class="section-heading">
+        <div><p class="eyebrow dark">Flexible trip plan</p><h2>Structure, without turning vacation into a board meeting</h2></div>
+        <p>Morning, afternoon, and evening buckets make the day easy to scan, especially when people want different speeds.</p>
+      </div>
+      <div class="day-tabs">
+        <button class="active">Sun 23</button><button>Mon 24</button><button>Tue 25</button><button>Wed 26</button><button>Thu 27</button>
+      </div>
+      <div class="timeline">
+        <article><span>Morning</span><h3>Road-trip launch</h3><p>Pack snacks, queue the playlist, and point the car north.</p></article>
+        <article><span>Afternoon</span><h3>Check-in after 4:00 PM</h3><p>Claim rooms, meet the porch, inspect the shuffleboard table.</p></article>
+        <article><span>Evening</span><h3>First-night waterfront dinner</h3><p>Something easy, somewhere beautiful, no overplanning allowed.</p></article>
+      </div>
+    </section>
+
+    <section class="closing-cta">
+      <p class="eyebrow">The countdown has officially begun</p>
+      <h2>West Bay is waiting for the Talbots.</h2>
+      <button class="button button-light" id="bottomTraveler">Personalize my view</button>
+    </section>
+  </main>
+
+  <footer>
+    <span>⚓ The Talbots Take Traverse City</span>
+    <span>Built for August 23–27, 2026</span>
+  </footer>
+
+  <dialog id="travelerDialog">
+    <button class="dialog-close" aria-label="Close">×</button>
+    <p class="eyebrow dark">Who is exploring?</p>
+    <h2>Make this trip feel like yours.</h2>
+    <p>Choose a traveler and we'll surface the ideas most likely to make them say, “Okay, yes, that one.”</p>
+    <div class="traveler-grid" id="travelerGrid"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
