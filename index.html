@@ -12,7 +12,7 @@
 </head>
 <body>
   <section class="landing" id="landing">
-    <img class="landing-photo" src="B582D310-D685-4793-B089-042E754C6C3E.jpeg" alt="Clear blue water on West Bay" />
+    <img class="landing-photo" src="Assets/Assets/Images/IMG_9799.jpeg" alt="West Bay waterfront view" />
     <div class="landing-shade"></div>
     <div class="landing-content">
       <p class="eyebrow">August 23–27, 2026 · West Bay</p>
@@ -33,7 +33,7 @@
     <main class="tab-stage">
       <section class="tab-panel active" data-panel="home">
         <div class="dashboard-hero">
-          <img src="ADF70C5A-4A80-4209-A987-10BA372013B6.jpeg" alt="Fire pit at the vacation house" />
+          <img src="Assets/Assets/Images/IMG_9788.jpeg" alt="Vacation house outdoor gathering area" />
           <div class="dashboard-copy"><p class="eyebrow">Welcome home</p><h2>Let’s build a vacation everyone is excited about.</h2><p>Browse ideas, heart the good ones, then drag favorites into a day that feels just right.</p><button class="primary" data-tab="discover">Start discovering</button></div>
         </div>
         <div class="stats-row"><article><strong id="favoriteCount">0</strong><span>saved ideas</span></article><article><strong id="plannedCount">0</strong><span>planned stops</span></article><article><strong>5</strong><span>travelers</span></article></div>
@@ -61,27 +61,37 @@
         <div class="page-heading"><div><p class="eyebrow dark">Let’s plan the day</p><h2>Build Monday with drag and drop.</h2></div><p>Drag favorites from the idea tray into a time of day. Rearrange them until the rhythm feels right.</p></div>
         <div class="planner-layout">
           <aside class="idea-tray"><h3>Saved ideas</h3><p>Heart ideas in Discover, then grab them here.</p><div id="plannerIdeas" class="draggable-list"></div></aside>
-          <section class="day-board"><div class="day-board-head"><div><small>Monday · August 24</small><h3>Our Day</h3></div><button id="clearPlan" class="ghost-button">Clear day</button></div>
-            <div class="time-lane" data-lane="morning"><div class="lane-label"><span>☀️</span><strong>Morning</strong><small>8 AM–12 PM</small></div><div class="drop-zone" id="morning"></div></div>
-            <div class="time-lane" data-lane="afternoon"><div class="lane-label"><span>🌿</span><strong>Afternoon</strong><small>12–5 PM</small></div><div class="drop-zone" id="afternoon"></div></div>
-            <div class="time-lane" data-lane="evening"><div class="lane-label"><span>🌙</span><strong>Evening</strong><small>5 PM onward</small></div><div class="drop-zone" id="evening"></div></div>
+          <section class="day-board"><div class="day-board-head"><div><small>Monday · August 24</small><h3>Our Day</h3></div><button id="clearPlan" class="quiet-button">Clear day</button></div>
+            <div class="time-bucket"><div class="bucket-label"><span>☀️</span><div><small>8 AM–12 PM</small><h3>Morning</h3></div></div><div class="drop-zone" data-slot="morning"></div></div>
+            <div class="time-bucket"><div class="bucket-label"><span>🌤️</span><div><small>12 PM–5 PM</small><h3>Afternoon</h3></div></div><div class="drop-zone" data-slot="afternoon"></div></div>
+            <div class="time-bucket"><div class="bucket-label"><span>🌙</span><div><small>5 PM onward</small><h3>Evening</h3></div></div><div class="drop-zone" data-slot="evening"></div></div>
           </section>
         </div>
       </section>
 
       <section class="tab-panel" data-panel="house">
-        <div class="house-hero"><img src="C3426CEF-6592-44DE-9992-DE595312017B.jpeg" alt="Large white kitchen with teal stools"><div><p class="eyebrow">The gathering place</p><h2>Every vacation eventually ends up around this island.</h2></div></div>
-        <div class="house-story"><article><span>🌊</span><h3>Wake by the bay</h3><p>Three queen bedrooms, quiet mornings, and water waiting just outside.</p></article><article><span>🔥</span><h3>Stay out late</h3><p>Fire pit, hot tub, and enough lawn for a very ambitious evening.</p></article><article><span>🎯</span><h3>Friendly competition</h3><p>The converted garage game room is already accepting challengers.</p></article></div>
+        <div class="page-heading"><div><p class="eyebrow dark">Our West Bay home</p><h2>The vacation starts before we unpack.</h2></div><p>Three queen bedrooms, water outside the windows, a huge kitchen, game room, hot tub, dock, and fire pit.</p></div>
+        <div class="house-story">
+          <article class="house-lead"><img src="Assets/Assets/Images/IMG_9771.jpeg" alt="Waterfront vacation house" /><div><p class="eyebrow">Welcome home</p><h2>Our basecamp between Traverse City and Suttons Bay.</h2></div></article>
+          <article><img src="Assets/Assets/Images/IMG_9777.jpeg" alt="Large remodeled kitchen" /><div><h3>The Gathering Place</h3><p>Every vacation eventually gathers around the kitchen island.</p></div></article>
+          <article><img src="Assets/Assets/Images/IMG_9784.jpeg" alt="Living space at the house" /><div><h3>Room to Settle In</h3><p>Lake-house comfort with plenty of space for five travelers.</p></div></article>
+          <article><img src="Assets/Assets/Images/IMG_9790.jpeg" alt="Outdoor space near the water" /><div><h3>Evenings Outside</h3><p>Fire, water, conversation, and nowhere else we need to be.</p></div></article>
+          <article><img src="Assets/Assets/Images/IMG_9814.jpeg" alt="West Bay view" /><div><h3>Follow the Water</h3><p>The bay is not an amenity. It is the main character.</p></div></article>
+        </div>
       </section>
     </main>
 
     <nav class="bottom-nav" aria-label="App navigation">
-      <button class="active" data-tab="home"><span>⌂</span>Home</button><button data-tab="discover"><span>⌕</span>Discover</button><button data-tab="favorites"><span>♥</span>Favorites</button><button data-tab="planner"><span>＋</span>Plan</button><button data-tab="house"><span>⌂</span>House</button>
+      <button class="active" data-tab="home"><span>⌂</span><small>Home</small></button>
+      <button data-tab="discover"><span>⌕</span><small>Discover</small></button>
+      <button data-tab="favorites"><span>♥</span><small>Favorites</small></button>
+      <button data-tab="planner"><span>▦</span><small>Plan</small></button>
+      <button data-tab="house"><span>⌂</span><small>House</small></button>
     </nav>
   </div>
 
-  <dialog id="travelerDialog"><button class="dialog-close">×</button><p class="eyebrow dark">Who is exploring?</p><h2>Make this trip feel like yours.</h2><div class="traveler-grid" id="travelerGrid"></div></dialog>
-  <div class="toast" id="toast"></div>
+  <dialog id="travelerDialog"><button class="dialog-close" aria-label="Close">×</button><p class="eyebrow dark">Who is exploring?</p><h2>Make this trip feel like yours.</h2><div class="traveler-grid" id="travelerGrid"></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
 </body>
 </html>
