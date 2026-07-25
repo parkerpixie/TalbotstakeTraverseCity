@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#092b3a" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b3443" />
+  <meta name="description" content="The Talbots' Traverse City family trip planner." />
   <title>The Talbots Take Traverse City</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,14 +13,14 @@
 </head>
 <body>
   <section class="landing" id="landing">
-    <img class="landing-photo" src="Assets/Assets/Images/IMG_9799.jpeg" alt="West Bay waterfront view" />
+    <img class="landing-photo" src="Assets/Assets/Images/IMG_9799.jpeg" alt="West Bay waterfront" />
     <div class="landing-shade"></div>
     <div class="landing-content">
       <p class="eyebrow">August 23–27, 2026 · West Bay</p>
       <h1>The Talbots Take<br><em>Traverse City</em></h1>
-      <p>Four nights by the water, five travelers, and one shared place to dream up the whole adventure.</p>
+      <p>One shared place to answer the important vacation questions: where are we eating, what are we shopping for, and what belongs in the plan?</p>
       <div class="countdown"><div><strong id="days">0</strong><span>days</span></div><div><strong id="hours">0</strong><span>hours</span></div><div><strong id="minutes">0</strong><span>minutes</span></div></div>
-      <button class="primary" id="enterApp">Plan Our Vacation</button>
+      <button class="primary" id="enterApp">Open Trip Planner</button>
     </div>
   </section>
 
@@ -33,64 +34,82 @@
     <main class="tab-stage">
       <section class="tab-panel active" data-panel="home">
         <div class="dashboard-hero">
-          <img src="Assets/Assets/Images/IMG_9788.jpeg" alt="Vacation house outdoor gathering area" />
-          <div class="dashboard-copy"><p class="eyebrow">Welcome home</p><h2>Let’s build a vacation everyone is excited about.</h2><p>Browse ideas, heart the good ones, then drag favorites into a day that feels just right.</p><button class="primary" data-tab="discover">Start discovering</button></div>
+          <img src="Assets/Assets/Images/IMG_9814.jpeg" alt="West Bay view from the vacation house" />
+          <div class="dashboard-copy">
+            <p class="eyebrow">Vacation command center</p>
+            <h2>Pick the mood. Find the place. Save the winner.</h2>
+            <p>No giant spreadsheet and no restaurant debate spiral. Filter by budget, food, atmosphere, town, or who will actually enjoy it.</p>
+            <div class="hero-buttons"><button class="primary" data-tab="eat">Find somewhere to eat</button><button class="secondary" data-tab="shop">Browse shopping</button></div>
+          </div>
         </div>
-        <div class="stats-row"><article><strong id="favoriteCount">0</strong><span>saved ideas</span></article><article><strong id="plannedCount">0</strong><span>planned stops</span></article><article><strong>5</strong><span>travelers</span></article></div>
-        <div class="home-grid">
-          <button class="feature-card" data-tab="discover"><span>🧭</span><strong>Discover</strong><small>Food, shopping, scenery, and adventures</small></button>
-          <button class="feature-card" data-tab="favorites"><span>♥</span><strong>Family Favorites</strong><small>Everything worth discussing</small></button>
-          <button class="feature-card featured" data-tab="planner"><span>📅</span><strong>Let’s Plan the Day</strong><small>Drag saved ideas into morning, afternoon, or evening</small></button>
-          <button class="feature-card" data-tab="house"><span>🏡</span><strong>Explore the House</strong><small>Meet our West Bay home base</small></button>
+        <div class="stats-row"><article><strong id="favoriteCount">0</strong><span>saved places</span></article><article><strong id="plannedCount">0</strong><span>planned stops</span></article><article><strong>5</strong><span>travelers</span></article></div>
+        <div class="quick-grid">
+          <button class="quick-card" data-tab="eat"><span>🍔</span><strong>Low-key dinner</strong><small>Burgers, patios, local favorites, easy wins</small></button>
+          <button class="quick-card" data-tab="eat" data-preset="waterfront"><span>🌊</span><strong>Eat by the water</strong><small>Bay views, decks, sunsets, and seafood</small></button>
+          <button class="quick-card" data-tab="eat" data-preset="special"><span>🍝</span><strong>Worth dressing up for</strong><small>Pasta, tasting plates, date-night energy</small></button>
+          <button class="quick-card" data-tab="shop"><span>🛍️</span><strong>Town wandering</strong><small>Boutiques, books, art, gifts, and antiques</small></button>
         </div>
       </section>
 
-      <section class="tab-panel" data-panel="discover">
-        <div class="page-heading"><div><p class="eyebrow dark">Discover</p><h2>Find something worth hearting.</h2></div><p id="personalizedMessage">Showing a little bit of everything for everyone.</p></div>
+      <section class="tab-panel" data-panel="eat">
+        <div class="page-heading"><div><p class="eyebrow dark">Eat</p><h2>What kind of restaurant sounds right?</h2></div><p>Use several filters together. “Cheap + waterfront + burgers” is now a valid family planning strategy.</p></div>
         <div class="traveler-strip" id="travelerStrip"></div>
-        <div class="filters"><input id="searchInput" type="search" placeholder="Search ideas…"><select id="categoryFilter"><option value="all">All categories</option><option value="food">Food</option><option value="shopping">Shopping</option><option value="outdoors">Outdoors</option><option value="scenic">Scenic</option><option value="games">Games</option></select><select id="energyFilter"><option value="all">Any energy</option><option value="low">Low-key</option><option value="medium">A little active</option><option value="high">Adventure mode</option></select></div>
-        <div class="card-grid" id="activityGrid"></div>
+        <div class="filter-panel">
+          <input id="restaurantSearch" type="search" placeholder="Search burgers, pasta, hidden gem, whitefish…" />
+          <select id="restaurantTown"><option value="all">All towns</option><option>Traverse City</option><option>Suttons Bay</option><option>Glen Arbor</option><option>Leland</option></select>
+          <select id="restaurantPrice"><option value="all">Any price</option><option value="$">$ casual</option><option value="$$">$$ moderate</option><option value="$$$">$$$ special</option></select>
+        </div>
+        <div class="chip-row" id="restaurantChips">
+          <button data-tag="waterfront">🌊 Waterfront</button><button data-tag="burgers">🍔 Burgers</button><button data-tag="pasta">🍝 Pasta</button><button data-tag="hidden-gem">🔎 Hidden gem</button><button data-tag="local-favorite">📍 Local favorite</button><button data-tag="family">👨‍👩‍👧 Family friendly</button><button data-tag="patio">☀️ Patio</button><button data-tag="special">✨ Special occasion</button><button data-tag="quick">⚡ Quick</button>
+        </div>
+        <p class="results-note" id="restaurantResultsNote"></p>
+        <div class="place-grid" id="restaurantGrid"></div>
       </section>
 
-      <section class="tab-panel" data-panel="favorites">
-        <div class="page-heading"><div><p class="eyebrow dark">Family favorites</p><h2>The vacation idea pantry.</h2></div><p>Everything hearted lives here, ready to be pulled into the planner.</p></div>
-        <div id="favoriteList" class="favorite-board"></div>
+      <section class="tab-panel" data-panel="shop">
+        <div class="page-heading"><div><p class="eyebrow dark">Shop</p><h2>Build a wandering route by town or treasure type.</h2></div><p>Traverse City, Suttons Bay, Leland, Glen Arbor, and the Sleeping Bear corridor all get their own flavor.</p></div>
+        <div class="filter-panel">
+          <input id="shopSearch" type="search" placeholder="Search books, antiques, local art, clothes, gifts…" />
+          <select id="shopTown"><option value="all">All towns</option><option>Traverse City</option><option>Suttons Bay</option><option>Glen Arbor</option><option>Leland</option></select>
+          <select id="shopType"><option value="all">All shopping</option><option value="boutique">Boutiques</option><option value="books">Books</option><option value="art">Art & handmade</option><option value="antiques">Antiques</option><option value="gifts">Michigan gifts</option><option value="food">Edible souvenirs</option></select>
+        </div>
+        <div class="place-grid" id="shopGrid"></div>
       </section>
 
       <section class="tab-panel" data-panel="planner">
-        <div class="page-heading"><div><p class="eyebrow dark">Let’s plan the day</p><h2>Build Monday with drag and drop.</h2></div><p>Drag favorites from the idea tray into a time of day. Rearrange them until the rhythm feels right.</p></div>
+        <div class="page-heading"><div><p class="eyebrow dark">Plan</p><h2>Turn saved places into a day.</h2></div><p>Save restaurants and shops, then drag them into morning, afternoon, or evening.</p></div>
         <div class="planner-layout">
-          <aside class="idea-tray"><h3>Saved ideas</h3><p>Heart ideas in Discover, then grab them here.</p><div id="plannerIdeas" class="draggable-list"></div></aside>
+          <aside class="idea-tray"><h3>Saved places</h3><p>These are still available to schedule.</p><div id="plannerIdeas" class="draggable-list"></div></aside>
           <section class="day-board"><div class="day-board-head"><div><small>Monday · August 24</small><h3>Our Day</h3></div><button id="clearPlan" class="quiet-button">Clear day</button></div>
-            <div class="time-bucket"><div class="bucket-label"><span>☀️</span><div><small>8 AM–12 PM</small><h3>Morning</h3></div></div><div class="drop-zone" data-slot="morning"></div></div>
-            <div class="time-bucket"><div class="bucket-label"><span>🌤️</span><div><small>12 PM–5 PM</small><h3>Afternoon</h3></div></div><div class="drop-zone" data-slot="afternoon"></div></div>
-            <div class="time-bucket"><div class="bucket-label"><span>🌙</span><div><small>5 PM onward</small><h3>Evening</h3></div></div><div class="drop-zone" data-slot="evening"></div></div>
+            <div class="time-lane"><div class="lane-label"><span>☀️</span><strong>Morning</strong><small>8 AM–12 PM</small></div><div class="drop-zone" id="morning"></div></div>
+            <div class="time-lane"><div class="lane-label"><span>🌤️</span><strong>Afternoon</strong><small>12 PM–5 PM</small></div><div class="drop-zone" id="afternoon"></div></div>
+            <div class="time-lane"><div class="lane-label"><span>🌙</span><strong>Evening</strong><small>5 PM onward</small></div><div class="drop-zone" id="evening"></div></div>
           </section>
         </div>
       </section>
 
       <section class="tab-panel" data-panel="house">
-        <div class="page-heading"><div><p class="eyebrow dark">Our West Bay home</p><h2>The vacation starts before we unpack.</h2></div><p>Three queen bedrooms, water outside the windows, a huge kitchen, game room, hot tub, dock, and fire pit.</p></div>
+        <div class="page-heading"><div><p class="eyebrow dark">Our West Bay home</p><h2>A proper house tour, with the rooms correctly introduced.</h2></div><p>The captions now describe the actual photographs rather than inventing an outdoor fire pit inside a bedroom.</p></div>
         <div class="house-story">
-          <article class="house-lead"><img src="Assets/Assets/Images/IMG_9771.jpeg" alt="Waterfront vacation house" /><div><p class="eyebrow">Welcome home</p><h2>Our basecamp between Traverse City and Suttons Bay.</h2></div></article>
-          <article><img src="Assets/Assets/Images/IMG_9777.jpeg" alt="Large remodeled kitchen" /><div><h3>The Gathering Place</h3><p>Every vacation eventually gathers around the kitchen island.</p></div></article>
-          <article><img src="Assets/Assets/Images/IMG_9784.jpeg" alt="Living space at the house" /><div><h3>Room to Settle In</h3><p>Lake-house comfort with plenty of space for five travelers.</p></div></article>
-          <article><img src="Assets/Assets/Images/IMG_9790.jpeg" alt="Outdoor space near the water" /><div><h3>Evenings Outside</h3><p>Fire, water, conversation, and nowhere else we need to be.</p></div></article>
-          <article><img src="Assets/Assets/Images/IMG_9814.jpeg" alt="West Bay view" /><div><h3>Follow the Water</h3><p>The bay is not an amenity. It is the main character.</p></div></article>
+          <article class="house-card wide"><img src="Assets/Assets/Images/IMG_9771.jpeg" alt="Garage game room opening toward West Bay" /><div><p class="eyebrow dark">The game room</p><h3>Shuffleboard with the bay as a backdrop</h3><p>Indoor hangout space, television, red Adirondack chairs, and an open-door view straight toward the water.</p></div></article>
+          <article class="house-card"><img src="Assets/Assets/Images/IMG_9777.jpeg" alt="Large white kitchen with island" /><div><h3>The Gathering Kitchen</h3><p>A long island, generous prep space, and the natural headquarters for coffee, snacks, and group decisions.</p></div></article>
+          <article class="house-card"><img src="Assets/Assets/Images/IMG_9784.jpeg" alt="Bright bathroom with window" /><div><h3>Freshen Up</h3><p>A bright, compact bathroom with natural light and lake-house details.</p></div></article>
+          <article class="house-card"><img src="Assets/Assets/Images/IMG_9790.jpeg" alt="Queen bedroom with compass pillow" /><div><h3>The Compass Bedroom</h3><p>A queen room with nautical details, a boat-shaped shelf, and a quiet place to land at night.</p></div></article>
+          <article class="house-card wide"><img src="Assets/Assets/Images/IMG_9814.jpeg" alt="Clear West Bay water and dock" /><div><h3>The Main Character</h3><p>Clear water, an easy dock, and the reason this whole trip already feels cinematic.</p></div></article>
         </div>
       </section>
     </main>
 
     <nav class="bottom-nav" aria-label="App navigation">
       <button class="active" data-tab="home"><span>⌂</span><small>Home</small></button>
-      <button data-tab="discover"><span>⌕</span><small>Discover</small></button>
-      <button data-tab="favorites"><span>♥</span><small>Favorites</small></button>
+      <button data-tab="eat"><span>🍴</span><small>Eat</small></button>
+      <button data-tab="shop"><span>🛍</span><small>Shop</small></button>
       <button data-tab="planner"><span>▦</span><small>Plan</small></button>
       <button data-tab="house"><span>⌂</span><small>House</small></button>
     </nav>
   </div>
 
-  <dialog id="travelerDialog"><button class="dialog-close" aria-label="Close">×</button><p class="eyebrow dark">Who is exploring?</p><h2>Make this trip feel like yours.</h2><div class="traveler-grid" id="travelerGrid"></div></dialog>
+  <dialog id="travelerDialog"><button class="dialog-close" aria-label="Close">×</button><p class="eyebrow dark">Who is exploring?</p><h2>Personalize the shortlist.</h2><div class="traveler-grid" id="travelerGrid"></div></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
 </body>
