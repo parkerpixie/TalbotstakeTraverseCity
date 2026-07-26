@@ -1,26 +1,76 @@
-// Correct house photo categorization after the main app data loads.
-const exteriorGallery = houseGalleryData.find(g => g.id === 'exterior');
-const kitchenGallery = houseGalleryData.find(g => g.id === 'kitchen-living');
-const bedroomGallery = houseGalleryData.find(g => g.id === 'bedrooms');
-const patioGallery = houseGalleryData.find(g => g.id === 'patio-hot-tub');
+// Replace the original listing-photo galleries with the newly labeled house photos.
+const galleryById = id => houseGalleryData.find(gallery => gallery.id === id);
 
-const removeFrom = (gallery, filenames) => {
-  gallery.images = gallery.images.filter(image => !filenames.includes(image));
-};
+const exteriorGallery = galleryById('exterior');
+const kitchenGallery = galleryById('kitchen-living');
+const bedroomGallery = galleryById('bedrooms');
+const bathroomGallery = galleryById('bathrooms');
+const gameRoomGallery = galleryById('game-room');
+const patioGallery = galleryById('patio-hot-tub');
 
-const addUnique = (gallery, filenames) => {
-  filenames.forEach(filename => {
-    if (!gallery.images.includes(filename)) gallery.images.push(filename);
-  });
-};
+exteriorGallery.title = 'House, yard and waterfront';
+exteriorGallery.description = 'Front and back views of the house, the porch, shoreline, pier and the walk from the front porch to West Bay.';
+exteriorGallery.images = [
+  'Front of House.avif',
+  'Front of House 2.avif',
+  'Front of House - Porch.avif',
+  'Back of House 1.webp',
+  'Back of House 2.webp',
+  'From Front Porch to Lake.avif',
+  'Pier 1.webp',
+  'Pier 2.avif',
+  'Pier 3.avif',
+  'Pier 4.avif',
+  'Lake off Pier.avif'
+];
 
-// Keep bedroom photographs out of the exterior gallery.
-removeFrom(exteriorGallery, ['IMG_9768.jpeg', 'IMG_9770.jpeg', 'IMG_9798.jpeg']);
-addUnique(bedroomGallery, ['IMG_9770.jpeg']);
+kitchenGallery.title = 'Kitchen, dining and living spaces';
+kitchenGallery.description = 'Multiple views of the kitchen, dining room and the connected living spaces where everyone can gather.';
+kitchenGallery.images = [
+  'Kitchen.avif',
+  'Kitchen - Dinning 1.webp',
+  'Kitchen - Dinning 2.avif',
+  'Dinning Room.webp',
+  'Living Room.avif',
+  'Living Room 2.avif',
+  'Full Living Area.webp',
+  'Full Living Area 2.webp'
+];
 
-// Keep porch, dock-walkway, patio and hot-tub images together in outdoor living.
-removeFrom(kitchenGallery, ['IMG_9768.jpeg', 'IMG_9798.jpeg']);
-removeFrom(exteriorGallery, ['IMG_9795.jpeg', 'IMG_9796.jpeg']);
-addUnique(patioGallery, ['IMG_9768.jpeg', 'IMG_9798.jpeg', 'IMG_9795.jpeg', 'IMG_9796.jpeg']);
+bedroomGallery.title = 'Three queen bedrooms';
+bedroomGallery.description = 'The Blue Deco, Wave and Nautical queen bedrooms, including the Wave bedroom attached bathroom view.';
+bedroomGallery.images = [
+  'Blue Deco Bedroom - Side of house.avif',
+  'Blue Deco Bedroom - Font of House 2.avif',
+  'Wave Bedroom - Back of House.avif',
+  'Wave bedroom - Attached bathroom.avif',
+  'Nautical Room - Front of House.avif'
+];
+
+bathroomGallery.title = 'Bathrooms';
+bathroomGallery.description = 'Both full bathrooms, plus the attached-bathroom view from the Wave bedroom.';
+bathroomGallery.images = [
+  'Full Bathroom 1.avif',
+  'Full Bathroom 2.avif',
+  'Wave bedroom - Attached bathroom.avif'
+];
+
+gameRoomGallery.title = 'Garage game room';
+gameRoomGallery.description = 'Two views of the garage game room plus the garage exterior.';
+gameRoomGallery.images = [
+  'Game Room Garage 1.avif',
+  'Game Room Garage 2.avif',
+  'Garage Exterior.avif'
+];
+
+patioGallery.title = 'Hot tub, fire pit and outdoor hangouts';
+patioGallery.description = 'The hot tub, backyard fire pit and porch spaces for winding down after a day around the bay.';
+patioGallery.images = [
+  'Hot Tub 1.avif',
+  'Hot Tub 2.avif',
+  'Backyard Fire Pit.avif',
+  'Backyard Fire Pit 2.avif',
+  'Front of House - Porch.avif'
+];
 
 renderHouseGalleries();
