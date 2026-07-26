@@ -6,9 +6,24 @@
 
   const travelerNames = ['Parker', 'Blake', 'Porter', 'Mark', 'Nancy'];
   const bedDefinitions = [
-    { id: 'bed-one', title: 'Blue Deco Room', image: 'Blue Deco Bedroom - Side of house.avif', note: 'Art Deco blue wallpaper and a queen bed.' },
-    { id: 'bed-two', title: 'Wave Room', image: 'Wave Bedroom - Back of House.avif', note: 'Queen bedroom with the wave artwork and attached bathroom.' },
-    { id: 'bed-three', title: 'Harbor View Room', image: 'IMG_9770.jpeg', note: 'Front-of-house queen bedroom with a view toward the bay.' }
+    {
+      id: 'bed-one',
+      title: 'Blue Deco Room',
+      images: ['Blue Deco Bedroom - Side of house.avif', 'Blue Deco Bedroom - Font of House 2.avif'],
+      note: 'Art Deco blue wallpaper and a queen bed.'
+    },
+    {
+      id: 'bed-two',
+      title: 'Wave Room',
+      images: ['Wave Bedroom - Back of House.avif', 'Wave bedroom - Attached bathroom.avif'],
+      note: 'Queen bedroom with the wave artwork and attached bathroom.'
+    },
+    {
+      id: 'bed-three',
+      title: 'Harbor View Room',
+      images: ['IMG_9770.jpeg?v=harbor-view-full'],
+      note: 'Front-of-house queen bedroom with a view toward the bay.'
+    }
   ];
 
   const normalizeClaims = value => {
@@ -39,7 +54,7 @@
       <div>
         <p class="eyebrow dark">Pick your bed</p>
         <h2>Choose a room at Sunrise Shores Retreat</h2>
-        <p>Each bedroom can hold up to two names. Tap your name to claim or release a spot.</p>
+        <p>See every available photo for each room, then tap your name to claim or release a spot.</p>
       </div>
       <span class="claim-note">Shared with the family</span>
     </div>
@@ -55,9 +70,17 @@
     grid.innerHTML = bedDefinitions.map(bed => {
       const bedClaims = claims[bed.id];
       const full = bedClaims.length >= 2;
+      const hasMultiple = bed.images.length > 1;
       return `
-        <article class="bed-claim-card">
-          <img src="Assets/Assets/Images/${bed.image}" alt="${bed.title}" loading="lazy" />
+        <article class="bed-claim-card" data-room-card="${bed.id}" data-photo-index="0">
+          <div class="room-photo-viewer">
+            <img class="room-main-photo" src="Assets/Assets/Images/${bed.images[0]}" alt="${bed.title}" loading="lazy" />
+            ${hasMultiple ? '<button class="room-photo-control prev" type="button" aria-label="Previous room photo">‹</button><button class="room-photo-control next" type="button" aria-label="Next room photo">›</button>' : ''}
+            <span class="room-photo-count">1 / ${bed.images.length}</span>
+          </div>
+          <div class="room-photo-thumbs" aria-label="${bed.title} photos">
+            ${bed.images.map((image, index) => `<button type="button" class="room-photo-thumb ${index === 0 ? 'active' : ''}" data-room-photo="${index}" aria-label="Show ${bed.title} photo ${index + 1}"><img src="Assets/Assets/Images/${image}" alt="" /></button>`).join('')}
+          </div>
           <div class="bed-claim-body">
             <div class="bed-title-row"><h3>${bed.title}</h3><span>${bedClaims.length}/2 claimed</span></div>
             <p>${bed.note}</p>
@@ -75,6 +98,23 @@
           </div>
         </article>`;
     }).join('');
+
+    grid.querySelectorAll('[data-room-card]').forEach(card => {
+      const bed = bedDefinitions.find(item => item.id === card.dataset.roomCard);
+      const mainPhoto = card.querySelector('.room-main-photo');
+      const count = card.querySelector('.room-photo-count');
+      const thumbs = [...card.querySelectorAll('[data-room-photo]')];
+      const showPhoto = nextIndex => {
+        const index = (nextIndex + bed.images.length) % bed.images.length;
+        card.dataset.photoIndex = String(index);
+        mainPhoto.src = `Assets/Assets/Images/${bed.images[index]}`;
+        count.textContent = `${index + 1} / ${bed.images.length}`;
+        thumbs.forEach((thumb, thumbIndex) => thumb.classList.toggle('active', thumbIndex === index));
+      };
+      card.querySelector('.room-photo-control.prev')?.addEventListener('click', () => showPhoto(Number(card.dataset.photoIndex) - 1));
+      card.querySelector('.room-photo-control.next')?.addEventListener('click', () => showPhoto(Number(card.dataset.photoIndex) + 1));
+      thumbs.forEach(thumb => thumb.addEventListener('click', () => showPhoto(Number(thumb.dataset.roomPhoto))));
+    });
 
     grid.querySelectorAll('[data-bed][data-person]').forEach(button => {
       button.addEventListener('click', () => {
