@@ -14,12 +14,13 @@ const addUnique = (gallery, filenames) => {
   });
 };
 
-// Correct the original exterior mix-up.
+// Keep bedroom photographs out of the exterior gallery.
 removeFrom(exteriorGallery, ['IMG_9768.jpeg', 'IMG_9770.jpeg', 'IMG_9798.jpeg']);
 addUnique(bedroomGallery, ['IMG_9770.jpeg']);
 
-// The dock walkway and porch are outdoor living spaces, not indoor gathering rooms.
+// Keep porch, dock-walkway, patio and hot-tub images together in outdoor living.
 removeFrom(kitchenGallery, ['IMG_9768.jpeg', 'IMG_9798.jpeg']);
-addUnique(patioGallery, ['IMG_9768.jpeg', 'IMG_9798.jpeg']);
+removeFrom(exteriorGallery, ['IMG_9795.jpeg', 'IMG_9796.jpeg']);
+addUnique(patioGallery, ['IMG_9768.jpeg', 'IMG_9798.jpeg', 'IMG_9795.jpeg', 'IMG_9796.jpeg']);
 
 renderHouseGalleries();
