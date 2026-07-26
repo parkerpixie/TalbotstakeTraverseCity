@@ -18,7 +18,6 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="planner-upgrades.css" />
   <link rel="stylesheet" href="debut-upgrades.css" />
-  <link rel="stylesheet" href="house-final-upgrades.css" />
 </head>
 <body>
   <section class="landing" id="landing">
@@ -118,7 +117,9 @@
   <dialog id="travelerDialog"><button class="dialog-close" aria-label="Close">×</button><p class="eyebrow dark">Who is exploring?</p><h2>Personalize the shortlist.</h2><div class="traveler-grid" id="travelerGrid"></div></dialog>
   <dialog id="photoDialog" class="photo-dialog"><button class="dialog-close photo-close" aria-label="Close photo">×</button><img id="dialogPhoto" alt="Expanded house photograph" /><p id="dialogCaption"></p></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
+  <script src="supabase-sync.js"></script>
   <script src="presentation-polish.js"></script>
   <script src="gallery-correction.js"></script>
   <script src="debut-upgrades.js"></script>
