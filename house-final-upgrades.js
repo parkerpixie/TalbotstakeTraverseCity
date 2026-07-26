@@ -8,7 +8,7 @@
   const bedDefinitions = [
     { id: 'bed-one', title: 'Blue Deco Queen Bedroom', image: 'Blue Deco Bedroom - Side of house.avif', note: 'Side-of-house bedroom, shown in two listing photos.' },
     { id: 'bed-two', title: 'Wave Queen Bedroom', image: 'Wave Bedroom - Back of House.avif', note: 'Back-of-house bedroom with the attached bathroom.' },
-    { id: 'bed-three', title: 'Nautical Queen Bedroom', image: 'Nautical Room - Front of House.avif', note: 'Front-of-house bedroom with nautical decor.' }
+    { id: 'bed-three', title: 'Nautical Queen Bedroom', image: 'IMG_9770.jpeg', note: 'Front-of-house bedroom with nautical decor.' }
   ];
 
   const normalizeClaims = value => {
