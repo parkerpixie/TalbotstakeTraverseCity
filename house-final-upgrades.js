@@ -6,9 +6,9 @@
 
   const travelerNames = ['Parker', 'Blake', 'Porter', 'Mark', 'Nancy'];
   const bedDefinitions = [
-    { id: 'bed-one', title: 'Blue Deco Queen Bedroom', image: 'Blue Deco Bedroom - Side of house.avif', note: 'Side-of-house bedroom, shown in two listing photos.' },
-    { id: 'bed-two', title: 'Wave Queen Bedroom', image: 'Wave Bedroom - Back of House.avif', note: 'Back-of-house bedroom with the attached bathroom.' },
-    { id: 'bed-three', title: 'Nautical Queen Bedroom', image: 'IMG_9770.jpeg', note: 'Front-of-house bedroom with nautical decor.' }
+    { id: 'bed-one', title: 'Blue Deco Room', image: 'Blue Deco Bedroom - Side of house.avif', note: 'Art Deco blue wallpaper and a queen bed.' },
+    { id: 'bed-two', title: 'Wave Room', image: 'Wave Bedroom - Back of House.avif', note: 'Queen bedroom with the wave artwork and attached bathroom.' },
+    { id: 'bed-three', title: 'Harbor View Room', image: 'IMG_9770.jpeg', note: 'Front-of-house queen bedroom with a view toward the bay.' }
   ];
 
   const normalizeClaims = value => {
@@ -37,8 +37,8 @@
   bedSection.innerHTML = `
     <div class="bed-claim-head">
       <div>
-        <p class="eyebrow dark">Choose your room</p>
-        <h2>Claim a queen bedroom</h2>
+        <p class="eyebrow dark">Pick your bed</p>
+        <h2>Choose a room at Sunrise Shores Retreat</h2>
         <p>Each bedroom can hold up to two names. Tap your name to claim or release a spot.</p>
       </div>
       <span class="claim-note">Shared with the family</span>
@@ -57,7 +57,7 @@
       const full = bedClaims.length >= 2;
       return `
         <article class="bed-claim-card">
-          <img src="Assets/Assets/Images/${bed.image}" alt="${bed.title}" />
+          <img src="Assets/Assets/Images/${bed.image}" alt="${bed.title}" loading="lazy" />
           <div class="bed-claim-body">
             <div class="bed-title-row"><h3>${bed.title}</h3><span>${bedClaims.length}/2 claimed</span></div>
             <p>${bed.note}</p>
@@ -116,7 +116,7 @@
   mapSection.innerHTML = `
     <div class="trip-map-copy">
       <p class="eyebrow dark">Getting there</p>
-      <h2>Drive to the West Bay house</h2>
+      <h2>Drive to Sunrise Shores Retreat</h2>
       <p>Open turn-by-turn directions from Madison or Cumberland, or use the live map below.</p>
       <div class="drive-buttons">
         <a href="https://www.google.com/maps/dir/?api=1&origin=Madison%2C+WI&destination=Majestic+Views+of+West+Bay%2C+Traverse+City%2C+MI&travelmode=driving" target="_blank" rel="noopener">🚗 <span>Directions from Madison</span></a>
@@ -124,7 +124,7 @@
       </div>
     </div>
     <div class="map-frame-wrap">
-      <iframe title="Google map of the West Bay vacation house" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Majestic%20Views%20of%20West%20Bay%20Traverse%20City%20Michigan&output=embed"></iframe>
+      <iframe title="Google map of Sunrise Shores Retreat" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Majestic%20Views%20of%20West%20Bay%20Traverse%20City%20Michigan&output=embed"></iframe>
     </div>
   `;
 
