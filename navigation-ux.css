@@ -1,6 +1,17 @@
-/* Navigation and landing visibility fixes */
+/* Navigation, landing visibility, and bedroom-card image fixes */
 [hidden] {
   display: none !important;
+}
+
+/* Show the entire bedroom photograph instead of cropping it to the middle. */
+.bed-claim-card > img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  object-position: center;
+  background: #edf1ef;
+  display: block;
 }
 
 @media (min-width: 641px) {
