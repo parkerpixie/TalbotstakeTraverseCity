@@ -6,9 +6,9 @@
 
   const travelerNames = ['Parker', 'Blake', 'Porter', 'Mark', 'Nancy'];
   const bedDefinitions = [
-    { id: 'bed-one', title: 'Queen Bed One', image: 'IMG_9780.jpeg', note: 'First bedroom photo' },
-    { id: 'bed-two', title: 'Queen Bed Two', image: 'IMG_9787.jpeg', note: 'The two middle gallery photos show this same bed' },
-    { id: 'bed-three', title: 'Queen Bed Three', image: 'IMG_9770.jpeg', note: 'Final bedroom photo' }
+    { id: 'bed-one', title: 'Blue Deco Queen Bedroom', image: 'Blue Deco Bedroom - Side of house.avif', note: 'Side-of-house bedroom, shown in two listing photos.' },
+    { id: 'bed-two', title: 'Wave Queen Bedroom', image: 'Wave Bedroom - Back of House.avif', note: 'Back-of-house bedroom with the attached bathroom.' },
+    { id: 'bed-three', title: 'Nautical Queen Bedroom', image: 'Nautical Room - Front of House.avif', note: 'Front-of-house bedroom with nautical decor.' }
   ];
 
   const normalizeClaims = value => {
@@ -38,16 +38,15 @@
     <div class="bed-claim-head">
       <div>
         <p class="eyebrow dark">Choose your room</p>
-        <h2>Claim a queen bed</h2>
-        <p>Each bed can hold up to two names. Tap your name to claim or release a spot.</p>
+        <h2>Claim a queen bedroom</h2>
+        <p>Each bedroom can hold up to two names. Tap your name to claim or release a spot.</p>
       </div>
       <span class="claim-note">Shared with the family</span>
     </div>
     <div class="bed-claim-grid" id="bedClaimGrid"></div>
   `;
 
-  const galleries = document.getElementById('houseGalleries');
-  galleries?.after(bedSection);
+  document.getElementById('houseGalleries')?.after(bedSection);
 
   const renderClaims = () => {
     const grid = document.getElementById('bedClaimGrid');
@@ -118,10 +117,10 @@
     <div class="trip-map-copy">
       <p class="eyebrow dark">Getting there</p>
       <h2>Drive to the West Bay house</h2>
-      <p>Use the live Google map below, or launch turn-by-turn directions from either starting point.</p>
+      <p>Open turn-by-turn directions from Madison or Cumberland, or use the live map below.</p>
       <div class="drive-buttons">
-        <a href="https://www.google.com/maps/dir/?api=1&origin=Madison%2C+WI&destination=Majestic+Views+of+West+Bay%2C+Traverse+City%2C+MI&travelmode=driving" target="_blank" rel="noopener">🚗 Drive from Madison</a>
-        <a href="https://www.google.com/maps/dir/?api=1&origin=Cumberland%2C+WI&destination=Majestic+Views+of+West+Bay%2C+Traverse+City%2C+MI&travelmode=driving" target="_blank" rel="noopener">🚙 Drive from Cumberland</a>
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Madison%2C+WI&destination=Majestic+Views+of+West+Bay%2C+Traverse+City%2C+MI&travelmode=driving" target="_blank" rel="noopener">🚗 <span>Directions from Madison</span></a>
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Cumberland%2C+WI&destination=Majestic+Views+of+West+Bay%2C+Traverse+City%2C+MI&travelmode=driving" target="_blank" rel="noopener">🚙 <span>Directions from Cumberland</span></a>
       </div>
     </div>
     <div class="map-frame-wrap">
