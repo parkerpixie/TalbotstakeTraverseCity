@@ -38,13 +38,13 @@ kitchenGallery.images = [
 ];
 
 bedroomGallery.title = 'Three queen bedrooms';
-bedroomGallery.description = 'The Blue Deco, Wave and Harbor View rooms, including the Wave Room attached bathroom view.';
+bedroomGallery.description = 'Harbor View, Blue Deco and Wave rooms. The Wave Room photos also include its attached bathroom.';
 bedroomGallery.images = [
+  'IMG_9770.jpeg?v=harbor-view-full',
   'Blue Deco Bedroom - Side of house.avif',
   'Blue Deco Bedroom - Font of House 2.avif',
   'Wave Bedroom - Back of House.avif',
-  'Wave bedroom - Attached bathroom.avif',
-  'IMG_9770.jpeg'
+  'Wave bedroom - Attached bathroom.avif'
 ];
 
 bathroomGallery.title = 'Bathrooms';
