@@ -9,7 +9,7 @@ const gameRoomGallery = galleryById('game-room');
 const patioGallery = galleryById('patio-hot-tub');
 
 exteriorGallery.title = 'House, yard and waterfront';
-exteriorGallery.description = 'Front and back views of the house, the porch, shoreline, pier and the walk from the front porch to West Bay.';
+exteriorGallery.description = 'Front and back views of Sunrise Shores Retreat, the porch, shoreline, pier and the walk from the front porch to West Bay.';
 exteriorGallery.images = [
   'Front of House.avif',
   'Front of House 2.avif',
@@ -38,7 +38,7 @@ kitchenGallery.images = [
 ];
 
 bedroomGallery.title = 'Three queen bedrooms';
-bedroomGallery.description = 'The Blue Deco, Wave and Nautical queen bedrooms, including the Wave bedroom attached bathroom view.';
+bedroomGallery.description = 'The Blue Deco, Wave and Harbor View rooms, including the Wave Room attached bathroom view.';
 bedroomGallery.images = [
   'Blue Deco Bedroom - Side of house.avif',
   'Blue Deco Bedroom - Font of House 2.avif',
@@ -48,7 +48,7 @@ bedroomGallery.images = [
 ];
 
 bathroomGallery.title = 'Bathrooms';
-bathroomGallery.description = 'Both full bathrooms, plus the attached-bathroom view from the Wave bedroom.';
+bathroomGallery.description = 'Both full bathrooms, plus the attached-bathroom view from the Wave Room.';
 bathroomGallery.images = [
   'Full Bathroom 1.avif',
   'Full Bathroom 2.avif',
