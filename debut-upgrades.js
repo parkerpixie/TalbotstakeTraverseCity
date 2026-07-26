@@ -32,13 +32,15 @@
     const items = ids.map(id => allPlaces.find(place => place.id === id)).filter(Boolean);
     const list = favoritesDialog.querySelector('#favoritesList');
     list.innerHTML = items.length ? items.map(place => `<article class="favorite-row"><div><strong>${place.icon} ${place.name}</strong><small>${typeLabel(place)} · ${place.area}</small></div><div class="favorite-row-actions">${place.area === 'At the House' ? '' : `<a href="${appleMapsUrl(place)}" target="_blank" rel="noopener">Directions</a>`}<button data-remove-favorite="${place.id}">Remove</button></div></article>`).join('') : `<div class="favorites-empty"><span>♡</span><strong>No saved places yet</strong><p>Browse Eat, Explore, or Shop and tap Save on anything worth discussing.</p></div>`;
-    favoritesDialog.querySelectorAll('[data-remove-favorite]').forEach(button => button.onclick = () => {
+    favoritesDialog.querySelectorAll('[data-remove-favorite]').forEach(button => button.onclick = async () => {
       const current = getFavorites().filter(id => id !== button.dataset.removeFavorite);
       localStorage.setItem('tcFavoritesV3', JSON.stringify(current));
       favorites = current;
       renderRestaurants(); renderShops(); renderActivities(); renderPlanner(); updateStats();
       renderFavorites();
       const count = document.getElementById('savedHeaderCount'); if (count) count.textContent = current.length;
+      try { await window.TCShared?.write('favorites', current); }
+      catch (error) { console.warn('Favorite removal saved on this phone only:', error?.message); }
     });
   }
 
