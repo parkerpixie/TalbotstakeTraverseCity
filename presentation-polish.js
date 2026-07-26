@@ -4,7 +4,7 @@
   if (!home || !header) return;
 
   const getFavorites = () => {
-    try { return JSON.parse(localStorage.getItem('tcFavoritesV2') || '[]'); }
+    try { return JSON.parse(localStorage.getItem('tcFavoritesV3') || localStorage.getItem('tcFavoritesV2') || '[]'); }
     catch { return []; }
   };
 
@@ -22,7 +22,7 @@
     <div>
       <p class="eyebrow dark">Welcome, Talbots</p>
       <h2>One place to dream up the trip together.</h2>
-      <p>Browse restaurants, shops, and activities. Save anything that sounds good, then build each day without bouncing across the map like a pinball.</p>
+      <p>Browse restaurants, shops, and activities. Save anything that sounds good, then group your favorites into easy days.</p>
       <button class="primary" id="welcomeStart">Start exploring</button>
     </div>
     <div class="start-steps">
@@ -49,9 +49,9 @@
   progress.className = 'planning-progress';
   progress.innerHTML = `
     <div class="progress-card">
-      <div class="progress-head"><div><p class="eyebrow">Vacation planning</p><h3>Almost adventure-ready</h3></div><strong>82%</strong></div>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-      <div class="progress-list"><span>✓ House tour</span><span>✓ Restaurants</span><span>✓ Shopping</span><span>✓ Activities</span><span>○ Family favorites</span><span>○ Final itinerary</span></div>
+      <div class="progress-head"><div><p class="eyebrow">Vacation planning</p><h3 id="progressTitle">The trip is taking shape</h3></div><strong id="progressPercent">0%</strong></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-list"><span>✓ House tour</span><span>✓ Restaurants</span><span>✓ Shopping</span><span>✓ Activities</span><span id="favoritesProgress">○ Family favorites</span><span id="itineraryProgress">○ Final itinerary</span></div>
     </div>`;
 
   const footer = document.createElement('section');
@@ -90,10 +90,29 @@
   addPurpose('shop', 'Build walkable clusters of local finds instead of scattering shopping stops across the county.');
   addPurpose('planner', 'This is planning mode. Nothing is locked in, and every saved idea can move between days.');
 
+  const updateProgress = () => {
+    const favoriteTotal = getFavorites().length;
+    let plannedTotal = 0;
+    try {
+      const savedPlan = JSON.parse(localStorage.getItem('tcPlanV3') || '{}');
+      plannedTotal = Object.values(savedPlan).flatMap(day => Object.values(day || {}).flat()).length;
+    } catch {}
+    const percent = Math.min(100, 60 + Math.min(20, favoriteTotal * 4) + Math.min(20, plannedTotal * 4));
+    const fill = document.getElementById('progressFill');
+    const value = document.getElementById('progressPercent');
+    if (fill) fill.style.width = `${percent}%`;
+    if (value) value.textContent = `${percent}%`;
+    const favoriteStep = document.getElementById('favoritesProgress');
+    const itineraryStep = document.getElementById('itineraryProgress');
+    if (favoriteStep) favoriteStep.textContent = `${favoriteTotal ? '✓' : '○'} Family favorites`;
+    if (itineraryStep) itineraryStep.textContent = `${plannedTotal ? '✓' : '○'} Final itinerary`;
+  };
+
   const updateSavedCount = () => {
     const count = getFavorites().length;
     const el = document.getElementById('savedHeaderCount');
     if (el) el.textContent = count;
+    updateProgress();
   };
 
   document.getElementById('startHereButton')?.addEventListener('click', () => guide.showModal());
@@ -101,10 +120,11 @@
   document.getElementById('welcomeStart')?.addEventListener('click', () => document.querySelector('[data-tab="explore"]')?.click());
   document.getElementById('savedHeader')?.addEventListener('click', () => document.querySelector('[data-tab="planner"]')?.click());
   document.addEventListener('click', (event) => {
-    if (event.target.closest('[data-save]')) setTimeout(updateSavedCount, 30);
+    if (event.target.closest('[data-save], [data-remove-favorite], [data-add], .remove-stop')) setTimeout(updateSavedCount, 80);
     const tabButton = event.target.closest('.pick-card[data-tab]');
     if (tabButton) document.querySelector(`.bottom-nav [data-tab="${tabButton.dataset.tab}"]`)?.click();
   });
 
+  document.addEventListener('tc-shared-ready', updateSavedCount);
   updateSavedCount();
 })();
