@@ -12,6 +12,13 @@
 
   replaceText('[data-panel="house"] .house-intro h2', 'Explore the house by area.');
 
+  const bedCards = document.querySelectorAll('.bed-claim-card');
+  const bedNotes = ['Shown in the first bedroom photo.', 'Shown in two listing photos.', 'Shown in the final bedroom photo.'];
+  bedCards.forEach((card, index) => {
+    const note = card.querySelector('.bed-claim-body > p');
+    if (note && bedNotes[index]) note.textContent = bedNotes[index];
+  });
+
   const syncChip = document.createElement('span');
   syncChip.className = 'sync-status';
   syncChip.setAttribute('role', 'status');
