@@ -1,0 +1,98 @@
+/* Mobile-first House gallery refinements. Phone layout stays full-width; larger screens get a calmer reading width. */
+
+@media (min-width: 921px) {
+  [data-panel="house"] {
+    max-width: 1120px;
+    margin-inline: auto;
+  }
+
+  .house-galleries {
+    gap: 30px;
+  }
+
+  .gallery-section {
+    max-width: 1040px;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .gallery-head {
+    padding: 28px 32px 22px;
+  }
+
+  .gallery-head > div {
+    max-width: 760px;
+  }
+
+  .gallery-head h3 {
+    font-size: 2.05rem;
+  }
+
+  .gallery-stage {
+    aspect-ratio: 16 / 8.5;
+    max-height: 585px;
+  }
+
+  .gallery-thumbs {
+    padding: 16px 22px 20px;
+  }
+
+  .gallery-thumb {
+    flex-basis: 108px;
+  }
+
+  .gallery-thumb img {
+    height: 72px;
+  }
+
+  .bed-claim-section,
+  .trip-map-section {
+    max-width: 1040px;
+    margin-inline: auto;
+  }
+}
+
+@media (min-width: 1400px) {
+  [data-panel="house"] {
+    max-width: 1180px;
+  }
+
+  .gallery-section,
+  .bed-claim-section,
+  .trip-map-section {
+    max-width: 1080px;
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery-section {
+    border-radius: 22px;
+  }
+
+  .gallery-stage {
+    aspect-ratio: 4 / 3;
+  }
+
+  .gallery-caption {
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+  }
+
+  .gallery-caption strong {
+    max-width: 70%;
+    line-height: 1.25;
+  }
+
+  .gallery-caption small {
+    font-size: .72rem;
+  }
+
+  .gallery-thumb {
+    flex-basis: 82px;
+  }
+
+  .gallery-thumb img {
+    height: 58px;
+  }
+}
