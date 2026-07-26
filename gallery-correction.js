@@ -44,7 +44,7 @@ bedroomGallery.images = [
   'Blue Deco Bedroom - Font of House 2.avif',
   'Wave Bedroom - Back of House.avif',
   'Wave bedroom - Attached bathroom.avif',
-  'Nautical Room - Front of House.avif'
+  'IMG_9770.jpeg'
 ];
 
 bathroomGallery.title = 'Bathrooms';
