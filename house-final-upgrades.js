@@ -11,17 +11,26 @@
     { id: 'bed-three', title: 'Queen Bed Three', image: 'IMG_9770.jpeg', note: 'Final bedroom photo' }
   ];
 
+  const normalizeClaims = value => {
+    const normalized = value && typeof value === 'object' ? value : {};
+    bedDefinitions.forEach(bed => {
+      if (!Array.isArray(normalized[bed.id])) normalized[bed.id] = [];
+      normalized[bed.id] = normalized[bed.id].slice(0, 2);
+    });
+    return normalized;
+  };
+
   const loadClaims = () => {
-    try { return JSON.parse(localStorage.getItem('tcBedClaims') || '{}'); }
-    catch { return {}; }
+    try { return normalizeClaims(JSON.parse(localStorage.getItem('tcBedClaims') || '{}')); }
+    catch { return normalizeClaims({}); }
   };
 
   let claims = loadClaims();
-  bedDefinitions.forEach(bed => {
-    if (!Array.isArray(claims[bed.id])) claims[bed.id] = [];
-  });
 
-  const saveClaims = () => localStorage.setItem('tcBedClaims', JSON.stringify(claims));
+  const saveClaims = () => {
+    localStorage.setItem('tcBedClaims', JSON.stringify(claims));
+    window.TCShared?.saveBedClaims(claims);
+  };
 
   const bedSection = document.createElement('section');
   bedSection.className = 'bed-claim-section';
@@ -32,7 +41,7 @@
         <h2>Claim a queen bed</h2>
         <p>Each bed can hold up to two names. Tap your name to claim or release a spot.</p>
       </div>
-      <span class="claim-note">Saved on this phone</span>
+      <span class="claim-note">Shared with the family</span>
     </div>
     <div class="bed-claim-grid" id="bedClaimGrid"></div>
   `;
@@ -83,6 +92,25 @@
       });
     });
   };
+
+  window.TCShared?.subscribe('bed_claims', value => {
+    claims = normalizeClaims(value);
+    localStorage.setItem('tcBedClaims', JSON.stringify(claims));
+    renderClaims();
+  });
+
+  document.addEventListener('tc-shared-ready', async () => {
+    try {
+      const sharedClaims = await window.TCShared?.read('bed_claims');
+      if (sharedClaims) {
+        claims = normalizeClaims(sharedClaims);
+        localStorage.setItem('tcBedClaims', JSON.stringify(claims));
+        renderClaims();
+      }
+    } catch (error) {
+      console.warn('Using local bedroom claims:', error.message);
+    }
+  });
 
   const mapSection = document.createElement('section');
   mapSection.className = 'trip-map-section';
