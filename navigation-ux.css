@@ -1,0 +1,31 @@
+/* Navigation and landing visibility fixes */
+[hidden] {
+  display: none !important;
+}
+
+@media (min-width: 641px) {
+  .app-shell {
+    padding-bottom: 40px;
+  }
+
+  .bottom-nav {
+    position: sticky;
+    top: 63px;
+    left: auto;
+    bottom: auto;
+    z-index: 55;
+    width: max-content;
+    margin: 10px auto 0;
+    transform: none;
+  }
+
+  .tab-panel {
+    scroll-margin-top: 150px;
+  }
+}
+
+@media (max-width: 640px) {
+  .tab-panel {
+    scroll-margin-top: 76px;
+  }
+}
