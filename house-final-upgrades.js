@@ -21,7 +21,7 @@
     {
       id: 'bed-three',
       title: 'Harbor View Room',
-      images: ['IMG_9770.jpeg?v=harbor-view-full'],
+      images: ['Nautical Room - Front of House.avif'],
       note: 'Front-of-house queen bedroom with a view toward the bay.'
     }
   ];
