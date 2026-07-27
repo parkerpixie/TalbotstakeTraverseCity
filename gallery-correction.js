@@ -40,7 +40,7 @@ kitchenGallery.images = [
 bedroomGallery.title = 'Three queen bedrooms';
 bedroomGallery.description = 'Harbor View, Blue Deco and Wave rooms. The Wave Room photos also include its attached bathroom.';
 bedroomGallery.images = [
-  'IMG_9770.jpeg?v=harbor-view-full',
+  'Nautical Room - Front of House.avif',
   'Blue Deco Bedroom - Side of house.avif',
   'Blue Deco Bedroom - Font of House 2.avif',
   'Wave Bedroom - Back of House.avif',
