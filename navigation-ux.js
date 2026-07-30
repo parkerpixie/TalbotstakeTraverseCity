@@ -1,4 +1,14 @@
 (() => {
+  const fieldGuideStyle = document.createElement('link');
+  fieldGuideStyle.rel = 'stylesheet';
+  fieldGuideStyle.href = 'discover-field-guide.css?v=20260730-2';
+  document.head.appendChild(fieldGuideStyle);
+
+  const fieldGuideScript = document.createElement('script');
+  fieldGuideScript.src = 'discover-field-guide.js?v=20260730-2';
+  fieldGuideScript.defer = true;
+  document.body.appendChild(fieldGuideScript);
+
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
   const nav = document.querySelector('.bottom-nav');
