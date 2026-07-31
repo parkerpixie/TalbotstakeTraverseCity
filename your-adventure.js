@@ -5,7 +5,7 @@
   const FAMILY = ['Parker', 'Blake', 'Porter', 'Mark', 'Nancy'];
   const asset = (filename) => `Assets/${filename.split('/').map(encodeURIComponent).join('/')}`;
   const houseAsset = (filename) => asset(`Assets/Images/${filename}`);
-  const safe = (value = '') => String(value).replace(/[&<>"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[character]));
+  const safe = (value = '') => String(value).replace(/[&<>\"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;' }[character]));
 
   const placeImages = {
     'arts': 'Art Tavern Building.jpeg',
@@ -68,7 +68,7 @@
     { label: 'Explore', caption: 'Dunes, trails & water', image: 'Sleeping Bear Dunes Nataional Lakeshore Ariel Image.jpg', mode: 'explore' },
     { label: 'Eat', caption: 'Local flavor', image: 'Art Tavern Building.jpeg', mode: 'eat' },
     { label: 'Shop', caption: 'Downtown treasures', image: 'Downtown Traverse City Shopping.jpeg', mode: 'shop' },
-    { label: 'House', caption: 'West Bay basecamp', image: houseAsset('IMG_9814.jpeg'), tab: 'house' }
+    { label: 'House', caption: 'West Bay basecamp', image: houseAsset('IMG_9814.jpeg'), tab: 'house', isPath: true }
   ];
 
   function traveler() {
@@ -193,9 +193,10 @@
 
   function shortcutCard(item) {
     const data = item.mode ? `data-open-mode="${item.mode}"` : `data-open-tab="${item.tab}"`;
+    const image = item.isPath ? item.image : asset(item.image);
     return `
       <button class="adventure-shortcut" type="button" ${data}>
-        <img src="${item.image}" alt="">
+        <img src="${image}" alt="">
         <span></span>
         <strong>${item.label}<small>${item.caption}</small></strong>
       </button>`;
