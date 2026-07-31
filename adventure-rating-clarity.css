@@ -1,0 +1,97 @@
+/* Separate personal ratings from the live family average on Adventure cards. */
+.adventure-family-rating{
+  gap:5px;
+  border-color:rgba(178,232,223,.3);
+  background:rgba(7,69,73,.82);
+  color:#fff;
+}
+.adventure-family-rating small{
+  display:inline!important;
+  font-size:.56rem;
+  font-weight:900;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  opacity:.86;
+}
+.adventure-family-rating strong{font-size:.78rem}
+.adventure-family-rating>span{
+  display:inline!important;
+  color:#f3c865!important;
+  font-size:.78rem!important;
+  letter-spacing:0!important;
+}
+.adventure-family-rating.empty{
+  background:rgba(5,30,39,.66);
+  color:rgba(255,255,255,.9);
+}
+
+.adventure-rate-button{
+  right:10px;
+  bottom:10px;
+  min-width:72px;
+  justify-items:center;
+  text-align:center;
+}
+.adventure-rate-button>span{
+  font-size:1.05rem;
+  color:#8b6070;
+  letter-spacing:0;
+}
+.adventure-rate-button>strong{
+  font-family:'DM Sans',sans-serif;
+  font-size:.78rem;
+  line-height:1;
+}
+.adventure-rate-button.active{
+  top:10px;
+  right:10px;
+  bottom:auto;
+  min-width:82px;
+  border-color:rgba(232,169,107,.42);
+  background:rgba(255,248,232,.96);
+  color:#794728;
+}
+.adventure-rate-button.active small{
+  font-size:.54rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.family-top-score{
+  grid-template-columns:auto auto 1fr;
+  grid-template-rows:auto auto;
+}
+.family-top-score small{
+  grid-column:1/-1;
+  color:#567578;
+  font-size:.58rem;
+  font-weight:900;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.family-top-score strong{
+  grid-row:auto;
+  font-size:1.35rem;
+}
+.family-top-score span{
+  color:#f0b54d;
+  font-size:.95rem;
+  letter-spacing:0;
+}
+.family-top-score em{
+  align-self:center;
+  color:#687a7d;
+  font-size:.65rem;
+  font-style:normal;
+  font-weight:750;
+}
+.family-top-rate.active{
+  background:#fff2df;
+  border-color:rgba(205,139,75,.42);
+  color:#744923;
+}
+
+@media(max-width:440px){
+  .adventure-family-rating{top:8px;left:8px}
+  .adventure-rate-button.active{top:8px;right:8px}
+}
