@@ -1,13 +1,22 @@
 (() => {
-  const fieldGuideStyle = document.createElement('link');
-  fieldGuideStyle.rel = 'stylesheet';
-  fieldGuideStyle.href = 'discover-field-guide.css?v=20260730-2';
-  document.head.appendChild(fieldGuideStyle);
+  const loadStyle = (href) => {
+    const style = document.createElement('link');
+    style.rel = 'stylesheet';
+    style.href = href;
+    document.head.appendChild(style);
+  };
 
-  const fieldGuideScript = document.createElement('script');
-  fieldGuideScript.src = 'discover-field-guide.js?v=20260730-2';
-  fieldGuideScript.defer = true;
-  document.body.appendChild(fieldGuideScript);
+  const loadScript = (src) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.defer = true;
+    document.body.appendChild(script);
+  };
+
+  loadStyle('discover-field-guide.css?v=20260730-2');
+  loadStyle('choose-explorer.css?v=20260730-1');
+  loadScript('discover-field-guide.js?v=20260730-2');
+  loadScript('choose-explorer.js?v=20260730-1');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
