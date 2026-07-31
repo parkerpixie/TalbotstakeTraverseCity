@@ -15,11 +15,11 @@
 
   loadStyle('discover-field-guide.css?v=20260730-2');
   loadStyle('choose-explorer.css?v=20260730-2');
-  loadStyle('your-adventure.css?v=20260730-3');
-  loadStyle('places-hub.css?v=20260730-1');
+  loadStyle('your-adventure.css?v=20260730-4');
+  loadStyle('places-hub.css?v=20260730-2');
   loadScript('discover-field-guide.js?v=20260730-2');
   loadScript('choose-explorer.js?v=20260730-2');
-  loadScript('your-adventure.js?v=20260730-3');
+  loadScript('your-adventure.js?v=20260730-4');
   loadScript('places-hub.js?v=20260730-2');
 
   const appShell = document.getElementById('appShell');
