@@ -39,4 +39,36 @@
   .tab-panel {
     scroll-margin-top: 76px;
   }
+
+  /* Mobile header should identify the app and traveler, not become a second dashboard. */
+  .app-header {
+    min-height: 58px;
+    padding: 8px 14px !important;
+    gap: 10px !important;
+    justify-content: space-between;
+  }
+
+  .app-header .header-actions,
+  .app-header .trip-chip,
+  .app-header .sync-status {
+    display: none !important;
+  }
+
+  .mini-brand {
+    flex: 0 0 auto;
+  }
+
+  .mini-brand span {
+    width: 42px;
+    height: 42px;
+  }
+
+  .traveler-button,
+  .explorer-profile-pill {
+    min-height: 42px !important;
+    width: auto !important;
+    padding: 9px 15px !important;
+    margin-left: auto;
+    font-size: .9rem !important;
+  }
 }
