@@ -1,24 +1,15 @@
-/* Places hub and stronger dashboard grouping */
-.adventure-columns{gap:24px}
-.adventure-list-section{
-  min-width:0;
-  padding:16px;
-  border:1px solid rgba(11,52,67,.08);
-  border-radius:24px;
-  background:rgba(255,255,255,.82);
-  box-shadow:0 10px 28px rgba(20,48,55,.07);
-}
-.adventure-list-section:nth-child(2){background:rgba(230,241,237,.82)}
-.adventure-list-head{margin-bottom:13px}
-.adventure-card-rail{gap:12px}
-.adventure-shortcut-row{margin-top:4px;padding-top:4px}
-
+/* Unified Places hub */
 .places-hub{
   --places-ink:#0b3443;
   --places-teal:#0b6671;
   --places-coral:#d66f52;
+  min-width:0;
+}
+
+.tab-panel.places-hub.active{
   display:grid;
-  gap:20px;
+  gap:26px;
+  padding-bottom:32px;
 }
 
 .places-hero{
@@ -36,7 +27,7 @@
 .places-hero-copy h2{margin:5px 0 12px;font-family:'Playfair Display',serif;font-size:clamp(39px,5.6vw,66px);line-height:.98}
 .places-hero-copy p:last-child{max-width:610px;margin:0;font-size:16px;line-height:1.55}
 
-.places-mode-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.places-mode-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .places-mode-nav button{
   position:relative;
   min-height:116px;
@@ -56,26 +47,22 @@
 .places-mode-nav strong{position:relative;z-index:1;display:grid;gap:5px;padding:22px;font-family:'Playfair Display',serif;font-size:25px;line-height:1}
 .places-mode-nav small{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;opacity:.84}
 
-.places-mode-stage{min-width:0}
+.places-mode-stage{display:grid;gap:18px;min-width:0}
 .places-mode-panel{animation:placesFade .22s ease}
+.places-mode-panel:not([hidden]){display:grid;gap:18px}
 .places-mode-panel[hidden]{display:none!important}
 @keyframes placesFade{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:none}}
 
-.places-mode-panel>.page-heading{
-  margin:6px 0 20px;
-  padding:22px 24px;
-  border:1px solid rgba(11,52,67,.08);
-  border-radius:24px;
-  background:#fff;
-  box-shadow:0 9px 24px rgba(20,48,55,.06);
-}
-.places-mode-panel>.page-heading h2{font-size:clamp(32px,4.4vw,54px)}
-.places-mode-panel>.traveler-strip{margin-top:-5px}
+/* The changing hero already names the section, so filters begin immediately below it. */
+.places-mode-panel>.page-heading{display:none!important}
+.places-mode-panel>.traveler-strip{margin:0}
 .places-mode-panel>.filter-panel{
+  margin:0;
   padding:14px;
   border:1px solid rgba(11,52,67,.08);
   border-radius:20px;
-  background:rgba(255,255,255,.75);
+  background:rgba(255,255,255,.8);
+  box-shadow:0 9px 24px rgba(20,48,55,.05);
 }
 
 .visual-place-card{padding:0;overflow:hidden;min-height:0}
@@ -92,27 +79,21 @@
 .visual-place-card .saved-by-label{margin-top:12px}
 
 @media(max-width:720px){
-  .adventure-columns{gap:28px}
-  .adventure-list-section{padding:16px 14px 14px;border-radius:23px}
-  .adventure-card-rail{gap:12px;padding-bottom:9px}
-  .adventure-shortcut-row{margin-top:3px;padding-top:5px}
-  .places-hub{gap:16px}
+  .tab-panel.places-hub.active{gap:20px;padding-bottom:26px}
   .places-hero,.places-hero-copy{min-height:330px}
   .places-hero{border-radius:24px}
   .places-hero-shade{background:linear-gradient(180deg,rgba(4,30,40,.12),rgba(4,30,40,.93) 74%)}
   .places-hero-copy{padding:25px 22px}
   .places-hero-copy h2{font-size:43px}
-  .places-mode-nav{display:flex;gap:10px;overflow-x:auto;padding:3px 3px 10px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .places-mode-nav{display:flex;gap:12px;overflow-x:auto;padding:3px 3px 10px;scroll-snap-type:x mandatory;scrollbar-width:none}
   .places-mode-nav::-webkit-scrollbar{display:none}
   .places-mode-nav button{flex:0 0 min(72vw,280px);min-height:106px;scroll-snap-align:start}
   .places-mode-nav strong{padding:19px;font-size:23px}
-  .places-mode-panel>.page-heading{padding:19px 18px;border-radius:21px}
-  .places-mode-panel>.page-heading h2{font-size:36px}
+  .places-mode-stage,.places-mode-panel:not([hidden]){gap:15px}
   .place-card-media{height:210px}
 }
 
 @media(max-width:440px){
-  .adventure-list-section{padding:14px 12px 12px}
   .places-hero,.places-hero-copy{min-height:350px}
   .places-hero-copy h2{font-size:39px}
   .places-hero-copy p:last-child{font-size:14px}
