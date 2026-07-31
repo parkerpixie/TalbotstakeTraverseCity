@@ -3,67 +3,6 @@
   if (!home) return;
 
   const asset = (filename) => `Assets/${filename.split('/').map(encodeURIComponent).join('/')}`;
-  const houseAsset = (filename) => asset(`Assets/Images/${filename}`);
-
-  const placeImages = {
-    'arts': 'Art Tavern Building.jpeg',
-    'cherry-public': 'Cherry Republic - Cherry Public House and Great Hall of the Repbulic Glen Arbor.webp',
-    'rpm-records': 'RPM Records.jpeg',
-    'top-comics': 'Top Comics Outside.jpeg',
-    'horizon': 'Horizon Books.jpeg',
-    'laughing-fish': 'Laughing Fish Gallery.jpeg',
-    'cherry-republic-tc': 'Cherry Republic Traverse City.jpg',
-    'cherry-republic-ga': 'Cherry Republic Glen Arbor.jpg',
-    'fishtown': 'Fishtown - Leelanau Artisan - Local goods.webp',
-    'house-water': 'Traverse City - Pier and Beach access.webp',
-    'clinch-park': 'Clinch Park Beach at Sunset.jpg',
-    'commons-trails': 'Grand Traverse Commons - Scenic Walking Trail.webp',
-    'old-mission-drive': 'Cherry Orchard 1.jpeg',
-    'mission-point': 'Mission Point Lighthouse.webp',
-    'suttons-bay-walk': 'Suttons Bay Marina.jpeg',
-    'fishtown-walk': 'Fishtown - Shantys on Canal.jpg',
-    'empire-bluff': 'Sleeping Bear Dunes from the Lake View.jpeg',
-    'pyramid-point': 'Sleeping Bear Dunes Steep Dune Blue Water.webp',
-    'dune-climb': 'Sleeping Bear Dunes - Dune Climb.webp',
-    'pierce-stocking': 'Pierce Stocking Scenic Drive.jpg',
-    'rainy-commons': 'Grand Traverse Commons 1.jpg'
-  };
-
-  const profileDefaults = {
-    Parker: ['laughing-fish', 'fishtown-walk', 'horizon', 'commons-trails'],
-    Blake: ['arts', 'rpm-records', 'pierce-stocking', 'commons-trails'],
-    Porter: ['top-comics', 'dune-climb', 'cherry-republic-ga', 'commons-trails'],
-    Mark: ['house-water', 'mission-point', 'suttons-bay-walk', 'fishtown-walk'],
-    Nancy: ['laughing-fish', 'mission-point', 'fishtown', 'cherry-republic-ga'],
-    Explorer: ['pierce-stocking', 'fishtown-walk', 'commons-trails', 'mission-point']
-  };
-
-  const discoveries = [
-    {
-      type: 'Garden wander',
-      name: 'The Botanic Garden at Historic Barns Park',
-      image: 'Grand Traverse Commons - Botanical Garden 1.jpg',
-      tab: 'explore'
-    },
-    {
-      type: 'Curious stop',
-      name: 'The Music House Museum',
-      image: 'The Music House Museum Outside Image.jpeg',
-      tab: 'explore'
-    },
-    {
-      type: 'Waterfront pause',
-      name: 'Clinch Park at Sunset',
-      image: 'Clinch Park Beach at Sunset.jpg',
-      placeId: 'clinch-park'
-    },
-    {
-      type: 'Historic wandering',
-      name: 'Fishtown Shanties & Harbor',
-      image: 'Fishtown - Shantys on Canal 2.webp',
-      placeId: 'fishtown-walk'
-    }
-  ];
 
   const fieldNotes = [
     {
@@ -93,13 +32,6 @@
     }
   ];
 
-  const shortcutItems = [
-    { label: 'Explore', caption: 'Dunes, trails & water', image: 'Sleeping Bear Dunes Nataional Lakeshore Ariel Image.jpg', tab: 'explore' },
-    { label: 'Eat', caption: 'Local flavor', image: 'Art Tavern Building.jpeg', tab: 'eat' },
-    { label: 'Shop', caption: 'Downtown treasures', image: 'Downtown Traverse City Shopping.jpeg', tab: 'shop' },
-    { label: 'House', caption: 'West Bay basecamp', image: houseAsset('IMG_9814.jpeg'), tab: 'house', isPath: true }
-  ];
-
   function traveler() {
     const saved = localStorage.getItem('tcTraveler');
     return saved && saved !== 'Everyone' ? saved : 'Explorer';
@@ -121,10 +53,6 @@
     } catch {
       return {};
     }
-  }
-
-  function allPlaceRecords() {
-    return typeof allPlaces !== 'undefined' && Array.isArray(allPlaces) ? allPlaces : [];
   }
 
   function favoriteIdsFor(name) {
@@ -150,112 +78,25 @@
       .length;
   }
 
-  function itemImage(item) {
-    const filename = placeImages[item.id];
-    return filename ? asset(filename) : '';
+  function placeCount() {
+    return typeof allPlaces !== 'undefined' && Array.isArray(allPlaces) ? allPlaces.length : 0;
   }
 
-  function itemTab(item) {
-    return item.kind === 'restaurant' ? 'eat' : item.kind === 'shop' ? 'shop' : 'explore';
-  }
+  function openPlaces(mode = 'explore') {
+    if (window.TCPlaces?.open) {
+      window.TCPlaces.open(mode);
+      return;
+    }
 
-  function topPicksFor(name) {
-    const records = allPlaceRecords();
-    const selectedIds = favoriteIdsFor(name);
-    const defaults = profileDefaults[name] || profileDefaults.Explorer;
-    const orderedIds = [...selectedIds, ...defaults];
-    const seen = new Set();
-
-    return orderedIds
-      .filter((id) => {
-        if (seen.has(id) || !placeImages[id]) return false;
-        seen.add(id);
-        return true;
-      })
-      .map((id) => records.find((place) => place.id === id))
-      .filter(Boolean)
-      .slice(0, 4)
-      .map((place) => ({
-        ...place,
-        image: itemImage(place),
-        tab: itemTab(place),
-        savedByTraveler: selectedIds.includes(place.id)
-      }));
-  }
-
-  function typeLabel(item) {
-    if (item.savedByTraveler) return 'Saved by you';
-    if (item.kind === 'restaurant') return 'Restaurant';
-    if (item.kind === 'shop') return 'Shop';
-    return 'Adventure';
-  }
-
-  function placeCard(item) {
-    return `
-      <button class="adventure-place-card" type="button" data-place-id="${item.id}" data-tab-target="${item.tab}">
-        <img src="${item.image}" alt="${item.name}">
-        <span class="adventure-place-shade"></span>
-        <span class="adventure-place-copy">
-          <small>${typeLabel(item)}</small>
-          <strong>${item.name}</strong>
-          <span>${item.area || ''}</span>
-        </span>
-        ${item.savedByTraveler ? '<span class="adventure-saved-mark" aria-label="Saved by you">♥</span>' : ''}
-      </button>`;
-  }
-
-  function discoveryCard(item) {
-    const image = asset(item.image);
-    return `
-      <button class="adventure-place-card discovery-place-card" type="button" ${item.placeId ? `data-place-id="${item.placeId}"` : ''} data-tab-target="${item.tab || 'explore'}">
-        <img src="${image}" alt="${item.name}">
-        <span class="adventure-place-shade"></span>
-        <span class="adventure-place-copy">
-          <small>${item.type}</small>
-          <strong>${item.name}</strong>
-        </span>
-      </button>`;
-  }
-
-  function shortcutCard(item) {
-    const image = item.isPath ? item.image : asset(item.image);
-    return `
-      <button class="adventure-shortcut" type="button" data-tab-target="${item.tab}">
-        <img src="${image}" alt="">
-        <span></span>
-        <strong>${item.label}<small>${item.caption}</small></strong>
-      </button>`;
-  }
-
-  function goToTab(tab) {
-    const navButton = document.querySelector(`.bottom-nav [data-tab="${tab}"]`);
-    const fallback = document.querySelector(`.mini-brand[data-tab="${tab}"]`);
-    (navButton || fallback)?.click();
-  }
-
-  function focusPlace(id, requestedTab) {
-    const place = allPlaceRecords().find((item) => item.id === id);
-    const tab = place ? itemTab(place) : requestedTab || 'explore';
-    goToTab(tab);
-    if (!place) return;
-
-    const searchIds = { eat: 'restaurantSearch', shop: 'shopSearch', explore: 'activitySearch' };
-    window.setTimeout(() => {
-      const field = document.getElementById(searchIds[tab]);
-      if (!field) return;
-      field.value = place.name;
-      field.dispatchEvent(new Event('input', { bubbles: true }));
-      field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 80);
+    if (typeof showTab === 'function') showTab(mode);
+    window.setTimeout(() => window.TCPlaces?.open(mode), 120);
   }
 
   function render() {
     const name = traveler();
     const selectedIds = favoriteIdsFor(name);
-    const picks = topPicksFor(name);
     const fieldNote = fieldNotes[new Date().getDate() % fieldNotes.length];
-    const totalPlaces = allPlaceRecords().length;
-    const remaining = Math.max(0, totalPlaces - selectedIds.length);
+    const remaining = Math.max(0, placeCount() - selectedIds.length);
 
     home.className = 'tab-panel active your-adventure';
     home.innerHTML = `
@@ -277,13 +118,13 @@
       </section>
 
       <section class="adventure-signal-row">
-        <button class="adventure-next-step" type="button" data-tab-target="explore">
+        <button class="adventure-next-step" type="button" data-open-places="explore">
           <img src="${asset('Cherry in Orchard close up.jpeg')}" alt="Ripe cherries in a northern Michigan orchard">
           <span class="adventure-signal-shade"></span>
           <span class="adventure-signal-copy">
             <small>Your next step</small>
             <strong>${remaining ? 'Keep exploring' : 'Your shortlist is ready'}</strong>
-            <span>${remaining ? `${remaining} places are still waiting for your verdict.` : 'Open the planner and start shaping the five days.'}</span>
+            <span>${remaining ? `${remaining} places are still waiting for your verdict.` : 'Open Places to review your shortlist, then shape the five days.'}</span>
           </span>
           <b>→</b>
         </button>
@@ -296,40 +137,10 @@
             <p>${fieldNote.text}</p>
           </div>
         </article>
-      </section>
-
-      <section class="adventure-columns">
-        <div class="adventure-list-section">
-          <div class="adventure-list-head">
-            <div><p class="eyebrow dark">Personal shortlist</p><h3>${selectedIds.length ? 'Your Top Picks' : `Made for ${name}`}</h3></div>
-            <button type="button" data-tab-target="explore">See all →</button>
-          </div>
-          <div class="adventure-card-rail">
-            ${picks.length ? picks.map(placeCard).join('') : '<p class="adventure-empty">Start exploring and your saved places will appear here.</p>'}
-          </div>
-        </div>
-
-        <div class="adventure-list-section">
-          <div class="adventure-list-head">
-            <div><p class="eyebrow dark">Fresh possibilities</p><h3>New Discoveries</h3></div>
-            <button type="button" data-tab-target="explore">Wander →</button>
-          </div>
-          <div class="adventure-card-rail">
-            ${discoveries.map(discoveryCard).join('')}
-          </div>
-        </div>
-      </section>
-
-      <section class="adventure-shortcut-row" aria-label="Trip sections">
-        ${shortcutItems.map(shortcutCard).join('')}
       </section>`;
 
-    home.querySelectorAll('[data-tab-target]').forEach((button) => {
-      button.addEventListener('click', () => {
-        const placeId = button.dataset.placeId;
-        if (placeId) focusPlace(placeId, button.dataset.tabTarget);
-        else goToTab(button.dataset.tabTarget);
-      });
+    home.querySelector('[data-open-places]')?.addEventListener('click', (event) => {
+      openPlaces(event.currentTarget.dataset.openPlaces);
     });
   }
 
