@@ -5,6 +5,7 @@
   const FAMILY = ['Parker', 'Blake', 'Porter', 'Mark', 'Nancy'];
   const asset = (filename) => `Assets/${filename.split('/').map(encodeURIComponent).join('/')}`;
   const houseAsset = (filename) => asset(`Assets/Images/${filename}`);
+  const safe = (value = '') => String(value).replace(/[&<>"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[character]));
 
   const placeImages = {
     'arts': 'Art Tavern Building.jpeg',
@@ -63,16 +64,18 @@
     { title: 'History under the water', text: 'Storms, shoals, and busy shipping routes left shipwreck stories throughout the region.', image: 'Shipwreck - Paddleboat with ship underneath.jpeg' }
   ];
 
-  const shortcutItems = [
+  const shortcuts = [
     { label: 'Explore', caption: 'Dunes, trails & water', image: 'Sleeping Bear Dunes Nataional Lakeshore Ariel Image.jpg', mode: 'explore' },
     { label: 'Eat', caption: 'Local flavor', image: 'Art Tavern Building.jpeg', mode: 'eat' },
     { label: 'Shop', caption: 'Downtown treasures', image: 'Downtown Traverse City Shopping.jpeg', mode: 'shop' },
-    { label: 'House', caption: 'West Bay basecamp', image: houseAsset('IMG_9814.jpeg'), tab: 'house', isPath: true }
+    { label: 'House', caption: 'West Bay basecamp', image: houseAsset('IMG_9814.jpeg'), tab: 'house' }
   ];
 
   function traveler() {
-    const saved = localStorage.getItem('tcTraveler');
-    return saved && saved !== 'Everyone' ? saved : 'Explorer';
+    const stored = localStorage.getItem('tcTraveler');
+    if (FAMILY.includes(stored)) return stored;
+    if (typeof selectedTraveler !== 'undefined' && FAMILY.includes(selectedTraveler)) return selectedTraveler;
+    return 'Explorer';
   }
 
   function greeting() {
@@ -84,32 +87,30 @@
     return Math.max(0, Math.ceil((new Date('2026-08-23T16:00:00') - new Date()) / 86400000));
   }
 
-  function readFavoriteOwners() {
-    try {
-      const value = JSON.parse(localStorage.getItem('tcFavoriteOwners') || '{}');
-      return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
-    } catch {
-      return {};
-    }
-  }
-
   function allPlaceRecords() {
     return typeof allPlaces !== 'undefined' && Array.isArray(allPlaces) ? allPlaces : [];
   }
 
-  function favoriteIdsFor(name) {
-    const owners = readFavoriteOwners();
-    const owned = Object.entries(owners)
-      .filter(([, names]) => Array.isArray(names) && names.includes(name))
-      .map(([id]) => id);
+  function ratingApi() {
+    return window.TCHeartRatings || {
+      get: () => 0,
+      stats: () => ({ count: 0, total: 0, average: 0, entries: [] }),
+      hearts: (score) => '♥'.repeat(Math.max(0, Math.round(score))) + '♡'.repeat(Math.max(0, 5 - Math.round(score))),
+      label: () => 'Not rated',
+      open: () => {},
+      legend: {}
+    };
+  }
 
-    if (Object.keys(owners).length) return owned;
+  function ratingFor(id, name) {
+    return ratingApi().get(id, name);
+  }
 
-    try {
-      return JSON.parse(localStorage.getItem('tcFavoritesV3') || '[]');
-    } catch {
-      return [];
-    }
+  function ratedIdsFor(name) {
+    return allPlaceRecords()
+      .map((place) => ({ id: place.id, rating: ratingFor(place.id, name) }))
+      .filter((item) => item.rating > 0)
+      .sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id));
   }
 
   function plannedCount() {
@@ -118,20 +119,8 @@
     return Object.values(currentPlan).flatMap((day) => Object.values(day || {}).flat()).length;
   }
 
-  function heartNames(id) {
-    const owners = readFavoriteOwners();
-    return Array.isArray(owners[id]) ? owners[id].filter((name) => FAMILY.includes(name)) : [];
-  }
-
-  function heartMeter(id) {
-    const names = heartNames(id);
-    const label = names.length ? `${names.length} of ${FAMILY.length} family hearts: ${names.join(', ')}` : 'No family hearts yet';
-    return `<span class="adventure-heart-meter" aria-label="${label}" title="${label}">${FAMILY.map((_, index) => `<i class="${index < names.length ? 'filled' : ''}">♥</i>`).join('')}</span>`;
-  }
-
   function itemImage(item) {
-    const filename = placeImages[item?.id];
-    return filename ? asset(filename) : asset('Downtown Traverse City From Above.jpeg');
+    return asset(placeImages[item?.id] || 'Downtown Traverse City From Above.jpeg');
   }
 
   function itemMode(item) {
@@ -140,17 +129,12 @@
 
   function topPicksFor(name) {
     const records = allPlaceRecords();
-    const selectedIds = favoriteIdsFor(name);
+    const rated = ratedIdsFor(name).filter((item) => item.rating >= 3).map((item) => item.id);
     const defaults = profileDefaults[name] || profileDefaults.Explorer;
-    const orderedIds = [...selectedIds, ...defaults];
+    const ordered = [...rated, ...defaults];
     const seen = new Set();
-
-    return orderedIds
-      .filter((id) => {
-        if (seen.has(id) || !placeImages[id]) return false;
-        seen.add(id);
-        return true;
-      })
+    return ordered
+      .filter((id) => !seen.has(id) && seen.add(id))
       .map((id) => records.find((place) => place.id === id))
       .filter(Boolean)
       .slice(0, 4);
@@ -158,59 +142,89 @@
 
   function discoveriesFor(name, picks) {
     const records = allPlaceRecords();
-    const excluded = new Set([...favoriteIdsFor(name), ...picks.map((item) => item.id)]);
-    const preferred = discoveryIds
-      .map((id) => records.find((place) => place.id === id))
-      .filter((place) => place && !excluded.has(place.id));
+    const excluded = new Set([...ratedIdsFor(name).map((item) => item.id), ...picks.map((item) => item.id)]);
+    const preferred = discoveryIds.map((id) => records.find((place) => place.id === id)).filter((place) => place && !excluded.has(place.id));
     const backups = records.filter((place) => placeImages[place.id] && !excluded.has(place.id));
     return [...preferred, ...backups.filter((place) => !preferred.some((item) => item.id === place.id))].slice(0, 4);
   }
 
   function familyTopTen() {
-    const records = allPlaceRecords();
-    const owners = readFavoriteOwners();
-    return records
-      .map((place) => ({ ...place, hearts: Array.isArray(owners[place.id]) ? owners[place.id].filter((name) => FAMILY.includes(name)).length : 0 }))
-      .filter((place) => place.hearts > 0 && placeImages[place.id])
-      .sort((a, b) => b.hearts - a.hearts || a.name.localeCompare(b.name))
+    return allPlaceRecords()
+      .map((place) => ({ place, stats: ratingApi().stats(place.id) }))
+      .filter((item) => item.stats.count > 0 && placeImages[item.place.id])
+      .sort((a, b) => b.stats.total - a.stats.total || b.stats.average - a.stats.average || b.stats.count - a.stats.count || a.place.name.localeCompare(b.place.name))
       .slice(0, 10);
   }
 
-  function typeLabel(item, name) {
-    if (favoriteIdsFor(name).includes(item.id)) return 'Saved by you';
+  function personalLabel(item, name) {
+    const rating = ratingFor(item.id, name);
+    if (rating) return `${rating}. ${ratingApi().label(rating)}`;
     if (item.kind === 'restaurant') return 'Restaurant';
-    if (item.kind === 'shop') return 'Shop';
+    if (item.kind === 'shop') return 'Shopping';
     return 'Adventure';
   }
 
+  function familySummary(id) {
+    const stats = ratingApi().stats(id);
+    if (!stats.count) return '<span class="adventure-family-rating empty">Not rated yet</span>';
+    return `<span class="adventure-family-rating" title="${safe(stats.entries.map((entry) => `${entry.name}: ${entry.rating}`).join(' · '))}"><strong>${stats.average.toFixed(1)}</strong><span>${ratingApi().hearts(stats.average)}</span><small>${stats.count} rated</small></span>`;
+  }
+
   function placeCard(item, name, extraClass = '') {
-    const isMine = favoriteIdsFor(name).includes(item.id);
-    const mode = itemMode(item);
+    const rating = ratingFor(item.id, name);
     return `
-      <article class="adventure-place-card ${extraClass}" data-place-id="${item.id}">
-        <button class="adventure-card-open" type="button" data-place-open="${item.id}" data-place-mode="${mode}" aria-label="Open ${item.name} in Places">
-          <img src="${itemImage(item)}" alt="${item.name}">
+      <article class="adventure-place-card ${extraClass}" data-place-id="${safe(item.id)}">
+        <button class="adventure-card-open" type="button" data-place-open="${safe(item.id)}" data-place-mode="${itemMode(item)}" aria-label="Open ${safe(item.name)} in Places">
+          <img src="${itemImage(item)}" alt="${safe(item.name)}">
           <span class="adventure-place-shade"></span>
           <span class="adventure-place-copy">
-            <small>${typeLabel(item, name)}</small>
-            <strong>${item.name}</strong>
-            <span>${item.area || item.town || ''}</span>
+            <small>${safe(personalLabel(item, name))}</small>
+            <strong>${safe(item.name)}</strong>
+            <span>${safe(item.area || item.town || '')}</span>
           </span>
         </button>
-        ${heartMeter(item.id)}
-        <button class="adventure-heart-button ${isMine ? 'active' : ''}" type="button" data-dashboard-heart="${item.id}" aria-label="${isMine ? 'Remove' : 'Add'} ${name}'s heart for ${item.name}" title="${isMine ? 'Remove your heart' : 'Add your heart'}">${isMine ? '♥' : '♡'}</button>
+        ${familySummary(item.id)}
+        <button class="adventure-rate-button ${rating ? 'active' : ''}" type="button" data-dashboard-rate="${safe(item.id)}" aria-label="Rate ${safe(item.name)} from one to five hearts">
+          <span>${rating ? ratingApi().hearts(rating) : '♡♡♡♡♡'}</span>
+          <small>${rating ? ratingApi().label(rating) : 'Rate it'}</small>
+        </button>
       </article>`;
   }
 
   function shortcutCard(item) {
-    const image = item.isPath ? item.image : asset(item.image);
     const data = item.mode ? `data-open-mode="${item.mode}"` : `data-open-tab="${item.tab}"`;
     return `
       <button class="adventure-shortcut" type="button" ${data}>
-        <img src="${image}" alt="">
+        <img src="${item.image}" alt="">
         <span></span>
         <strong>${item.label}<small>${item.caption}</small></strong>
       </button>`;
+  }
+
+  function familyCard(item, rank, name) {
+    const { place, stats } = item;
+    const personal = ratingFor(place.id, name);
+    return `
+      <article class="family-top-card">
+        <button class="family-top-open" type="button" data-place-open="${safe(place.id)}" data-place-mode="${itemMode(place)}">
+          <img src="${itemImage(place)}" alt="${safe(place.name)}">
+          <span class="family-top-shade"></span>
+          <b>#${rank}</b>
+          <span class="family-top-copy"><strong>${safe(place.name)}</strong><small>${safe(place.area || place.town || '')}</small></span>
+        </button>
+        <div class="family-top-score"><strong>${stats.average.toFixed(1)}</strong><span>${ratingApi().hearts(stats.average)}</span><small>${stats.count} of 5 rated</small></div>
+        <button class="family-top-rate ${personal ? 'active' : ''}" type="button" data-dashboard-rate="${safe(place.id)}">${personal ? `${ratingApi().hearts(personal)} ${ratingApi().label(personal)}` : 'Add my rating'}</button>
+      </article>`;
+  }
+
+  function legendMarkup() {
+    const legend = ratingApi().legend || {};
+    return [5, 4, 3, 2, 1].map((score) => `
+      <div class="adventure-legend-item">
+        <span>${ratingApi().hearts(score)}</span>
+        <strong>${score}. ${safe(legend[score]?.title || '')}</strong>
+        <small>${safe(legend[score]?.detail || '')}</small>
+      </div>`).join('');
   }
 
   function openPlaces(mode = 'explore', placeId = '') {
@@ -223,26 +237,18 @@
   }
 
   function openTab(tab) {
-    if (typeof showTab === 'function') {
-      showTab(tab);
-      return;
-    }
-    document.querySelector(`.bottom-nav [data-tab="${tab}"]`)?.click();
-  }
-
-  function toggleHeart(id) {
-    if (typeof toggleFavorite === 'function') toggleFavorite(id);
-    window.setTimeout(render, 120);
+    if (typeof showTab === 'function') showTab(tab);
+    else document.querySelector(`.bottom-nav [data-tab="${tab}"]`)?.click();
   }
 
   function render() {
     const name = traveler();
-    const selectedIds = favoriteIdsFor(name);
+    const rated = ratedIdsFor(name);
     const picks = topPicksFor(name);
     const discoveries = discoveriesFor(name, picks);
     const familyPicks = familyTopTen();
     const fieldNote = fieldNotes[new Date().getDate() % fieldNotes.length];
-    const remaining = Math.max(0, allPlaceRecords().length - selectedIds.length);
+    const remaining = Math.max(0, allPlaceRecords().length - rated.length);
 
     home.className = 'tab-panel active your-adventure';
     home.innerHTML = `
@@ -252,12 +258,12 @@
         <div class="adventure-hero-content">
           <div>
             <p class="eyebrow">Your Adventure</p>
-            <h2>${greeting()}, ${name}.</h2>
-            <p>Your personal field guide is filling in. Give places your heart and let the family overlap reveal the trip.</p>
+            <h2>${greeting()}, ${safe(name)}.</h2>
+            <p>Rate every possibility from one to five hearts. Your favorites stay personal while the Family Top 10 reveals where the trip has real gravitational pull.</p>
           </div>
           <div class="adventure-stat-strip" aria-label="Trip status">
             <span><strong>${daysUntilTrip()}</strong><small>days to go</small></span>
-            <span><strong>${selectedIds.length}</strong><small>your hearts</small></span>
+            <span><strong>${rated.length}</strong><small>places rated</small></span>
             <span><strong>${plannedCount()}</strong><small>planned stops</small></span>
           </div>
         </div>
@@ -269,8 +275,8 @@
           <span class="adventure-signal-shade"></span>
           <span class="adventure-signal-copy">
             <small>Your next step</small>
-            <strong>${remaining ? 'Keep exploring' : 'Your shortlist is ready'}</strong>
-            <span>${remaining ? `${remaining} places are still waiting for your verdict.` : 'Open Places to review the family favorites, then shape the five days.'}</span>
+            <strong>${remaining ? 'Keep rating possibilities' : 'Your ratings are complete'}</strong>
+            <span>${remaining ? `${remaining} places are still waiting for your verdict.` : 'The Family Top 10 is ready to guide the plan.'}</span>
           </span>
           <b>→</b>
         </button>
@@ -281,15 +287,18 @@
         </article>
       </section>
 
-      <section class="adventure-columns" aria-label="Personal picks and new discoveries">
+      <section class="adventure-rating-legend" aria-label="One through five heart rating legend">
+        <div class="adventure-legend-head"><p class="eyebrow dark">The family heart scale</p><h3>Say what you actually mean.</h3></div>
+        <div class="adventure-legend-grid">${legendMarkup()}</div>
+      </section>
+
+      <section class="adventure-columns" aria-label="Personal favorites and new discoveries">
         <div class="adventure-list-section">
           <div class="adventure-list-head">
-            <div><p class="eyebrow dark">Personal favorites</p><h3>${selectedIds.length ? 'Your Top Picks' : `Made for ${name}`}</h3></div>
+            <div><p class="eyebrow dark">Your highest ratings</p><h3>Your Favorites</h3></div>
             <button type="button" data-open-mode="explore">See all →</button>
           </div>
-          <div class="adventure-card-rail">
-            ${picks.length ? picks.map((item) => placeCard(item, name)).join('') : '<p class="adventure-empty">Start exploring and your hearted places will appear here.</p>'}
-          </div>
+          <div class="adventure-card-rail">${picks.map((item) => placeCard(item, name)).join('') || '<p class="adventure-empty">Rate a few places and your favorites will gather here.</p>'}</div>
         </div>
 
         <div class="adventure-list-section">
@@ -297,36 +306,31 @@
             <div><p class="eyebrow dark">Fresh possibilities</p><h3>Explore Something New</h3></div>
             <button type="button" data-open-mode="explore">Wander →</button>
           </div>
-          <div class="adventure-card-rail">
-            ${discoveries.map((item) => placeCard(item, name, 'discovery-place-card')).join('')}
-          </div>
+          <div class="adventure-card-rail">${discoveries.map((item) => placeCard(item, name, 'discovery-place-card')).join('')}</div>
         </div>
       </section>
 
-      <section class="adventure-family-section">
-        <div class="adventure-list-head family-list-head">
-          <div><p class="eyebrow dark">Where the hearts overlap</p><h3>Family Top 10</h3><p>Every traveler gets one heart per place. The family favorites rise here automatically.</p></div>
-          <button type="button" data-open-mode="explore">Open Places →</button>
-        </div>
-        ${familyPicks.length
-          ? `<div class="adventure-family-rail">${familyPicks.map((item, index) => placeCard(item, name, `family-place-card rank-${index + 1}`)).join('')}</div>`
-          : `<div class="adventure-family-empty"><strong>The leaderboard is waiting.</strong><span>Add hearts in Places and the family’s shared Top 10 will build itself.</span><button type="button" data-open-mode="explore">Start voting</button></div>`}
+      <section class="adventure-quick-section">
+        <div class="adventure-list-head"><div><p class="eyebrow dark">Choose your next move</p><h3>Four Ways Into the Trip</h3></div></div>
+        <div class="adventure-shortcut-row">${shortcuts.map(shortcutCard).join('')}</div>
       </section>
 
-      <section class="adventure-choose-section">
+      <section class="family-top-section">
         <div class="adventure-list-head">
-          <div><p class="eyebrow dark">Choose your next lane</p><h3>What are we in the mood for?</h3></div>
+          <div><p class="eyebrow dark">The shared signal</p><h3>Family Top 10</h3></div>
+          <span class="family-top-note">Ranked by combined hearts, then family average.</span>
         </div>
-        <div class="adventure-shortcut-row" aria-label="Trip sections">${shortcutItems.map(shortcutCard).join('')}</div>
+        <div class="family-top-rail">
+          ${familyPicks.length ? familyPicks.map((item, index) => familyCard(item, index + 1, name)).join('') : '<p class="adventure-empty">Once the family starts rating places, the Top 10 will build itself here.</p>'}
+        </div>
       </section>`;
 
     home.querySelectorAll('[data-open-mode]').forEach((button) => button.addEventListener('click', () => openPlaces(button.dataset.openMode)));
     home.querySelectorAll('[data-open-tab]').forEach((button) => button.addEventListener('click', () => openTab(button.dataset.openTab)));
     home.querySelectorAll('[data-place-open]').forEach((button) => button.addEventListener('click', () => openPlaces(button.dataset.placeMode, button.dataset.placeOpen)));
-    home.querySelectorAll('[data-dashboard-heart]').forEach((button) => button.addEventListener('click', (event) => {
-      event.preventDefault();
+    home.querySelectorAll('[data-dashboard-rate]').forEach((button) => button.addEventListener('click', (event) => {
       event.stopPropagation();
-      toggleHeart(button.dataset.dashboardHeart);
+      ratingApi().open(button.dataset.dashboardRate);
     }));
   }
 
@@ -334,14 +338,14 @@
 
   document.getElementById('profilePill')?.addEventListener('click', () => window.setTimeout(render, 250));
   window.addEventListener('storage', (event) => {
-    if (['tcTraveler', 'tcFavoriteOwners', 'tcFavoritesV3', 'tcPlanV3'].includes(event.key)) render();
+    if (['tcTraveler', 'tcHeartRatings', 'tcPlanV3'].includes(event.key)) render();
   });
+  document.addEventListener('tc-ratings-changed', () => window.setTimeout(render, 60));
+  document.addEventListener('tc-places-ready', () => window.setTimeout(render, 80));
+  document.addEventListener('tc-shared-ready', () => window.setTimeout(render, 120));
   document.addEventListener('click', (event) => {
-    if (event.target.closest('[data-explorer-name]')) window.setTimeout(render, 120);
-    if (event.target.closest('[data-save], [data-add], .remove-stop, #clearPlan')) window.setTimeout(render, 140);
+    if (event.target.closest('[data-explorer-name]')) window.setTimeout(render, 140);
+    if (event.target.closest('[data-add], .remove-stop, #clearPlan')) window.setTimeout(render, 120);
     if (event.target.closest('.bottom-nav [data-tab="home"], .mini-brand[data-tab="home"]')) window.setTimeout(render, 40);
   });
-  document.addEventListener('tc-shared-ready', () => window.setTimeout(render, 120));
-  document.addEventListener('tc-places-ready', () => window.setTimeout(render, 80));
-  document.addEventListener('tc-favorites-changed', () => window.setTimeout(render, 60));
 })();
