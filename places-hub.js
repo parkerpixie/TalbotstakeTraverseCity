@@ -124,10 +124,10 @@
   ];
 
   const supplementalRestaurants = [
-    { id: 'barrel-room', name: 'The Barrel Room', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$', icon: '🍽️', url: 'https://www.thevillagetc.com/dine/', tags: ['commons', 'casual'], fit: ['Blake', 'Mark'], summary: 'A Village dining option that can be paired with the surrounding shops and historic grounds.', menu: 'Check the current Village dining directory for menus and hours.' },
+    { id: 'barrel-room', name: 'The Barrel Room', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$', icon: '🍇', url: 'https://www.thevillagetc.com/dine/', tags: ['winery', '21-plus', 'commons'], fit: [], summary: 'A wine-tasting experience listed in the Commons dining directory, included for directory completeness.', menu: 'Wine-focused tasting experience; verify current offerings directly.' },
     { id: 'cuppa-joe', name: 'Cuppa Joe', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$', icon: '☕', url: 'https://www.thevillagetc.com/dine/', tags: ['coffee', 'quick', 'commons'], fit: ['Parker', 'Blake', 'Nancy'], summary: 'Coffee and a quick pause inside the Commons.', menu: 'Coffee, café drinks, and light café fare.' },
     { id: 'higher-grounds', name: 'Higher Grounds Trading Company', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$', icon: '☕', url: 'https://www.thevillagetc.com/dine/', tags: ['coffee', 'quick', 'commons'], fit: ['Parker', 'Blake', 'Nancy'], summary: 'A Commons coffee stop that fits naturally into a walking-and-shopping block.', menu: 'Coffee and café drinks.' },
-    { id: 'pepenero', name: 'Pepenero', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$$', icon: '🇮🇹', url: 'https://www.thevillagetc.com/dine/', tags: ['pasta', 'special', 'commons'], fit: ['Parker', 'Nancy', 'Mark'], summary: 'Italian dining inside the Commons for a meal that can anchor the whole neighborhood visit.', menu: 'Italian dishes; check the current menu before the trip.' },
+    { id: 'pepenero-ballaro', name: 'Pepenero / Ballaro Wine Lounge', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$$', icon: '🇮🇹', url: 'https://www.thevillagetc.com/dine/', tags: ['pasta', 'wine', '21-plus', 'commons'], fit: [], summary: 'Southern Italian dining paired with a wine-lounge concept, included for directory completeness.', menu: 'Italian dishes and wine-lounge service; verify the current menu directly.' },
     { id: 'pleasanton-bakery', name: 'Pleasanton Brick Oven Bakery', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$', icon: '🥖', url: 'https://www.thevillagetc.com/dine/', tags: ['bakery', 'quick', 'commons'], fit: ['Everyone'], summary: 'Brick-oven bread and bakery fare, ideal for a low-ceremony Commons stop.', menu: 'Bread, baked goods, and rotating bakery fare.' },
     { id: 'red-spire', name: 'Red Spire Brunch House', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$', icon: '🍳', url: 'https://www.thevillagetc.com/dine/', tags: ['brunch', 'family', 'commons'], fit: ['Parker', 'Nancy', 'Mark'], summary: 'A brunch-focused Commons option for the beginning of a Village day.', menu: 'Brunch and breakfast-style dishes.' },
     { id: 'sugar-2-salt', name: 'S2S Sugar 2 Salt', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$', icon: '🥞', url: 'https://www.thevillagetc.com/dine/', tags: ['brunch', 'local-favorite', 'commons'], fit: ['Parker', 'Nancy', 'Mark'], summary: 'A creative daytime meal inside the Commons.', menu: 'Seasonal brunch and lunch fare.' },
@@ -135,7 +135,6 @@
     { id: 'earthen-ales', name: 'Earthen Ales Taproom & Brewery', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$', icon: '🍺', url: 'https://www.thevillagetc.com/dine/', tags: ['brewery', '21-plus', 'commons'], fit: [], summary: 'A brewery and taproom listed in the Commons dining directory.', menu: 'Beer-focused stop; verify food and hours directly.' },
     { id: 'left-foot-charley', name: 'Left Foot Charley Winery', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$', icon: '🍇', url: 'https://www.thevillagetc.com/dine/', tags: ['winery', '21-plus', 'commons'], fit: [], summary: 'A wine-focused Commons storefront included for directory completeness.', menu: 'Wine tasting; verify current offerings directly.' },
     { id: 'obrien-vineyards', name: 'ŌBrien Vineyards', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$', icon: '🍇', url: 'https://www.thevillagetc.com/dine/', tags: ['winery', '21-plus', 'commons'], fit: [], summary: 'A wine-focused Village listing included for directory completeness.', menu: 'Wine tasting; verify current offerings directly.' },
-    { id: 'ballaro-wine-lounge', name: 'Ballaro Wine Lounge', town: 'Traverse City', area: 'Grand Traverse Commons', price: '$$', icon: '🍇', url: 'https://www.thevillagetc.com/dine/', tags: ['wine', '21-plus', 'commons'], fit: [], summary: 'A wine lounge in the Commons directory, included without placing it in anyone’s recommendations.', menu: 'Wine-focused service; verify current offerings directly.' },
     { id: 'moomers', name: 'Moomers Homemade Ice Cream', town: 'Traverse City', area: 'Traverse City / West Side', price: '$', icon: '🍦', url: 'https://moomers.com/', tags: ['dessert', 'family', 'local-favorite'], fit: ['Porter', 'Parker', 'Nancy', 'Blake', 'Mark'], summary: 'A classic local ice-cream stop with enough visual charm to count as a tiny activity.', menu: 'Homemade ice cream and rotating flavors.' }
   ];
 
@@ -298,16 +297,16 @@
 
   function clearSpecificFilters(mode) {
     if (mode === 'eat') {
-      restaurantTown.value = 'all';
-      restaurantPrice.value = 'all';
+      document.getElementById('restaurantTown').value = 'all';
+      document.getElementById('restaurantPrice').value = 'all';
       activeRestaurantTags = [];
       document.querySelectorAll('#restaurantChips button').forEach((button) => button.classList.remove('active'));
     } else if (mode === 'shop') {
-      shopTown.value = 'all';
-      shopType.value = 'all';
+      document.getElementById('shopTown').value = 'all';
+      document.getElementById('shopType').value = 'all';
     } else {
-      activityTown.value = 'all';
-      activityType.value = 'all';
+      document.getElementById('activityTown').value = 'all';
+      document.getElementById('activityType').value = 'all';
       activeActivityTags = [];
       renderActivityChips();
     }
@@ -415,6 +414,7 @@
     }
 
     window.TCPlaces = { open: openPlaces, setMode: updateMode };
+    document.dispatchEvent(new CustomEvent('tc-shared-ready'));
     document.dispatchEvent(new CustomEvent('tc-places-ready'));
     return true;
   }
