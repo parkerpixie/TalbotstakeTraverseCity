@@ -31,6 +31,12 @@
   const nav = document.querySelector('.bottom-nav');
   const enterButton = document.getElementById('enterApp');
 
+  if (nav) {
+    const houseButton = nav.querySelector('[data-tab="house"]');
+    const planButton = nav.querySelector('[data-tab="planner"]');
+    if (houseButton && planButton) nav.insertBefore(houseButton, planButton);
+  }
+
   if (appHeader && nav) {
     appHeader.insertAdjacentElement('afterend', nav);
   }
