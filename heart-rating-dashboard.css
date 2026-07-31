@@ -1,0 +1,208 @@
+/* Adventure dashboard support for the 1–5 heart rating system */
+.adventure-rating-legend,
+.adventure-quick-section,
+.family-top-section{
+  min-width:0;
+  padding:24px;
+  border:1px solid rgba(11,52,67,.09);
+  border-radius:26px;
+  background:#fff;
+  box-shadow:0 12px 32px rgba(20,48,55,.055);
+}
+
+.adventure-legend-head h3{
+  margin:2px 0 16px;
+  color:#0b3443;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(25px,3vw,34px);
+  line-height:1.05;
+}
+
+.adventure-legend-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px;
+}
+
+.adventure-legend-item{
+  display:grid;
+  gap:5px;
+  min-width:0;
+  padding:14px;
+  border:1px solid rgba(163,78,99,.12);
+  border-radius:16px;
+  background:#fbf7f6;
+}
+
+.adventure-legend-item>span{
+  color:#a34e63;
+  font-size:.92rem;
+  letter-spacing:-1px;
+  white-space:nowrap;
+}
+
+.adventure-legend-item strong{
+  color:#0b3443;
+  font-size:.82rem;
+  line-height:1.18;
+}
+
+.adventure-legend-item small{
+  color:#65777a;
+  font-size:.69rem;
+  line-height:1.3;
+}
+
+.adventure-family-rating{
+  position:absolute;
+  z-index:5;
+  top:10px;
+  left:10px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  max-width:calc(100% - 20px);
+  padding:5px 7px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:999px;
+  background:rgba(5,30,39,.68);
+  color:#fff;
+  backdrop-filter:blur(7px);
+  box-shadow:0 4px 12px rgba(5,30,39,.18);
+}
+
+.adventure-family-rating strong{font-size:.75rem}
+.adventure-family-rating>span{color:#ffd3dc;font-size:.64rem;letter-spacing:-1px;white-space:nowrap}
+.adventure-family-rating small{font-size:.58rem;font-weight:800;white-space:nowrap;opacity:.84}
+.adventure-family-rating.empty{font-size:.62rem;font-weight:800}
+
+.adventure-rate-button{
+  position:absolute;
+  z-index:6;
+  right:10px;
+  bottom:10px;
+  display:grid;
+  justify-items:end;
+  gap:1px;
+  max-width:70%;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:13px;
+  padding:7px 9px;
+  background:rgba(255,255,255,.92);
+  color:#87465a;
+  text-align:right;
+  cursor:pointer;
+  box-shadow:0 5px 15px rgba(5,30,39,.22);
+  backdrop-filter:blur(8px);
+}
+
+.adventure-rate-button>span{font-size:.72rem;letter-spacing:-1px;white-space:nowrap}
+.adventure-rate-button small{overflow:hidden;max-width:100%;font-size:.58rem;font-weight:900;white-space:nowrap;text-overflow:ellipsis}
+.adventure-rate-button.active{background:#f7e7eb;color:#8f3f56}
+.adventure-rate-button:hover{transform:translateY(-1px)}
+
+/* Leave space for the rating controls without hiding the card title. */
+.adventure-place-copy{padding-bottom:54px!important}
+
+.family-top-note{
+  color:#65777a;
+  font-size:.76rem;
+  font-weight:750;
+  text-align:right;
+}
+
+.family-top-rail{
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:minmax(220px,1fr);
+  gap:13px;
+  overflow-x:auto;
+  padding:2px 2px 10px;
+  scroll-snap-type:x mandatory;
+  overscroll-behavior-inline:contain;
+}
+
+.family-top-card{
+  display:grid;
+  grid-template-rows:158px auto auto;
+  overflow:hidden;
+  border:1px solid rgba(11,52,67,.1);
+  border-radius:19px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(20,48,55,.08);
+  scroll-snap-align:start;
+}
+
+.family-top-open{
+  position:relative;
+  overflow:hidden;
+  border:0;
+  padding:0;
+  background:#dce6e3;
+  color:#fff;
+  text-align:left;
+  cursor:pointer;
+}
+
+.family-top-open>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .25s ease}
+.family-top-open:hover>img{transform:scale(1.04)}
+.family-top-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,30,39,.02),rgba(5,30,39,.88))}
+.family-top-open>b{position:absolute;z-index:2;top:10px;left:10px;display:grid;place-items:center;min-width:34px;height:34px;padding:0 8px;border-radius:999px;background:rgba(255,255,255,.94);color:#0b3443;font-family:'Playfair Display',serif;font-size:.9rem;box-shadow:0 4px 12px rgba(5,30,39,.2)}
+.family-top-copy{position:absolute;z-index:2;right:0;bottom:0;left:0;display:grid;gap:2px;padding:34px 13px 13px}
+.family-top-copy strong{font-size:1rem;line-height:1.1}
+.family-top-copy small{overflow:hidden;font-size:.66rem;white-space:nowrap;text-overflow:ellipsis;opacity:.8}
+
+.family-top-score{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  align-items:center;
+  gap:2px 8px;
+  padding:12px 13px 8px;
+  color:#0b3443;
+}
+.family-top-score strong{grid-row:1/3;font-family:'Playfair Display',serif;font-size:1.35rem}
+.family-top-score span{color:#a34e63;font-size:.78rem;letter-spacing:-1px;white-space:nowrap}
+.family-top-score small{color:#687a7d;font-size:.65rem;font-weight:750}
+
+.family-top-rate{
+  margin:0 12px 12px;
+  overflow:hidden;
+  border:1px solid rgba(163,78,99,.22);
+  border-radius:999px;
+  padding:9px 11px;
+  background:#fbf5f5;
+  color:#87465a;
+  font-size:.68rem;
+  font-weight:850;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  cursor:pointer;
+}
+.family-top-rate.active{background:#f4e2e6;border-color:rgba(163,78,99,.4)}
+
+.adventure-quick-section .adventure-list-head,
+.family-top-section .adventure-list-head{margin-bottom:16px}
+
+@media(max-width:1050px){
+  .adventure-legend-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+@media(max-width:720px){
+  .adventure-rating-legend,
+  .adventure-quick-section,
+  .family-top-section{padding:18px;border-radius:22px}
+  .adventure-legend-grid{display:flex;gap:10px;overflow-x:auto;padding:0 1px 8px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .adventure-legend-grid::-webkit-scrollbar{display:none}
+  .adventure-legend-item{flex:0 0 min(68vw,235px);scroll-snap-align:start}
+  .family-top-rail{grid-auto-columns:min(76vw,270px);scrollbar-width:none}
+  .family-top-rail::-webkit-scrollbar{display:none}
+  .family-top-note{text-align:left}
+}
+
+@media(max-width:440px){
+  .adventure-family-rating{top:8px;left:8px}
+  .adventure-family-rating small{display:none}
+  .adventure-rate-button{right:8px;bottom:8px;max-width:74%}
+  .adventure-place-copy{padding-bottom:52px!important}
+  .family-top-section>.adventure-list-head{align-items:flex-start;flex-direction:column}
+}
