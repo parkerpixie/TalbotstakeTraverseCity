@@ -9,16 +9,18 @@
   const loadScript = (src) => {
     const script = document.createElement('script');
     script.src = src;
-    script.defer = true;
+    script.async = false;
     document.body.appendChild(script);
   };
 
   loadStyle('discover-field-guide.css?v=20260730-2');
   loadStyle('choose-explorer.css?v=20260730-2');
   loadStyle('your-adventure.css?v=20260730-3');
+  loadStyle('places-hub.css?v=20260730-1');
   loadScript('discover-field-guide.js?v=20260730-2');
   loadScript('choose-explorer.js?v=20260730-2');
   loadScript('your-adventure.js?v=20260730-3');
+  loadScript('places-hub.js?v=20260730-1');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
