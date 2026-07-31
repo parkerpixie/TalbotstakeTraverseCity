@@ -14,9 +14,11 @@
   };
 
   loadStyle('discover-field-guide.css?v=20260730-2');
-  loadStyle('choose-explorer.css?v=20260730-1');
+  loadStyle('choose-explorer.css?v=20260730-2');
+  loadStyle('your-adventure.css?v=20260730-1');
   loadScript('discover-field-guide.js?v=20260730-2');
-  loadScript('choose-explorer.js?v=20260730-1');
+  loadScript('choose-explorer.js?v=20260730-2');
+  loadScript('your-adventure.js?v=20260730-1');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
