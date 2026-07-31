@@ -1,0 +1,121 @@
+/* Places hub and stronger dashboard grouping */
+.adventure-columns{gap:24px}
+.adventure-list-section{
+  min-width:0;
+  padding:16px;
+  border:1px solid rgba(11,52,67,.08);
+  border-radius:24px;
+  background:rgba(255,255,255,.82);
+  box-shadow:0 10px 28px rgba(20,48,55,.07);
+}
+.adventure-list-section:nth-child(2){background:rgba(230,241,237,.82)}
+.adventure-list-head{margin-bottom:13px}
+.adventure-card-rail{gap:12px}
+.adventure-shortcut-row{margin-top:4px;padding-top:4px}
+
+.places-hub{
+  --places-ink:#0b3443;
+  --places-teal:#0b6671;
+  --places-coral:#d66f52;
+  display:grid;
+  gap:20px;
+}
+
+.places-hero{
+  position:relative;
+  min-height:300px;
+  overflow:hidden;
+  border-radius:30px;
+  background:var(--places-ink);
+  color:#fff;
+  box-shadow:0 20px 48px rgba(11,52,67,.18);
+}
+.places-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .25s ease}
+.places-hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,30,40,.94),rgba(4,30,40,.58) 58%,rgba(4,30,40,.12))}
+.places-hero-copy{position:relative;z-index:1;display:flex;min-height:300px;max-width:700px;flex-direction:column;justify-content:flex-end;padding:clamp(28px,5vw,54px)}
+.places-hero-copy h2{margin:5px 0 12px;font-family:'Playfair Display',serif;font-size:clamp(39px,5.6vw,66px);line-height:.98}
+.places-hero-copy p:last-child{max-width:610px;margin:0;font-size:16px;line-height:1.55}
+
+.places-mode-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.places-mode-nav button{
+  position:relative;
+  min-height:116px;
+  overflow:hidden;
+  border:2px solid transparent;
+  border-radius:22px;
+  padding:0;
+  color:#fff;
+  text-align:left;
+  box-shadow:0 10px 26px rgba(20,48,55,.09);
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.places-mode-nav button:hover{transform:translateY(-2px)}
+.places-mode-nav button.active{border-color:#fff;box-shadow:0 0 0 3px var(--places-coral),0 14px 32px rgba(20,48,55,.15)}
+.places-mode-nav img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.places-mode-nav button>span{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,30,39,.9),rgba(5,30,39,.25))}
+.places-mode-nav strong{position:relative;z-index:1;display:grid;gap:5px;padding:22px;font-family:'Playfair Display',serif;font-size:25px;line-height:1}
+.places-mode-nav small{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;opacity:.84}
+
+.places-mode-stage{min-width:0}
+.places-mode-panel{animation:placesFade .22s ease}
+.places-mode-panel[hidden]{display:none!important}
+@keyframes placesFade{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+.places-mode-panel>.page-heading{
+  margin:6px 0 20px;
+  padding:22px 24px;
+  border:1px solid rgba(11,52,67,.08);
+  border-radius:24px;
+  background:#fff;
+  box-shadow:0 9px 24px rgba(20,48,55,.06);
+}
+.places-mode-panel>.page-heading h2{font-size:clamp(32px,4.4vw,54px)}
+.places-mode-panel>.traveler-strip{margin-top:-5px}
+.places-mode-panel>.filter-panel{
+  padding:14px;
+  border:1px solid rgba(11,52,67,.08);
+  border-radius:20px;
+  background:rgba(255,255,255,.75);
+}
+
+.visual-place-card{padding:0;overflow:hidden;min-height:0}
+.place-card-media{position:relative;height:190px;overflow:hidden;background:#dce7e4}
+.place-card-media img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.visual-place-card:hover .place-card-media img{transform:scale(1.035)}
+.place-card-media-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,30,39,.03),rgba(5,30,39,.66))}
+.place-card-media .card-type{position:absolute;z-index:2;left:14px;top:14px;margin:0;background:rgba(255,255,255,.92);color:var(--places-ink);backdrop-filter:blur(8px)}
+.place-card-media .icon-badge{position:absolute;z-index:2;right:14px;bottom:14px;width:50px;height:50px;margin:0;background:rgba(255,255,255,.92);box-shadow:0 6px 18px rgba(5,30,39,.18)}
+.place-card-body{display:flex;flex:1;flex-direction:column;padding:20px 21px 21px}
+.place-card-body h3{font-size:1.48rem}
+.place-card-body>p{margin-bottom:5px}
+.place-card-body .card-actions{margin-top:auto;padding-top:14px}
+.visual-place-card .saved-by-label{margin-top:12px}
+
+@media(max-width:720px){
+  .adventure-columns{gap:28px}
+  .adventure-list-section{padding:16px 14px 14px;border-radius:23px}
+  .adventure-card-rail{gap:12px;padding-bottom:9px}
+  .adventure-shortcut-row{margin-top:3px;padding-top:5px}
+  .places-hub{gap:16px}
+  .places-hero,.places-hero-copy{min-height:330px}
+  .places-hero{border-radius:24px}
+  .places-hero-shade{background:linear-gradient(180deg,rgba(4,30,40,.12),rgba(4,30,40,.93) 74%)}
+  .places-hero-copy{padding:25px 22px}
+  .places-hero-copy h2{font-size:43px}
+  .places-mode-nav{display:flex;gap:10px;overflow-x:auto;padding:3px 3px 10px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .places-mode-nav::-webkit-scrollbar{display:none}
+  .places-mode-nav button{flex:0 0 min(72vw,280px);min-height:106px;scroll-snap-align:start}
+  .places-mode-nav strong{padding:19px;font-size:23px}
+  .places-mode-panel>.page-heading{padding:19px 18px;border-radius:21px}
+  .places-mode-panel>.page-heading h2{font-size:36px}
+  .place-card-media{height:210px}
+}
+
+@media(max-width:440px){
+  .adventure-list-section{padding:14px 12px 12px}
+  .places-hero,.places-hero-copy{min-height:350px}
+  .places-hero-copy h2{font-size:39px}
+  .places-hero-copy p:last-child{font-size:14px}
+  .places-mode-nav button{flex-basis:78vw}
+  .place-card-media{height:195px}
+}
