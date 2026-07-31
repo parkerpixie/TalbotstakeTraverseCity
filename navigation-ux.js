@@ -19,10 +19,12 @@
   loadStyle('places-hub.css?v=20260730-2');
   loadStyle('favorite-attribution.css?v=20260730-3');
   loadStyle('heart-rating-dashboard.css?v=20260730-1');
+  loadStyle('adventure-rating-clarity.css?v=20260730-1');
   loadScript('discover-field-guide.js?v=20260730-2');
   loadScript('choose-explorer.js?v=20260730-2');
   loadScript('your-adventure.js?v=20260730-6');
   loadScript('places-hub.js?v=20260730-2');
+  loadScript('adventure-rating-clarity.js?v=20260730-1');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
