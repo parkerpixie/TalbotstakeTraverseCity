@@ -133,7 +133,7 @@
       .filter(([, names]) => Array.isArray(names) && names.includes(name))
       .map(([id]) => id);
 
-    if (owned.length) return owned;
+    if (Object.keys(owners).length) return owned;
 
     try {
       return JSON.parse(localStorage.getItem('tcFavoritesV3') || '[]');
@@ -342,7 +342,8 @@
   });
   document.addEventListener('click', (event) => {
     if (event.target.closest('[data-explorer-name]')) window.setTimeout(render, 120);
-    if (event.target.closest('[data-save]')) window.setTimeout(render, 120);
+    if (event.target.closest('[data-save], [data-add], .remove-stop, #clearPlan')) window.setTimeout(render, 120);
+    if (event.target.closest('.bottom-nav [data-tab="home"], .mini-brand[data-tab="home"]')) window.setTimeout(render, 40);
   });
   document.addEventListener('tc-shared-ready', () => window.setTimeout(render, 120));
 })();
