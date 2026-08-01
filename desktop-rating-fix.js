@@ -23,7 +23,11 @@
       button.setAttribute('role', 'button');
       if (!button.hasAttribute('tabindex')) button.tabIndex = 0;
 
-      button.addEventListener('click', (event) => activate(button, event));
+      button.addEventListener('pointerdown', (event) => {
+        if (event.button !== undefined && event.button !== 0) return;
+        activate(button, event);
+      });
+
       button.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') activate(button, event);
       });
