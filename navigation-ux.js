@@ -23,6 +23,7 @@
   loadStyle('desktop-rating-fix.css?v=20260731-1');
   loadScript('discover-field-guide.js?v=20260730-2');
   loadScript('choose-explorer.js?v=20260730-2');
+  loadScript('missing-places-restoration.js?v=20260731-1');
   loadScript('your-adventure.js?v=20260730-6');
   loadScript('places-hub.js?v=20260730-2');
   loadScript('adventure-rating-clarity.js?v=20260730-1');
