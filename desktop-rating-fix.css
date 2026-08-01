@@ -1,0 +1,46 @@
+/* Ensure every place rating control remains above decorative/card layers on desktop. */
+.visual-place-card,
+.adventure-place-card,
+.family-top-card{isolation:isolate}
+
+.place-card-media img,
+.place-card-media-shade,
+.adventure-card-open>img,
+.adventure-place-shade,
+.family-top-open>img,
+.family-top-shade{pointer-events:none}
+
+.visual-place-card .place-card-body,
+.visual-place-card .card-actions,
+.visual-place-card .save-place,
+.visual-place-card .heart-rating-trigger,
+.adventure-rate-button,
+.family-top-rate{position:relative;z-index:20;pointer-events:auto!important}
+
+.visual-place-card .card-actions{isolation:isolate}
+.visual-place-card .save-place,
+.visual-place-card .heart-rating-trigger,
+.adventure-rate-button,
+.family-top-rate{
+  cursor:pointer!important;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.visual-place-card .save-place::before,
+.visual-place-card .heart-rating-trigger::before,
+.adventure-rate-button::before,
+.family-top-rate::before{
+  content:'';
+  position:absolute;
+  inset:-5px;
+  border-radius:inherit;
+}
+
+@media (hover:hover) and (pointer:fine){
+  .visual-place-card .save-place:hover,
+  .visual-place-card .heart-rating-trigger:hover,
+  .adventure-rate-button:hover,
+  .family-top-rate:hover{filter:brightness(.97);transform:translateY(-1px)}
+}
