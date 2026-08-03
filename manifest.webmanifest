@@ -1,19 +1,31 @@
 {
-  "name": "The Talbots Take Traverse City",
-  "short_name": "Talbots TC",
-  "description": "The Talbot family Traverse City trip planner and vacation guide.",
-  "start_url": "/",
-  "scope": "/",
+  "name": "Talbot's Take Traverse City",
+  "short_name": "Talbot's Take TC",
+  "description": "A CapyQueue Company family trip planner for Traverse City.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f7f1e7",
-  "theme_color": "#0b3443",
+  "background_color": "#f7f5f0",
+  "theme_color": "#0b080d",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/app-icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "tttc-pwa-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "tttc-pwa-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "tttc-maskable-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
