@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v25';
+const CACHE='talbots-tc-v26';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -7,6 +7,7 @@ const CORE=[
   'planner-upgrades.css',
   'app.js',
   'presentation-polish.js',
+  'presentation-polish.css',
   'gallery-correction.js',
   'debut-upgrades.js',
   'debut-upgrades.css',
@@ -36,6 +37,7 @@ const CORE=[
   'brand-fixes.css',
   'install-guide.js',
   'install-guide.css',
+  'completion-polish.css',
   'manifest.webmanifest',
   'brand/pattern.svg',
   'brand/swoosh.svg',
