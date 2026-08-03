@@ -1,12 +1,12 @@
 {
   "name": "Talbot's Take Traverse City",
   "short_name": "Talbot's Take TC",
-  "description": "A CapyQueue Company family trip planner for Traverse City.",
+  "description": "A CapyQueue Company family trip planner for Traverse City and Sleeping Bear Dunes.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f7f5f0",
-  "theme_color": "#0b080d",
+  "theme_color": "#f7f5f0",
   "orientation": "portrait-primary",
   "icons": [
     {
