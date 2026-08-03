@@ -1,8 +1,32 @@
 (() => {
+  const styleHref = 'brand-overhaul.css';
+  if (!document.querySelector(`link[href="${styleHref}"]`)) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = styleHref;
+    document.head.appendChild(link);
+  }
+
   const replaceText = (selector, text) => {
     const node = document.querySelector(selector);
     if (node) node.textContent = text;
   };
+
+  const miniBrand = document.querySelector('.mini-brand');
+  const miniBrandIcon = miniBrand?.querySelector('span');
+  const miniBrandName = miniBrand?.querySelector('strong');
+  if (miniBrandIcon && !miniBrandIcon.querySelector('img')) {
+    miniBrandIcon.innerHTML = '<img src="app-icon.svg" alt="">';
+  }
+  if (miniBrandName) miniBrandName.textContent = 'Talbots Take Traverse City';
+
+  const landingContent = document.querySelector('.landing-content');
+  if (landingContent && !landingContent.querySelector('.tc-brand-ribbon')) {
+    const ribbon = document.createElement('div');
+    ribbon.className = 'tc-brand-ribbon';
+    ribbon.innerHTML = '<strong>Freshwater family field guide</strong><span>Northern Michigan, thoughtfully queued</span>';
+    landingContent.insertBefore(ribbon, landingContent.firstChild);
+  }
 
   const eatHeading = document.querySelector('[data-panel="eat"] .page-heading > p');
   if (eatHeading) eatHeading.textContent = 'Filter by town, price, atmosphere, and appetite. Every card includes its general location so nearby stops are easier to plan together.';
