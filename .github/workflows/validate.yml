@@ -1,0 +1,18 @@
+name: Validate site
+
+on:
+  push:
+    branches: [main, traverse-city-brand-overhaul-v2]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node --check copy-polish.js
+      - run: test -f brand-overhaul.css && test -f app-icon.svg && test -f index.html
