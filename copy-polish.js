@@ -4,6 +4,14 @@
     if (node) node.textContent = text;
   };
 
+  const landingContent = document.querySelector('.landing-content');
+  if (landingContent && !landingContent.querySelector('.tc-brand-ribbon')) {
+    const ribbon = document.createElement('div');
+    ribbon.className = 'tc-brand-ribbon';
+    ribbon.innerHTML = '<strong>Freshwater family field guide</strong><span>Northern Michigan, thoughtfully queued</span>';
+    landingContent.insertBefore(ribbon, landingContent.firstChild);
+  }
+
   const eatHeading = document.querySelector('[data-panel="eat"] .page-heading > p');
   if (eatHeading) eatHeading.textContent = 'Filter by town, price, atmosphere, and appetite. Every card includes its general location so nearby stops are easier to plan together.';
 
