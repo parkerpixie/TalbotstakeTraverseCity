@@ -1,28 +1,30 @@
-# The Talbots Take Traverse City
+# Talbot's Take Traverse City Asset Pack
 
-A private-family-style trip app for the Talbots' August 23–27, 2026 getaway on West Bay.
+This ZIP contains the requested brand assets for the project.
 
-## Prototype features
+## Brand assets included (14 + swoosh)
+1. tttc-logo-horizontal-full-color-transparent-2400x800.png
+2. tttc-logo-stacked-full-color-transparent-1600x1600.png
+3. tttc-icon-only-t3c-otter-transparent-1600x1600.png
+4. tttc-app-icon-display-rounded-1024x1024.png
+5. tttc-badge-circular-full-color-transparent-1600x1600.png
+6. tttc-monogram-t3c-transparent-1200x1200.png
+7. tttc-wordmark-full-color-transparent-2000x1000.png
+8. tttc-social-avatar-transparent-1200x1200.png
+9. tttc-favicon-master-transparent-256x256.png
+10. tttc-logo-one-color-dark-transparent-2400x800.png
+11. tttc-logo-one-color-light-transparent-2400x800.png
+12. tttc-watermark-transparent-1600x1600.png
+13. tttc-mascot-lockup-full-color-transparent-2400x1400.png
+14. tttc-pattern-ecosystem-transparent-2400x1200.png
+15. tttc-swoosh-divider-transparent-1800x400.png
 
-- Northern Michigan nautical visual design
-- Live countdown to check-in
-- Traveler personalization for Jen, Blake, Porter, Mark, and Nancy
-- Searchable and filterable activity cards
-- Mood-based browsing
-- Device-saved favorites
-- House showcase with clearly labeled dummy image slots
-- Flexible morning, afternoon, and evening itinerary layout
-- Responsive mobile design
+## Icons included (6 core outputs)
+- tttc-app-icon-source-full-bleed-1024x1024.png
+- tttc-pwa-icon-512x512.png
+- tttc-pwa-icon-192x192.png
+- tttc-maskable-icon-512x512.png
+- tttc-apple-touch-icon-180x180.png
+- tttc-favicon.ico
 
-## Files
-
-- `index.html` — page structure and content
-- `styles.css` — complete responsive design
-- `app.js` — countdown, filters, personalization, and favorites
-
-## Next steps
-
-1. Replace the dummy image blocks with house photographs in `assets/images/house/`.
-2. Add researched restaurants, shopping, towns, and attractions to the activity data.
-3. Connect shared voting and favorites so all five travelers see the same shortlist.
-4. Deploy through Netlify or GitHub Pages.
+Extra favicon PNG sizes are also included.
