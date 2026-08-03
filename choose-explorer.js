@@ -30,8 +30,8 @@
   landingContent.innerHTML = `
     <div class="explorer-welcome-card">
       <div class="explorer-gate-mark">⚓</div>
-      <p class="eyebrow">August 23–27, 2026 · West Bay</p>
-      <h1>The Talbots Take<br><em>Traverse City</em></h1>
+      <p class="eyebrow">August 23–27, 2026 · Traverse City & Sleeping Bear Dunes</p>
+      <h1>Talbot's Take<br><em>Traverse City</em></h1>
       <p class="explorer-opening-copy">A family field guide for discovering places, sharing priorities, and building an adventure that sounds like all five of you.</p>
       <div class="explorer-countdown" aria-label="Trip countdown">
         <div><strong id="days">0</strong><span>days</span></div>
@@ -39,12 +39,11 @@
         <div><strong id="minutes">0</strong><span>minutes</span></div>
       </div>
       <div class="explorer-divider" aria-hidden="true"></div>
-      <p class="explorer-kicker">First things first</p>
-      <h2>Choose Your Explorer</h2>
-      <div class="explorer-gate-instruction">☝️ Choose your name first</div>
-      <p class="explorer-gate-intro">Your name keeps your heart rankings, saved places, and bedroom preferences attached to the right person.</p>
+      <p class="explorer-kicker">Meet Captain Manitou, Mani for short</p>
+      <h2>Choose Your Adventurer</h2>
+      <p class="explorer-gate-intro mani-intro"><strong>Hi, I’m Mani.</strong> I’m your T³C otter guide. I’ll help you compare places, share five-heart rankings, and turn five different opinions into one very good northern Michigan adventure.</p>
       ${explorerButtons('landing')}
-      <p class="explorer-switch-note">The app remembers your selection. You can switch explorers anytime from the name button at the top.</p>
+      <p class="explorer-switch-note">The app remembers your selection. You can switch adventurers anytime from the name button at the top.</p>
     </div>`;
 
   const switchGate = document.createElement('section');
@@ -56,12 +55,11 @@
   switchGate.setAttribute('aria-labelledby', 'explorerGateTitle');
   switchGate.innerHTML = `
     <div class="explorer-gate-card">
-      <button class="explorer-gate-close" type="button" aria-label="Close explorer selector">×</button>
+      <button class="explorer-gate-close" type="button" aria-label="Close adventurer selector">×</button>
       <div class="explorer-gate-mark">⚓</div>
-      <p class="eyebrow dark">Switch profiles</p>
-      <h2 id="explorerGateTitle">Choose Your Explorer</h2>
-      <div class="explorer-gate-instruction">☝️ Choose your name first</div>
-      <p class="explorer-gate-intro">Rankings, favorites, and room preferences will be saved for the person you choose.</p>
+      <p class="eyebrow dark">Captain Mani needs a quick update</p>
+      <h2 id="explorerGateTitle">Who is exploring now?</h2>
+      <p class="explorer-gate-intro mani-intro"><strong>Choose your name</strong> so ratings, favorites, and room preferences stay attached to the right adventurer.</p>
       ${explorerButtons('switcher')}
     </div>`;
   document.body.appendChild(switchGate);
@@ -73,9 +71,9 @@
   }
 
   function updateProfileLabel(name) {
-    profilePill.textContent = `👋 ${name}`;
+    profilePill.textContent = name;
     profilePill.classList.add('explorer-profile-pill');
-    profilePill.setAttribute('aria-label', `Current explorer: ${name}. Switch explorer.`);
+    profilePill.setAttribute('aria-label', `Current adventurer: ${name}. Switch adventurer.`);
   }
 
   function enterAs(name) {
