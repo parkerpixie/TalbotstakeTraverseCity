@@ -1,6 +1,7 @@
 (() => {
   const assets = {
     icon: 'tttc-icon-only-t3c-otter-transparent-1600x1600.png',
+    mascotLockup: 'tttc-mascot-lockup-full-color-transparent-2400x1400.png',
     favicon: 'tttc-favicon.ico',
     favicon32: 'tttc-favicon-transparent-32x32.png',
     favicon16: 'tttc-favicon-transparent-16x16.png',
@@ -20,6 +21,7 @@
   };
 
   const applyHeadBranding = () => {
+    document.documentElement.classList.add('tttc-brand-ready');
     document.title = "Talbot's Take Traverse City";
 
     const theme = document.querySelector('meta[name="theme-color"]');
@@ -40,36 +42,45 @@
     ensureLink('apple-touch-icon', assets.appleTouch, '180x180', 'image/png');
   };
 
-  const brandMark = (className = '') =>
-    `<img class="${className}" src="${assets.icon}" alt="" aria-hidden="true">`;
+  const mark = className => `<span class="${className}" aria-hidden="true"></span>`;
 
   const applyVisibleBranding = () => {
     document.querySelectorAll('.mini-brand').forEach(button => {
-      if (button.dataset.tttcBranded === 'true') return;
-      button.innerHTML = `${brandMark('mini-brand-mark')}<strong>Talbot's Take TC</strong>`;
-      button.dataset.tttcBranded = 'true';
+      if (button.dataset.tttcBrandVersion === '2') return;
+      button.innerHTML = `${mark('mini-brand-mark')}<strong>Talbot's Take TC</strong>`;
+      button.dataset.tttcBrandVersion = '2';
       button.setAttribute('aria-label', "Talbot's Take Traverse City home");
     });
 
-    document.querySelectorAll('.explorer-gate-mark').forEach(mark => {
-      if (mark.dataset.tttcBranded === 'true') return;
-      mark.innerHTML = brandMark('explorer-brand-mark');
-      mark.dataset.tttcBranded = 'true';
+    document.querySelectorAll('.explorer-gate-mark').forEach(container => {
+      const isWelcome = Boolean(container.closest('.explorer-welcome-card'));
+      const version = isWelcome ? 'welcome-2' : 'switcher-2';
+      if (container.dataset.tttcBrandVersion === version) return;
+      container.innerHTML = isWelcome
+        ? mark('explorer-mascot-lockup')
+        : mark('explorer-icon-mark');
+      container.dataset.tttcBrandVersion = version;
     });
 
     document.querySelectorAll('.explorer-welcome-card h1').forEach(heading => {
-      if (heading.dataset.tttcBranded === 'true') return;
       heading.innerHTML = "Talbot's Take<br><em>Traverse City</em>";
-      heading.dataset.tttcBranded = 'true';
-      if (!heading.nextElementSibling?.classList.contains('capyqueue-company')) {
-        heading.insertAdjacentHTML('afterend', '<p class="capyqueue-company">A CapyQueue Company</p>');
-      }
+      heading.classList.add('brand-accessible-heading');
     });
+
+    document.querySelectorAll('.explorer-welcome-card .capyqueue-company').forEach(line => line.remove());
   };
 
   applyHeadBranding();
   applyVisibleBranding();
 
-  const observer = new MutationObserver(() => applyVisibleBranding());
+  let scheduled = false;
+  const observer = new MutationObserver(() => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyVisibleBranding();
+    });
+  });
   observer.observe(document.body, { childList: true, subtree: true });
 })();
