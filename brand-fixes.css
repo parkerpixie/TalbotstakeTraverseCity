@@ -1,0 +1,110 @@
+/* Final asset placement corrections.
+   The exported PNG masters include generous transparent canvases.
+   These rules crop those masters visually without altering app content. */
+
+.dashboard-hero::before {
+  background-image: url('tttc-watermark-transparent-1600x1600.png');
+  background-position: 50% 50%;
+  background-size: 225% auto;
+  background-repeat: no-repeat;
+}
+
+.quick-card::after,
+.place-card::after,
+.gallery-section::after {
+  background-image: url('tttc-icon-only-t3c-otter-transparent-1600x1600.png');
+  background-position: 50% 50%;
+  background-size: 180% auto;
+  background-repeat: no-repeat;
+}
+
+.idea-tray::after {
+  left: auto;
+  right: -18px;
+  bottom: -34px;
+  width: 165px;
+  height: 200px;
+  background-image: url('tttc-icon-only-t3c-otter-transparent-1600x1600.png');
+  background-position: 50% 50%;
+  background-size: 180% auto;
+  background-repeat: no-repeat;
+  opacity: 0.045;
+}
+
+.day-board::after {
+  background-image: url('tttc-watermark-transparent-1600x1600.png');
+  background-position: 50% 50%;
+  background-size: 225% auto;
+  background-repeat: no-repeat;
+}
+
+.house-intro::before {
+  right: -12px;
+  top: -8px;
+  width: 320px;
+  height: 170px;
+  background-image: url('brand/pattern.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.06;
+}
+
+.house-intro-brand {
+  position: absolute;
+  top: -12px;
+  right: 10px;
+  width: 138px;
+  height: 162px;
+  opacity: 0.075;
+  pointer-events: none;
+}
+
+.idea-tray-brand {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  width: 140px;
+  height: 76px;
+  opacity: 0.055;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mini-brand-logo,
+.explorer-mascot-lockup,
+.explorer-badge,
+.traveler-dialog-brand,
+.brand-footer-logo,
+.house-intro-brand,
+.idea-tray-brand {
+  overflow: visible;
+}
+
+.brand-footer-logo {
+  height: auto;
+  aspect-ratio: 478 / 191;
+}
+
+.explorer-mascot-lockup {
+  height: auto;
+  aspect-ratio: 508 / 210;
+}
+
+.explorer-badge,
+.traveler-dialog-brand {
+  aspect-ratio: 146 / 131;
+}
+
+@media (max-width: 760px) {
+  .house-intro-brand {
+    width: 94px;
+    height: 112px;
+    opacity: 0.055;
+  }
+
+  .idea-tray-brand {
+    width: 105px;
+    height: 58px;
+  }
+}
