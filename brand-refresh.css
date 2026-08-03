@@ -1,0 +1,131 @@
+:root {
+  --tttc-ink: #0b080d;
+  --tttc-charcoal: #1a1b1e;
+  --tttc-slate: #3a3d44;
+  --tttc-ivory: #f7f5f0;
+  --tttc-pearl: #e6e4e0;
+  --tttc-cherry: #b80e1a;
+  --tttc-oxblood: #43060d;
+}
+
+.app-header {
+  background: rgba(11, 8, 13, 0.97);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+.mini-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #fff;
+}
+
+.mini-brand img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.mini-brand strong {
+  letter-spacing: 0.02em;
+}
+
+.explorer-gate-mark {
+  width: clamp(112px, 22vw, 176px);
+  height: clamp(112px, 22vw, 176px);
+  margin: 0 auto 0.25rem;
+  display: grid;
+  place-items: center;
+}
+
+.explorer-gate-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 24px rgba(11, 8, 13, 0.16));
+}
+
+.explorer-welcome-card,
+.explorer-gate-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.explorer-welcome-card::after,
+.explorer-gate-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -8% -4% 34%;
+  height: 36%;
+  background: url('tttc-pattern-ecosystem-transparent-2400x1200.png') center / contain no-repeat;
+  opacity: 0.055;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.explorer-divider {
+  min-height: 34px;
+  border: 0 !important;
+  background: url('tttc-swoosh-divider-transparent-1800x400.png') center / min(440px, 88%) 100% no-repeat;
+}
+
+.capyqueue-company {
+  margin: -0.15rem 0 0.9rem;
+  color: var(--tttc-slate);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.primary,
+button.primary {
+  background: var(--tttc-cherry);
+}
+
+.primary:hover,
+button.primary:hover {
+  background: var(--tttc-oxblood);
+}
+
+.trip-chip,
+.traveler-button {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.dashboard-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-hero::after {
+  content: "";
+  position: absolute;
+  right: -42px;
+  bottom: -50px;
+  width: 260px;
+  height: 260px;
+  background: url('tttc-watermark-transparent-1600x1600.png') center / contain no-repeat;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .mini-brand strong {
+    max-width: 112px;
+    line-height: 1.05;
+  }
+
+  .mini-brand img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .dashboard-hero::after {
+    width: 180px;
+    height: 180px;
+    opacity: 0.5;
+  }
+}
