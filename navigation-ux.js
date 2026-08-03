@@ -21,7 +21,9 @@
   loadStyle('heart-rating-dashboard.css?v=20260730-1');
   loadStyle('adventure-rating-clarity.css?v=20260730-1');
   loadStyle('desktop-rating-fix.css?v=20260731-1');
-  loadStyle('brand-refresh.css?v=20260802-3');
+  loadStyle('brand-refresh.css?v=20260802-5');
+  loadStyle('install-guide.css?v=20260802-1');
+
   loadScript('discover-field-guide.js?v=20260730-2');
   loadScript('choose-explorer.js?v=20260730-2');
   loadScript('missing-places-restoration.js?v=20260731-1');
@@ -29,7 +31,8 @@
   loadScript('places-hub.js?v=20260730-2');
   loadScript('adventure-rating-clarity.js?v=20260730-1');
   loadScript('desktop-rating-fix.js?v=20260731-2');
-  loadScript('brand-refresh.js?v=20260802-3');
+  loadScript('brand-refresh.js?v=20260802-5');
+  loadScript('install-guide.js?v=20260802-1');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
