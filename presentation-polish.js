@@ -3,18 +3,42 @@
   const header = document.querySelector('.app-header');
   if (!home || !header) return;
 
+  const RATING_GOAL = 10;
+
   const getFavorites = () => {
     try { return JSON.parse(localStorage.getItem('tcFavoritesV3') || localStorage.getItem('tcFavoritesV2') || '[]'); }
     catch { return []; }
   };
 
+  const getRatings = () => {
+    try {
+      const value = JSON.parse(localStorage.getItem('tcHeartRatings') || '{}');
+      return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+    } catch {
+      return {};
+    }
+  };
+
+  const currentTraveler = () => localStorage.getItem('tcTraveler') || '';
+
+  const ratedPlaceCount = () => {
+    const traveler = currentTraveler();
+    if (!traveler) return 0;
+    return Object.values(getRatings()).filter(people => Number(people?.[traveler]) > 0).length;
+  };
+
+  document.querySelector('.header-actions')?.remove();
   const headerActions = document.createElement('div');
-  headerActions.className = 'header-actions';
+  headerActions.className = 'header-actions rating-header-actions';
   headerActions.innerHTML = `
-    <button class="start-here-button" id="startHereButton">Start here</button>
-    <button class="saved-header" id="savedHeader">♥ Saved <span id="savedHeaderCount">0</span></button>
-  `;
+    <div class="header-rating-progress" id="headerRatingProgress" role="status" aria-live="polite">
+      <strong id="headerRatingCount">0/${RATING_GOAL}</strong>
+      <span>Places rated</span>
+    </div>`;
   header.appendChild(headerActions);
+
+  const tripChip = header.querySelector('.trip-chip');
+  if (tripChip) tripChip.textContent = 'Traverse City & Sleeping Bear Dunes';
 
   const welcome = document.createElement('section');
   welcome.className = 'home-welcome';
@@ -22,13 +46,13 @@
     <div>
       <p class="eyebrow dark">Welcome, Talbots</p>
       <h2>One place to dream up the trip together.</h2>
-      <p>Browse restaurants, shops, and activities. Save anything that sounds good, then group your favorites into easy days.</p>
+      <p>Browse restaurants, shops, and activities. Rate anything that sounds good, then group the family favorites into easy days.</p>
       <button class="primary" id="welcomeStart">Start exploring</button>
     </div>
     <div class="start-steps">
-      <div class="start-step"><span>1</span><div><strong>Choose your name</strong><small>Recommendations move toward what you enjoy.</small></div></div>
-      <div class="start-step"><span>2</span><div><strong>Tap Save</strong><small>Your ideas collect in the planner tray.</small></div></div>
-      <div class="start-step"><span>3</span><div><strong>Build the week</strong><small>Add saved ideas to any day and time.</small></div></div>
+      <div class="start-step"><span>1</span><div><strong>Choose your name</strong><small>Your ratings stay attached to the right adventurer.</small></div></div>
+      <div class="start-step"><span>2</span><div><strong>Rate the places</strong><small>Use the five-heart scale to show what matters most.</small></div></div>
+      <div class="start-step"><span>3</span><div><strong>Build the week</strong><small>Add the strongest family contenders to each day.</small></div></div>
     </div>`;
 
   const picks = document.createElement('section');
@@ -51,80 +75,75 @@
     <div class="progress-card">
       <div class="progress-head"><div><p class="eyebrow">Vacation planning</p><h3 id="progressTitle">The trip is taking shape</h3></div><strong id="progressPercent">0%</strong></div>
       <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="progress-list"><span>✓ House tour</span><span>✓ Restaurants</span><span>✓ Shopping</span><span>✓ Activities</span><span id="favoritesProgress">○ Family favorites</span><span id="itineraryProgress">○ Final itinerary</span></div>
+      <div class="progress-list"><span>✓ House tour</span><span>✓ Restaurants</span><span>✓ Shopping</span><span>✓ Activities</span><span id="favoritesProgress">○ Family ratings</span><span id="itineraryProgress">○ Final itinerary</span></div>
     </div>`;
 
   const footer = document.createElement('section');
   footer.className = 'trip-footer-card';
-  footer.innerHTML = `<p class="eyebrow dark">See you on West Bay</p><h3>Five travelers. Four nights. One very good plan.</h3><p>Everything here can keep changing as the family discovers new favorites.</p>`;
+  footer.innerHTML = `<p class="eyebrow dark">Traverse City & Sleeping Bear Dunes</p><h3>Five travelers. Four nights. One very good plan.</h3><p>Everything here can keep changing as the family discovers new favorites.</p>`;
 
   const stats = home.querySelector('.stats-row');
   if (stats) stats.before(welcome);
   home.append(picks, progress, footer);
 
-  const guide = document.createElement('dialog');
-  guide.id = 'guideDialog';
-  guide.className = 'guide-dialog';
-  guide.innerHTML = `
-    <button class="dialog-close" aria-label="Close">×</button>
-    <p class="eyebrow dark">Start here</p>
-    <h2>This guide does four simple things.</h2>
-    <div class="guide-grid">
-      <article><strong>🍴 Eat</strong><p>Find restaurants by town, price, and mood.</p></article>
-      <article><strong>🧭 Explore</strong><p>Find activities, including dog-friendly choices.</p></article>
-      <article><strong>🛍 Shop</strong><p>Browse records, comics, art, books, and local finds.</p></article>
-      <article><strong>▦ Plan</strong><p>Put saved ideas into each day of the trip.</p></article>
-    </div>`;
-  document.body.appendChild(guide);
-
   const addPurpose = (panel, text) => {
     const heading = document.querySelector(`[data-panel="${panel}"] .page-heading`);
-    if (!heading) return;
+    if (!heading || heading.nextElementSibling?.classList.contains('purpose-banner')) return;
     const note = document.createElement('div');
     note.className = 'purpose-banner';
     note.textContent = text;
     heading.after(note);
   };
-  addPurpose('eat', 'Find somewhere everyone can enjoy, then save the contenders before the family debate begins.');
+  addPurpose('eat', 'Find somewhere everyone can enjoy, then rate the contenders before the family debate begins.');
   addPurpose('explore', 'Choose the experience first, then use area and dog-friendly filters to keep the day practical.');
   addPurpose('shop', 'Build walkable clusters of local finds instead of scattering shopping stops across the county.');
-  addPurpose('planner', 'This is planning mode. Nothing is locked in, and every saved idea can move between days.');
+  addPurpose('planner', 'This is planning mode. Nothing is locked in, and every rated idea can move between days.');
 
   const updateProgress = () => {
     const favoriteTotal = getFavorites().length;
+    const ratingTotal = ratedPlaceCount();
     let plannedTotal = 0;
     try {
       const savedPlan = JSON.parse(localStorage.getItem('tcPlanV3') || '{}');
       plannedTotal = Object.values(savedPlan).flatMap(day => Object.values(day || {}).flat()).length;
     } catch {}
-    const percent = Math.min(100, 60 + Math.min(20, favoriteTotal * 4) + Math.min(20, plannedTotal * 4));
+    const percent = Math.min(100, 55 + Math.min(25, ratingTotal * 2.5) + Math.min(20, plannedTotal * 4));
     const fill = document.getElementById('progressFill');
     const value = document.getElementById('progressPercent');
     if (fill) fill.style.width = `${percent}%`;
-    if (value) value.textContent = `${percent}%`;
+    if (value) value.textContent = `${Math.round(percent)}%`;
     const favoriteStep = document.getElementById('favoritesProgress');
     const itineraryStep = document.getElementById('itineraryProgress');
-    if (favoriteStep) favoriteStep.textContent = `${favoriteTotal ? '✓' : '○'} Family favorites`;
+    if (favoriteStep) favoriteStep.textContent = `${ratingTotal ? '✓' : '○'} Family ratings`;
     if (itineraryStep) itineraryStep.textContent = `${plannedTotal ? '✓' : '○'} Final itinerary`;
   };
 
-  const updateSavedCount = () => {
-    const count = getFavorites().length;
-    const el = document.getElementById('savedHeaderCount');
-    if (el) el.textContent = count;
+  const updateRatingProgress = () => {
+    const count = ratedPlaceCount();
+    const traveler = currentTraveler();
+    const displayed = Math.min(count, RATING_GOAL);
+    const countNode = document.getElementById('headerRatingCount');
+    const shell = document.getElementById('headerRatingProgress');
+    if (countNode) countNode.textContent = count > RATING_GOAL ? `${RATING_GOAL}+` : `${displayed}/${RATING_GOAL}`;
+    if (shell) {
+      shell.classList.toggle('complete', count >= RATING_GOAL);
+      shell.setAttribute('aria-label', traveler
+        ? `${traveler} has rated ${count} place${count === 1 ? '' : 's'} toward a goal of ${RATING_GOAL}`
+        : `Choose an adventurer to track ratings toward a goal of ${RATING_GOAL}`);
+    }
     updateProgress();
   };
 
-  document.getElementById('startHereButton')?.addEventListener('click', () => guide.showModal());
-  guide.querySelector('.dialog-close')?.addEventListener('click', () => guide.close());
   document.getElementById('welcomeStart')?.addEventListener('click', () => document.querySelector('[data-tab="explore"]')?.click());
-  document.getElementById('savedHeader')?.addEventListener('click', () => document.querySelector('[data-tab="planner"]')?.click());
-  document.addEventListener('click', (event) => {
-    if (event.target.closest('[data-save], [data-remove-favorite], [data-add], .remove-stop')) setTimeout(updateSavedCount, 80);
+  document.addEventListener('click', event => {
+    if (event.target.closest('[data-save], [data-dashboard-rate], [data-heart-score], [data-explorer-name], [data-add], .remove-stop')) {
+      window.setTimeout(updateRatingProgress, 140);
+    }
     const tabButton = event.target.closest('.pick-card[data-tab]');
     if (tabButton) document.querySelector(`.bottom-nav [data-tab="${tabButton.dataset.tab}"]`)?.click();
   });
 
-  document.addEventListener('tc-shared-ready', updateSavedCount);
-  updateSavedCount();
+  document.addEventListener('tc-ratings-changed', updateRatingProgress);
+  document.addEventListener('tc-shared-ready', updateRatingProgress);
+  updateRatingProgress();
 })();
