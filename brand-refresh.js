@@ -30,12 +30,6 @@
       height: 1000,
       viewBox: '906 470 188 102'
     },
-    logoOnDark: {
-      src: 'tttc-logo-one-color-dark-transparent-2400x800.png',
-      width: 2400,
-      height: 800,
-      viewBox: '1036 370 328 85'
-    },
     favicon: 'tttc-favicon.ico',
     favicon32: 'tttc-favicon-transparent-32x32.png',
     favicon16: 'tttc-favicon-transparent-16x16.png',
@@ -73,7 +67,7 @@
     document.title = "Talbot's Take Traverse City";
 
     const theme = document.querySelector('meta[name="theme-color"]');
-    if (theme) theme.content = '#0b080d';
+    if (theme) theme.content = '#f7f5f0';
 
     const description = document.querySelector('meta[name="description"]');
     if (description) {
@@ -92,9 +86,9 @@
 
   const applyHeaderBrand = () => {
     document.querySelectorAll('.mini-brand').forEach(button => {
-      if (button.dataset.tttcBrandVersion === '6') return;
-      button.innerHTML = croppedSvg(assets.logoOnDark, 'mini-brand-logo');
-      button.dataset.tttcBrandVersion = '6';
+      if (button.dataset.tttcBrandVersion === '7') return;
+      button.innerHTML = croppedSvg(assets.horizontal, 'mini-brand-logo', "Talbot's Take Traverse City");
+      button.dataset.tttcBrandVersion = '7';
       button.setAttribute('aria-label', "Talbot's Take Traverse City home");
     });
   };
@@ -102,10 +96,10 @@
   const applyExplorerBrand = () => {
     document.querySelectorAll('.explorer-gate-mark').forEach(container => {
       const welcome = Boolean(container.closest('.explorer-welcome-card'));
-      const version = welcome ? 'welcome-6' : 'switcher-6';
+      const version = welcome ? 'welcome-7' : 'switcher-7';
       if (container.dataset.tttcBrandVersion === version) return;
       container.innerHTML = welcome
-        ? croppedSvg(assets.mascot, 'explorer-mascot-lockup', "Talbot's Take Traverse City")
+        ? croppedSvg(assets.mascot, 'explorer-mascot-lockup', "Captain Manitou, the Talbot's Take Traverse City otter guide")
         : croppedSvg(assets.badge, 'explorer-badge', "Talbot's Take Traverse City badge");
       container.dataset.tttcBrandVersion = version;
     });
