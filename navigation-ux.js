@@ -33,7 +33,7 @@
   loadScript('places-hub.js?v=20260730-2');
   loadScript('adventure-rating-clarity.js?v=20260730-1');
   loadScript('desktop-rating-fix.js?v=20260731-2');
-  loadScript('brand-refresh.js?v=20260803-7');
+  loadScript('brand-refresh.js?v=20260803-9');
   loadScript('install-guide.js?v=20260803-3');
 
   const appShell = document.getElementById('appShell');
