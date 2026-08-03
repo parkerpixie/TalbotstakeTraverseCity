@@ -1,5 +1,6 @@
 (() => {
   const STORAGE_KEY = 'tttc-install-guide-status-v1';
+  const APP_ICON = '07-tttc-app-icon-full-bleed-1024x1024.png';
   let deferredInstallPrompt = null;
 
   if ('serviceWorker' in navigator) {
@@ -31,10 +32,10 @@
       <button type="button" class="install-guide-close" aria-label="Close install guide">×</button>
 
       <section class="install-guide-step-panel" data-install-panel="question">
-        <img class="install-guide-icon" src="tttc-app-icon-display-rounded-1024x1024.png" alt="Talbot's Take Traverse City app icon">
+        <img class="install-guide-icon" src="${APP_ICON}" alt="Talbot's Take Traverse City app icon">
         <p class="install-guide-eyebrow">One quick phone thing</p>
         <h2>Is the trip app already saved?</h2>
-        <p class="install-guide-copy">Saving it to the home screen makes it open like an app, keeps the T³C otter icon handy, and avoids hunting for the link again.</p>
+        <p class="install-guide-copy">Saving it to the home screen makes it open like an app, keeps Mani handy, and avoids hunting for the link again.</p>
         <div class="install-guide-actions">
           <button type="button" class="install-guide-primary" data-install-answer="yes">Yes, it is saved</button>
           <button type="button" class="install-guide-secondary" data-install-answer="no">Not yet. Show me.</button>
@@ -43,14 +44,14 @@
       </section>
 
       <section class="install-guide-step-panel" data-install-panel="instructions" hidden>
-        <img class="install-guide-icon" src="tttc-app-icon-display-rounded-1024x1024.png" alt="Talbot's Take Traverse City app icon">
+        <img class="install-guide-icon" src="${APP_ICON}" alt="Talbot's Take Traverse City app icon">
         <p class="install-guide-eyebrow">Android + Chrome</p>
-        <h2>Put the otter on your home screen</h2>
+        <h2>Put Mani on your home screen</h2>
         <ol class="install-guide-steps">
           <li class="install-guide-step">Open this page in <strong>Chrome</strong>.</li>
           <li class="install-guide-step">Tap the <strong>three-dot menu</strong> beside the address bar.</li>
           <li class="install-guide-step">Tap <strong>Add to Home screen</strong>, then <strong>Install</strong>.</li>
-          <li class="install-guide-step">Follow the final phone prompt. The T³C otter icon will appear with the rest of the apps.</li>
+          <li class="install-guide-step">Follow the final phone prompt. Mani’s app icon will appear with the rest of the apps.</li>
         </ol>
         <p class="install-guide-note">Depending on the Android phone and Chrome version, the menu may say <strong>Install app</strong> instead of <strong>Add to Home screen</strong>.</p>
         <div class="install-guide-actions">
