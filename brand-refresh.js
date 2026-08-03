@@ -58,7 +58,9 @@
     });
 
     document.querySelectorAll('.explorer-welcome-card h1').forEach(heading => {
+      if (heading.dataset.tttcBranded === 'true') return;
       heading.innerHTML = "Talbot's Take<br><em>Traverse City</em>";
+      heading.dataset.tttcBranded = 'true';
       if (!heading.nextElementSibling?.classList.contains('capyqueue-company')) {
         heading.insertAdjacentHTML('afterend', '<p class="capyqueue-company">A CapyQueue Company</p>');
       }
