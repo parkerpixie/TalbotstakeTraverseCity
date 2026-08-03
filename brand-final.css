@@ -1,0 +1,489 @@
+/* Final TTTC brand layer. Loaded after all legacy styles so the new artwork can breathe. */
+:root {
+  --tttc-ink: #0b1015;
+  --tttc-navy: #0b3443;
+  --tttc-charcoal: #34383d;
+  --tttc-slate: #68747a;
+  --tttc-ivory: #f7f5f0;
+  --tttc-paper: #fffdfa;
+  --tttc-pearl: #e6e4e0;
+  --tttc-cherry: #b80e1a;
+  --tttc-oxblood: #650a13;
+}
+
+html,
+body {
+  background: var(--tttc-ivory) !important;
+  color: var(--tttc-charcoal) !important;
+}
+
+/* LIGHTER, CLEANER APP HEADER */
+.app-header {
+  min-height: 76px !important;
+  padding: 8px clamp(12px, 3vw, 40px) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: clamp(8px, 1.3vw, 18px) !important;
+  background: linear-gradient(90deg, #fffefa 0%, #f9f6f0 54%, #ffffff 100%) !important;
+  color: var(--tttc-ink) !important;
+  border-bottom: 1px solid rgba(11, 16, 21, 0.1) !important;
+  box-shadow: 0 8px 24px rgba(11, 16, 21, 0.08) !important;
+}
+
+.app-header .mini-brand {
+  min-width: 0 !important;
+  margin-right: auto !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: transparent !important;
+  color: var(--tttc-ink) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.tttc-header-icon {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  display: block;
+  object-fit: contain;
+}
+
+.tttc-header-copy {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+  text-align: left;
+}
+
+.tttc-header-copy small {
+  color: var(--tttc-slate);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.tttc-header-copy strong {
+  color: var(--tttc-navy);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.05rem, 2vw, 1.55rem);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.app-header .trip-chip,
+.app-header .sync-status,
+.app-header .start-here-button,
+.app-header .saved-header {
+  display: none !important;
+}
+
+.app-header .explorer-profile-pill,
+.app-header .traveler-button {
+  min-height: 44px !important;
+  margin: 0 !important;
+  padding: 9px 15px !important;
+  border: 1px solid rgba(184, 14, 26, 0.22) !important;
+  border-radius: 999px !important;
+  background: var(--tttc-cherry) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px rgba(184, 14, 26, 0.18) !important;
+  font-size: 0.92rem !important;
+  font-weight: 800 !important;
+}
+
+.rating-header-actions {
+  margin: 0 !important;
+}
+
+.header-rating-progress {
+  min-height: 46px !important;
+  padding: 7px 12px !important;
+  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* OPENING EXPERIENCE */
+.explorer-landing .landing-content {
+  width: min(1180px, calc(100vw - 24px)) !important;
+}
+
+.explorer-welcome-card {
+  width: 100% !important;
+  max-width: 1180px !important;
+  padding: clamp(18px, 3vw, 38px) !important;
+  background: rgba(247, 245, 240, 0.985) !important;
+  border: 1px solid rgba(11, 16, 21, 0.12) !important;
+  border-radius: clamp(24px, 4vw, 42px) !important;
+  box-shadow: 0 30px 90px rgba(11, 16, 21, 0.28) !important;
+  overflow: hidden !important;
+}
+
+.explorer-welcome-card::after,
+.explorer-gate-card::after {
+  display: none !important;
+}
+
+.explorer-welcome-card .explorer-gate-mark {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 auto 16px !important;
+  display: block !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+.tttc-opening-logo {
+  display: block;
+  width: min(100%, 1080px);
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+  border-radius: 18px;
+}
+
+.explorer-welcome-card > h1 {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+}
+
+.explorer-welcome-card > .eyebrow {
+  margin-top: 10px !important;
+  color: var(--tttc-slate) !important;
+}
+
+.explorer-opening-copy {
+  max-width: 820px !important;
+  margin: 12px auto 18px !important;
+  color: #545b61 !important;
+  font-size: clamp(1rem, 1.8vw, 1.22rem) !important;
+  line-height: 1.55 !important;
+}
+
+.explorer-divider {
+  width: min(620px, 82%) !important;
+  height: 18px !important;
+  margin: 22px auto 8px !important;
+  border: 0 !important;
+  background:
+    linear-gradient(90deg, transparent, var(--tttc-cherry) 24% 76%, transparent) center bottom / 100% 2px no-repeat !important;
+}
+
+.tttc-mani-welcome {
+  max-width: 880px;
+  margin: 10px auto 22px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: minmax(180px, 270px) 1fr;
+  align-items: center;
+  gap: clamp(16px, 3vw, 30px);
+  border: 1px solid rgba(11, 52, 67, 0.12);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(230,228,224,.46));
+  text-align: left;
+}
+
+.tttc-mani-welcome img {
+  width: 100%;
+  max-height: 175px;
+  object-fit: contain;
+}
+
+.tttc-mani-welcome-copy p {
+  margin: 0;
+  color: #51585d;
+  line-height: 1.62;
+}
+
+.tttc-mani-welcome-copy strong {
+  color: var(--tttc-navy);
+}
+
+/* TRAVELER SWITCHER */
+.explorer-gate-card .explorer-gate-mark {
+  width: 150px !important;
+  height: 150px !important;
+  margin: 0 auto 12px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+.tttc-switcher-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* HOME BRAND MOMENT */
+.tttc-home-mani {
+  margin: 18px 0 24px;
+  padding: clamp(18px, 3vw, 30px);
+  display: grid;
+  grid-template-columns: minmax(250px, 0.95fr) minmax(280px, 1.05fr);
+  align-items: center;
+  gap: clamp(18px, 4vw, 42px);
+  border: 1px solid rgba(11, 52, 67, 0.12);
+  border-radius: 28px;
+  background: linear-gradient(135deg, #fffdfa, #f1ede6);
+  overflow: hidden;
+}
+
+.tttc-home-mani img {
+  width: 100%;
+  max-height: 330px;
+  object-fit: contain;
+}
+
+.tttc-home-mani h3 {
+  margin: 4px 0 10px;
+  color: var(--tttc-navy);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+}
+
+.tttc-home-mani p {
+  margin: 0;
+  color: #555d62;
+  line-height: 1.65;
+}
+
+/* MICHIGAN FIELD GUIDE */
+.field-guide-hero {
+  min-height: 0 !important;
+  padding: clamp(18px, 3vw, 34px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(280px, 1fr) minmax(320px, 1fr) !important;
+  align-items: center !important;
+  gap: clamp(20px, 4vw, 48px) !important;
+  background: linear-gradient(135deg, #fffdfa, #e9eff0) !important;
+  border: 1px solid rgba(11, 52, 67, 0.12) !important;
+  border-radius: 30px !important;
+  overflow: hidden !important;
+}
+
+.field-guide-hero > img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 430px !important;
+  object-fit: contain !important;
+  border-radius: 20px !important;
+  background: transparent !important;
+}
+
+.field-guide-hero-copy {
+  position: static !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: var(--tttc-charcoal) !important;
+}
+
+.field-guide-hero-copy h2 {
+  color: var(--tttc-navy) !important;
+}
+
+.field-guide-kicker {
+  color: var(--tttc-cherry) !important;
+}
+
+.tttc-michigan-intro {
+  margin: 22px 0 28px;
+  padding: clamp(18px, 3vw, 30px);
+  display: grid;
+  grid-template-columns: minmax(250px, 0.92fr) minmax(300px, 1.08fr);
+  align-items: center;
+  gap: clamp(20px, 4vw, 44px);
+  border-radius: 28px;
+  background: var(--tttc-navy);
+  color: #fff;
+  overflow: hidden;
+}
+
+.tttc-michigan-intro img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.tttc-michigan-intro .eyebrow {
+  color: #f5bbc0 !important;
+}
+
+.tttc-michigan-intro h3 {
+  margin: 4px 0 12px;
+  color: #fff;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+}
+
+.tttc-michigan-intro p {
+  color: rgba(255,255,255,.84);
+  line-height: 1.68;
+}
+
+/* SUBTLE SUPPORTING MARKS */
+.tttc-corner-monogram {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  width: clamp(90px, 13vw, 170px);
+  height: auto;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dashboard-hero,
+.day-board,
+.house-intro {
+  position: relative;
+  overflow: hidden;
+}
+
+/* FOOTER */
+.tttc-final-footer {
+  margin-top: 32px;
+  padding: 24px clamp(18px, 4vw, 50px);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 22px;
+  background: #f1eee8;
+  color: var(--tttc-charcoal);
+  border-top: 1px solid rgba(11, 16, 21, 0.1);
+}
+
+.tttc-final-footer img {
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+}
+
+.tttc-final-footer strong {
+  display: block;
+  color: var(--tttc-navy);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.35rem;
+}
+
+.tttc-final-footer span {
+  color: var(--tttc-slate);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tttc-install-link {
+  padding: 11px 16px;
+  border: 1px solid var(--tttc-cherry);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tttc-cherry);
+  font-weight: 800;
+}
+
+.install-guide-icon {
+  content: url('07-tttc-app-icon-full-bleed-1024x1024.png') !important;
+}
+
+@media (max-width: 820px) {
+  .app-header {
+    min-height: 68px !important;
+    padding: 7px 10px !important;
+  }
+
+  .tttc-header-icon {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+
+  .tttc-header-copy small {
+    display: none;
+  }
+
+  .tttc-header-copy strong {
+    font-size: 0.98rem;
+  }
+
+  .app-header .explorer-profile-pill,
+  .app-header .traveler-button {
+    min-height: 40px !important;
+    padding: 8px 11px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .header-rating-progress {
+    min-width: 72px !important;
+    min-height: 40px !important;
+    padding: 5px 7px !important;
+  }
+
+  .tttc-mani-welcome,
+  .tttc-home-mani,
+  .field-guide-hero,
+  .tttc-michigan-intro {
+    grid-template-columns: 1fr !important;
+  }
+
+  .tttc-mani-welcome {
+    text-align: center;
+  }
+
+  .tttc-mani-welcome img {
+    max-height: 210px;
+  }
+
+  .field-guide-hero-copy {
+    text-align: left !important;
+  }
+
+  .tttc-final-footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .tttc-header-copy strong {
+    max-width: 105px;
+    white-space: normal;
+    line-height: 0.95;
+  }
+
+  .explorer-welcome-card {
+    padding: 14px 12px 20px !important;
+    border-radius: 22px !important;
+  }
+
+  .tttc-opening-logo {
+    border-radius: 10px;
+  }
+
+  .tttc-mani-welcome {
+    padding: 12px;
+  }
+
+  .tttc-mani-welcome img {
+    max-height: 175px;
+  }
+
+  .tttc-home-mani,
+  .tttc-michigan-intro {
+    padding: 16px;
+    border-radius: 22px;
+  }
+}
