@@ -1,23 +1,48 @@
 (() => {
   const assets = {
-    horizontal: 'brand/logo-horizontal.svg',
-    stacked: 'brand/logo-stacked.svg',
-    icon: 'brand/icon-t3c-otter.svg',
-    mascot: 'brand/mascot-lockup.svg',
-    badge: 'brand/badge.svg',
-    wordmark: 'brand/wordmark.svg',
-    logoOnDark: 'brand/logo-on-dark.svg',
-    logoOnLight: 'brand/logo-on-light.svg',
-    watermark: 'brand/watermark.svg',
-    appIcon: 'brand/app-icon.svg',
+    horizontal: {
+      src: 'tttc-logo-horizontal-full-color-transparent-2400x800.png',
+      width: 2400,
+      height: 800,
+      viewBox: '961 304 478 191'
+    },
+    mascot: {
+      src: 'tttc-mascot-lockup-full-color-transparent-2400x1400.png',
+      width: 2400,
+      height: 1400,
+      viewBox: '946 610 508 210'
+    },
+    badge: {
+      src: 'tttc-badge-circular-full-color-transparent-1600x1600.png',
+      width: 1600,
+      height: 1600,
+      viewBox: '727 744 146 131'
+    },
+    logoOnDark: {
+      src: 'tttc-logo-one-color-dark-transparent-2400x800.png',
+      width: 2400,
+      height: 800,
+      viewBox: '1036 370 328 85'
+    },
     favicon: 'tttc-favicon.ico',
     favicon32: 'tttc-favicon-transparent-32x32.png',
     favicon16: 'tttc-favicon-transparent-16x16.png',
     appleTouch: 'tttc-apple-touch-icon-180x180.png'
   };
 
-  const image = (src, className, alt = '') =>
-    `<img src="${src}" class="${className}" alt="${alt}">`;
+  const escaped = value => String(value).replace(/[&<>"']/g, character => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[character]);
+
+  const croppedSvg = (asset, className, label = '') => `
+    <svg class="${className}" viewBox="${asset.viewBox}" preserveAspectRatio="xMidYMid meet"
+      ${label ? `role="img" aria-label="${escaped(label)}"` : 'aria-hidden="true"'}>
+      <image href="${asset.src}" width="${asset.width}" height="${asset.height}" preserveAspectRatio="none"></image>
+    </svg>`;
 
   const ensureLink = (rel, href, sizes, type) => {
     let link = document.querySelector(`link[rel="${rel}"]${sizes ? `[sizes="${sizes}"]` : ''}`);
@@ -55,9 +80,9 @@
 
   const applyHeaderBrand = () => {
     document.querySelectorAll('.mini-brand').forEach(button => {
-      if (button.dataset.tttcBrandVersion === '4') return;
-      button.innerHTML = image(assets.logoOnDark, 'mini-brand-logo');
-      button.dataset.tttcBrandVersion = '4';
+      if (button.dataset.tttcBrandVersion === '5') return;
+      button.innerHTML = croppedSvg(assets.logoOnDark, 'mini-brand-logo');
+      button.dataset.tttcBrandVersion = '5';
       button.setAttribute('aria-label', "Talbot's Take Traverse City home");
     });
   };
@@ -65,16 +90,16 @@
   const applyExplorerBrand = () => {
     document.querySelectorAll('.explorer-gate-mark').forEach(container => {
       const welcome = Boolean(container.closest('.explorer-welcome-card'));
-      const version = welcome ? 'welcome-4' : 'switcher-4';
+      const version = welcome ? 'welcome-5' : 'switcher-5';
       if (container.dataset.tttcBrandVersion === version) return;
       container.innerHTML = welcome
-        ? image(assets.mascot, 'explorer-mascot-lockup', "Talbot's Take Traverse City")
-        : image(assets.badge, 'explorer-badge', "Talbot's Take Traverse City badge");
+        ? croppedSvg(assets.mascot, 'explorer-mascot-lockup', "Talbot's Take Traverse City")
+        : croppedSvg(assets.badge, 'explorer-badge', "Talbot's Take Traverse City badge");
       container.dataset.tttcBrandVersion = version;
     });
 
     document.querySelectorAll('.explorer-welcome-card h1').forEach(heading => {
-      heading.innerHTML = "Talbot's Take Traverse City";
+      heading.textContent = "Talbot's Take Traverse City";
       heading.classList.add('brand-accessible-heading');
     });
 
@@ -100,7 +125,7 @@
     if (travelerDialog && !travelerDialog.querySelector('.traveler-dialog-brand')) {
       travelerDialog.insertAdjacentHTML(
         'afterbegin',
-        image(assets.badge, 'traveler-dialog-brand', "Talbot's Take Traverse City badge")
+        croppedSvg(assets.badge, 'traveler-dialog-brand', "Talbot's Take Traverse City badge")
       );
     }
   };
@@ -114,7 +139,7 @@
     footer.className = 'brand-footer';
     footer.innerHTML = `
       <div class="brand-footer-art">
-        ${image(assets.horizontal, 'brand-footer-logo', "Talbot's Take Traverse City")}
+        ${croppedSvg(assets.horizontal, 'brand-footer-logo', "Talbot's Take Traverse City")}
       </div>
       <div class="brand-footer-copy">
         <strong>Otterly curious. Endlessly exploring.</strong>
