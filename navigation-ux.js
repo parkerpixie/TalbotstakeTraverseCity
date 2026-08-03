@@ -14,26 +14,27 @@
   };
 
   loadStyle('discover-field-guide.css?v=20260730-2');
-  loadStyle('choose-explorer.css?v=20260730-2');
+  loadStyle('choose-explorer.css?v=20260803-3');
   loadStyle('your-adventure.css?v=20260730-6');
   loadStyle('places-hub.css?v=20260730-2');
   loadStyle('favorite-attribution.css?v=20260730-3');
   loadStyle('heart-rating-dashboard.css?v=20260730-1');
   loadStyle('adventure-rating-clarity.css?v=20260730-1');
   loadStyle('desktop-rating-fix.css?v=20260731-1');
-  loadStyle('brand-refresh.css?v=20260802-6');
-  loadStyle('brand-fixes.css?v=20260802-1');
-  loadStyle('install-guide.css?v=20260802-2');
+  loadStyle('brand-refresh.css?v=20260803-7');
+  loadStyle('brand-fixes.css?v=20260803-2');
+  loadStyle('install-guide.css?v=20260803-3');
+  loadStyle('completion-polish.css?v=20260803-1');
 
   loadScript('discover-field-guide.js?v=20260730-2');
-  loadScript('choose-explorer.js?v=20260730-2');
+  loadScript('choose-explorer.js?v=20260803-3');
   loadScript('missing-places-restoration.js?v=20260731-1');
   loadScript('your-adventure.js?v=20260730-6');
   loadScript('places-hub.js?v=20260730-2');
   loadScript('adventure-rating-clarity.js?v=20260730-1');
   loadScript('desktop-rating-fix.js?v=20260731-2');
-  loadScript('brand-refresh.js?v=20260802-6');
-  loadScript('install-guide.js?v=20260802-2');
+  loadScript('brand-refresh.js?v=20260803-7');
+  loadScript('install-guide.js?v=20260803-3');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
