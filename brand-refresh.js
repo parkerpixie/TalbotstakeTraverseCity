@@ -6,6 +6,12 @@
       height: 800,
       viewBox: '961 304 478 191'
     },
+    stacked: {
+      src: 'tttc-logo-stacked-full-color-transparent-1600x1600.png',
+      width: 1600,
+      height: 1600,
+      viewBox: '698 680 204 239'
+    },
     mascot: {
       src: 'tttc-mascot-lockup-full-color-transparent-2400x1400.png',
       width: 2400,
@@ -17,6 +23,12 @@
       width: 1600,
       height: 1600,
       viewBox: '727 744 146 131'
+    },
+    wordmark: {
+      src: 'tttc-wordmark-full-color-transparent-2000x1000.png',
+      width: 2000,
+      height: 1000,
+      viewBox: '906 470 188 102'
     },
     logoOnDark: {
       src: 'tttc-logo-one-color-dark-transparent-2400x800.png',
@@ -80,9 +92,9 @@
 
   const applyHeaderBrand = () => {
     document.querySelectorAll('.mini-brand').forEach(button => {
-      if (button.dataset.tttcBrandVersion === '5') return;
+      if (button.dataset.tttcBrandVersion === '6') return;
       button.innerHTML = croppedSvg(assets.logoOnDark, 'mini-brand-logo');
-      button.dataset.tttcBrandVersion = '5';
+      button.dataset.tttcBrandVersion = '6';
       button.setAttribute('aria-label', "Talbot's Take Traverse City home");
     });
   };
@@ -90,7 +102,7 @@
   const applyExplorerBrand = () => {
     document.querySelectorAll('.explorer-gate-mark').forEach(container => {
       const welcome = Boolean(container.closest('.explorer-welcome-card'));
-      const version = welcome ? 'welcome-5' : 'switcher-5';
+      const version = welcome ? 'welcome-6' : 'switcher-6';
       if (container.dataset.tttcBrandVersion === version) return;
       container.innerHTML = welcome
         ? croppedSvg(assets.mascot, 'explorer-mascot-lockup', "Talbot's Take Traverse City")
@@ -108,11 +120,29 @@
 
   const applySectionBranding = () => {
     document.querySelectorAll('.page-heading, .house-intro').forEach(section => {
-      if (section.querySelector(':scope > .brand-section-swoosh')) return;
-      const flourish = document.createElement('div');
-      flourish.className = 'brand-section-swoosh';
-      flourish.setAttribute('aria-hidden', 'true');
-      section.appendChild(flourish);
+      if (!section.querySelector(':scope > .brand-section-swoosh')) {
+        const flourish = document.createElement('div');
+        flourish.className = 'brand-section-swoosh';
+        flourish.setAttribute('aria-hidden', 'true');
+        section.appendChild(flourish);
+      }
+    });
+
+    const houseIntro = document.querySelector('.house-intro');
+    if (houseIntro && !houseIntro.querySelector('.house-intro-brand')) {
+      houseIntro.insertAdjacentHTML(
+        'beforeend',
+        croppedSvg(assets.stacked, 'house-intro-brand')
+      );
+    }
+
+    document.querySelectorAll('.idea-tray').forEach(tray => {
+      if (!tray.querySelector('.idea-tray-brand')) {
+        tray.insertAdjacentHTML(
+          'beforeend',
+          croppedSvg(assets.wordmark, 'idea-tray-brand')
+        );
+      }
     });
 
     document.querySelectorAll('.quick-card, .place-card, .idea-tray, .day-board, .gallery-section').forEach(card => {
