@@ -31,7 +31,7 @@
       <button type="button" class="install-guide-close" aria-label="Close install guide">×</button>
 
       <section class="install-guide-step-panel" data-install-panel="question">
-        <img class="install-guide-icon" src="brand/app-icon.svg" alt="Talbot's Take Traverse City app icon">
+        <img class="install-guide-icon" src="tttc-app-icon-display-rounded-1024x1024.png" alt="Talbot's Take Traverse City app icon">
         <p class="install-guide-eyebrow">One quick phone thing</p>
         <h2>Is the trip app already saved?</h2>
         <p class="install-guide-copy">Saving it to the home screen makes it open like an app, keeps the T³C otter icon handy, and avoids hunting for the link again.</p>
@@ -43,7 +43,7 @@
       </section>
 
       <section class="install-guide-step-panel" data-install-panel="instructions" hidden>
-        <img class="install-guide-icon" src="brand/app-icon.svg" alt="Talbot's Take Traverse City app icon">
+        <img class="install-guide-icon" src="tttc-app-icon-display-rounded-1024x1024.png" alt="Talbot's Take Traverse City app icon">
         <p class="install-guide-eyebrow">Android + Chrome</p>
         <h2>Put the otter on your home screen</h2>
         <ol class="install-guide-steps">
