@@ -37,8 +37,7 @@
     </div>`;
   header.appendChild(headerActions);
 
-  const tripChip = header.querySelector('.trip-chip');
-  if (tripChip) tripChip.textContent = 'Traverse City & Sleeping Bear Dunes';
+  header.querySelector('.trip-chip')?.remove();
 
   const welcome = document.createElement('section');
   welcome.className = 'home-welcome';
@@ -100,7 +99,6 @@
   addPurpose('planner', 'This is planning mode. Nothing is locked in, and every rated idea can move between days.');
 
   const updateProgress = () => {
-    const favoriteTotal = getFavorites().length;
     const ratingTotal = ratedPlaceCount();
     let plannedTotal = 0;
     try {
