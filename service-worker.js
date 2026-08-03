@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v29';
+const CACHE='talbots-tc-v30';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -49,10 +49,7 @@ const CORE=[
   '10-tttc-logo-horizontal-light-background-2400x800.png',
   '11-tttc-mascot-scene-transparent-2400x1400.png',
   'tttc-mani-michigan-guide-transparent-1536x1024.png',
-  'tttc-mani-west-bay-scene-transparent-1536x1024.png',
-  'tttc-pwa-icon-192x192.png',
-  'tttc-pwa-icon-512x512.png',
-  'tttc-maskable-icon-512x512.png'
+  'tttc-mani-west-bay-scene-transparent-1536x1024.png'
 ].map(path=>new URL(path,BASE).href);
 const FALLBACK=new URL('index.html',BASE).href;
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
