@@ -1,24 +1,8 @@
 (() => {
-  const styleHref = 'brand-overhaul.css';
-  if (!document.querySelector(`link[href="${styleHref}"]`)) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = styleHref;
-    document.head.appendChild(link);
-  }
-
   const replaceText = (selector, text) => {
     const node = document.querySelector(selector);
     if (node) node.textContent = text;
   };
-
-  const miniBrand = document.querySelector('.mini-brand');
-  const miniBrandIcon = miniBrand?.querySelector('span');
-  const miniBrandName = miniBrand?.querySelector('strong');
-  if (miniBrandIcon && !miniBrandIcon.querySelector('img')) {
-    miniBrandIcon.innerHTML = '<img src="app-icon.svg" alt="">';
-  }
-  if (miniBrandName) miniBrandName.textContent = 'Talbots Take Traverse City';
 
   const landingContent = document.querySelector('.landing-content');
   if (landingContent && !landingContent.querySelector('.tc-brand-ribbon')) {
