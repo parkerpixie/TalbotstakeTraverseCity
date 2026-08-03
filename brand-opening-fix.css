@@ -1,0 +1,202 @@
+/* Opening-screen rescue: editorial text left, Mani artwork right, softly blended into ivory. */
+.explorer-welcome-card .explorer-gate-mark {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 auto 14px !important;
+  display: block !important;
+  overflow: visible !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+.tttc-opening-split {
+  position: relative;
+  width: 100%;
+  min-height: clamp(360px, 44vw, 560px);
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.1fr);
+  align-items: center;
+  gap: clamp(12px, 2vw, 30px);
+  padding: clamp(18px, 3vw, 40px);
+  overflow: hidden;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255,255,255,.95), rgba(255,255,255,0) 38%),
+    linear-gradient(90deg, #fffdfa 0%, #f7f5f0 44%, #eef1f0 100%);
+  border: 1px solid rgba(11,52,67,.09);
+}
+
+.tttc-opening-copy-block {
+  position: relative;
+  z-index: 3;
+  padding-left: clamp(2px, 1vw, 12px);
+  text-align: left;
+}
+
+.tttc-opening-overline {
+  margin: 0 0 10px;
+  color: #34383d;
+  font-size: clamp(.72rem, 1vw, .9rem);
+  font-weight: 800;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+}
+
+.tttc-opening-title {
+  margin: 0;
+  color: #0b3443;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(3.4rem, 6.4vw, 7rem);
+  font-weight: 600;
+  letter-spacing: -.045em;
+  line-height: .82;
+  text-transform: uppercase;
+}
+
+.tttc-opening-title span {
+  display: block;
+}
+
+.tttc-opening-rule {
+  width: min(390px, 86%);
+  height: 30px;
+  margin: 14px 0 12px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.tttc-opening-rule::before,
+.tttc-opening-rule::after {
+  content: '';
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #b80e1a);
+}
+
+.tttc-opening-rule::after {
+  background: linear-gradient(90deg, #b80e1a, transparent);
+}
+
+.tttc-opening-cherries {
+  font-size: 1.45rem;
+  line-height: 1;
+  filter: saturate(1.1);
+}
+
+.tttc-opening-tagline {
+  margin: 0;
+  color: #b80e1a;
+  font-size: clamp(.82rem, 1.3vw, 1.05rem);
+  font-weight: 900;
+  letter-spacing: .1em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.tttc-opening-company {
+  margin: 9px 0 0;
+  color: #60686e;
+  font-size: clamp(.64rem, .95vw, .82rem);
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.tttc-opening-art-wrap {
+  position: absolute;
+  inset: 0 0 0 38%;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.tttc-opening-art-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(90deg, #f7f5f0 0%, rgba(247,245,240,.88) 12%, rgba(247,245,240,.28) 38%, rgba(247,245,240,0) 62%);
+}
+
+.tttc-opening-art {
+  position: absolute;
+  right: clamp(-48px, -3vw, -10px);
+  top: 50%;
+  width: min(70vw, 850px);
+  max-width: none;
+  height: auto;
+  transform: translateY(-49%);
+  object-fit: contain;
+  filter: drop-shadow(0 18px 34px rgba(11,16,21,.12));
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.24) 11%, #000 34%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.24) 11%, #000 34%);
+}
+
+/* Hide the previous full-width logo image if stale markup survives briefly. */
+.tttc-opening-logo {
+  display: none !important;
+}
+
+@media (max-width: 850px) {
+  .tttc-opening-split {
+    min-height: 620px;
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding: 26px 22px 300px;
+  }
+
+  .tttc-opening-copy-block {
+    max-width: 620px;
+    padding: 0;
+    text-align: center;
+  }
+
+  .tttc-opening-title {
+    font-size: clamp(3rem, 11vw, 5.6rem);
+  }
+
+  .tttc-opening-rule {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .tttc-opening-art-wrap {
+    inset: 42% -6% -2% 0;
+  }
+
+  .tttc-opening-art-wrap::before {
+    background: linear-gradient(180deg, #f7f5f0 0%, rgba(247,245,240,.68) 18%, rgba(247,245,240,0) 46%);
+  }
+
+  .tttc-opening-art {
+    right: 50%;
+    top: 56%;
+    width: min(120vw, 760px);
+    transform: translate(50%, -50%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 18%);
+  }
+}
+
+@media (max-width: 520px) {
+  .tttc-opening-split {
+    min-height: 560px;
+    padding: 22px 14px 265px;
+    border-radius: 20px;
+  }
+
+  .tttc-opening-title {
+    font-size: clamp(2.65rem, 15vw, 4.25rem);
+  }
+
+  .tttc-opening-art-wrap {
+    inset: 45% -20% -2% -20%;
+  }
+
+  .tttc-opening-art {
+    width: 150vw;
+    top: 58%;
+  }
+}
