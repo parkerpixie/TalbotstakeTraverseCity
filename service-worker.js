@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v27';
+const CACHE='talbots-tc-v28';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -32,32 +32,25 @@ const CORE=[
   'adventure-rating-clarity.css',
   'desktop-rating-fix.js',
   'desktop-rating-fix.css',
-  'brand-refresh.js',
-  'brand-refresh.css',
-  'brand-fixes.css',
   'install-guide.js',
   'install-guide.css',
   'completion-polish.css',
+  'brand-final.js',
+  'brand-final.css',
   'manifest.webmanifest',
-  'brand/pattern.svg',
-  'brand/swoosh.svg',
-  'tttc-logo-horizontal-full-color-transparent-2400x800.png',
-  'tttc-logo-stacked-full-color-transparent-1600x1600.png',
-  'tttc-icon-only-t3c-otter-transparent-1600x1600.png',
-  'tttc-mascot-lockup-full-color-transparent-2400x1400.png',
-  'tttc-badge-circular-full-color-transparent-1600x1600.png',
-  'tttc-wordmark-full-color-transparent-2000x1000.png',
-  'tttc-logo-one-color-dark-transparent-2400x800.png',
-  'tttc-logo-one-color-light-transparent-2400x800.png',
-  'tttc-watermark-transparent-1600x1600.png',
-  'tttc-app-icon-display-rounded-1024x1024.png',
+  '02-tttc-icon-only-q-transparent-1600x1600.png',
+  '03-tttc-favicon-master-q-transparent-256x256.png',
+  '05-tttc-monogram-t3c-transparent-1200x1200.png',
+  '06-tttc-badge-circular-transparent-1600x1600.png',
+  '07-tttc-app-icon-full-bleed-1024x1024.png',
+  '08-tttc-social-avatar-q-transparent-1200x1200.png',
+  '10-tttc-logo-horizontal-light-background-2400x800.png',
+  '11-tttc-mascot-scene-transparent-2400x1400.png',
+  'tttc-mani-michigan-guide-transparent-1536x1024.png',
+  'tttc-mani-west-bay-scene-transparent-1536x1024.png',
   'tttc-pwa-icon-192x192.png',
   'tttc-pwa-icon-512x512.png',
-  'tttc-maskable-icon-512x512.png',
-  'tttc-apple-touch-icon-180x180.png',
-  'tttc-favicon-transparent-32x32.png',
-  'tttc-favicon-transparent-16x16.png',
-  'tttc-favicon.ico'
+  'tttc-maskable-icon-512x512.png'
 ].map(path=>new URL(path,BASE).href);
 const FALLBACK=new URL('index.html',BASE).href;
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
