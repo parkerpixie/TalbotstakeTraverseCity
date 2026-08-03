@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v28';
+const CACHE='talbots-tc-v29';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -37,6 +37,8 @@ const CORE=[
   'completion-polish.css',
   'brand-final.js',
   'brand-final.css',
+  'brand-opening-fix.js',
+  'brand-opening-fix.css',
   'manifest.webmanifest',
   '02-tttc-icon-only-q-transparent-1600x1600.png',
   '03-tttc-favicon-master-q-transparent-256x256.png',
