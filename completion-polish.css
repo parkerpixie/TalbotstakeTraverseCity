@@ -1,0 +1,242 @@
+/* Final CapyQueue subsidiary polish: simplified toolbar, Mani introduction, and scroll-safe install guide. */
+
+.app-header {
+  min-height: 96px !important;
+  padding: 10px clamp(18px, 4vw, 64px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-wrap: nowrap !important;
+  gap: clamp(10px, 1.4vw, 22px) !important;
+  background: linear-gradient(90deg, #f7f5f0 0%, #fff 58%, #f1ece5 100%) !important;
+  border-bottom: 1px solid rgba(11, 8, 13, 0.12) !important;
+  box-shadow: 0 12px 34px rgba(11, 8, 13, 0.1) !important;
+  color: #1a1b1e !important;
+}
+
+.app-header .mini-brand {
+  min-width: 0;
+  margin-right: auto;
+  flex: 0 1 auto;
+  color: #1a1b1e;
+}
+
+.app-header .mini-brand-logo {
+  display: block;
+  width: clamp(310px, 29vw, 440px) !important;
+  height: auto !important;
+  aspect-ratio: 478 / 191;
+  overflow: visible;
+  filter: drop-shadow(0 5px 10px rgba(11, 8, 13, 0.08));
+}
+
+/* The header now has exactly three jobs: brand, current adventurer, rating progress. */
+.app-header .trip-chip,
+.app-header .sync-status,
+.app-header .start-here-button,
+.app-header .saved-header {
+  display: none !important;
+}
+
+.app-header .explorer-profile-pill,
+.app-header .traveler-button {
+  order: 2;
+  min-height: 50px !important;
+  margin: 0 !important;
+  padding: 12px 19px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #b80e1a !important;
+  border-radius: 999px !important;
+  background: #b80e1a !important;
+  color: #fff !important;
+  box-shadow: 0 10px 24px rgba(184, 14, 26, 0.22) !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  white-space: nowrap;
+}
+
+.app-header .explorer-profile-pill::after,
+.app-header .traveler-button::after {
+  content: "⌄";
+  font-size: 0.9em;
+  line-height: 1;
+  opacity: 0.78;
+}
+
+.rating-header-actions {
+  order: 3;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.header-rating-progress {
+  min-width: 132px;
+  min-height: 54px;
+  padding: 8px 16px 9px;
+  display: grid;
+  place-items: center;
+  gap: 1px;
+  border: 1px solid rgba(11, 8, 13, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #1a1b1e;
+  box-shadow: 0 8px 22px rgba(11, 8, 13, 0.08);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.header-rating-progress strong {
+  color: #b80e1a;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.header-rating-progress span {
+  color: #565a60;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.header-rating-progress.complete {
+  border-color: rgba(184, 14, 26, 0.28);
+  background: rgba(184, 14, 26, 0.07);
+}
+
+.mani-intro {
+  max-width: 760px;
+  margin: 12px auto 22px !important;
+  padding: 15px 18px;
+  border-left: 4px solid #b80e1a;
+  border-radius: 0 16px 16px 0;
+  background: rgba(184, 14, 26, 0.055);
+  color: #4f5358 !important;
+  line-height: 1.65;
+  text-align: left;
+}
+
+.mani-intro strong {
+  color: #0b080d;
+}
+
+/* The instructions must scroll inside the viewport instead of being clipped by their own shell. */
+.install-guide-dialog {
+  width: min(620px, calc(100vw - 24px)) !important;
+  max-height: calc(100dvh - 24px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.install-guide-shell {
+  min-height: 100%;
+  overflow: visible !important;
+  padding-bottom: max(30px, env(safe-area-inset-bottom)) !important;
+}
+
+.install-guide-step-panel {
+  min-height: 0;
+}
+
+.install-guide-actions {
+  padding-bottom: 4px;
+}
+
+@media (max-width: 820px) {
+  .app-header {
+    min-height: 80px !important;
+    padding: 8px 14px !important;
+    gap: 8px !important;
+  }
+
+  .app-header .mini-brand-logo {
+    width: clamp(180px, 41vw, 280px) !important;
+  }
+
+  .app-header .explorer-profile-pill,
+  .app-header .traveler-button {
+    min-height: 44px !important;
+    padding: 9px 13px !important;
+    font-size: 0.88rem !important;
+  }
+
+  .header-rating-progress {
+    min-width: 94px;
+    min-height: 46px;
+    padding: 7px 10px;
+    border-radius: 15px;
+  }
+
+  .header-rating-progress strong {
+    font-size: 1.05rem;
+  }
+
+  .header-rating-progress span {
+    font-size: 0.56rem;
+    letter-spacing: 0.07em;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-header {
+    min-height: 70px !important;
+    padding: 7px 10px !important;
+    gap: 6px !important;
+  }
+
+  .app-header .mini-brand-logo {
+    width: min(39vw, 168px) !important;
+  }
+
+  .app-header .explorer-profile-pill,
+  .app-header .traveler-button {
+    min-height: 40px !important;
+    padding: 8px 11px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .header-rating-progress {
+    min-width: 72px;
+    min-height: 40px;
+    padding: 5px 7px;
+    border-radius: 13px;
+  }
+
+  .header-rating-progress strong {
+    font-size: 0.94rem;
+  }
+
+  .header-rating-progress span {
+    font-size: 0;
+  }
+
+  .header-rating-progress span::after {
+    content: "rated";
+    font-size: 0.53rem;
+    letter-spacing: 0.06em;
+  }
+
+  .install-guide-dialog {
+    width: calc(100vw - 12px) !important;
+    max-height: calc(100dvh - 12px) !important;
+    border-radius: 21px !important;
+  }
+
+  .install-guide-shell {
+    padding: 22px 14px max(24px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .install-guide-close {
+    position: sticky !important;
+    top: 8px;
+    margin-left: auto;
+    z-index: 5;
+  }
+}
