@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v24';
+const CACHE='talbots-tc-v25';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -33,19 +33,10 @@ const CORE=[
   'desktop-rating-fix.css',
   'brand-refresh.js',
   'brand-refresh.css',
+  'brand-fixes.css',
   'install-guide.js',
   'install-guide.css',
   'manifest.webmanifest',
-  'brand/logo-horizontal.svg',
-  'brand/logo-stacked.svg',
-  'brand/icon-t3c-otter.svg',
-  'brand/mascot-lockup.svg',
-  'brand/badge.svg',
-  'brand/wordmark.svg',
-  'brand/logo-on-dark.svg',
-  'brand/logo-on-light.svg',
-  'brand/watermark.svg',
-  'brand/app-icon.svg',
   'brand/pattern.svg',
   'brand/swoosh.svg',
   'tttc-logo-horizontal-full-color-transparent-2400x800.png',
