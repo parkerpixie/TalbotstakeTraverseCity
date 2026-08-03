@@ -2,6 +2,14 @@
   const STORAGE_KEY = 'tttc-install-guide-status-v1';
   let deferredInstallPrompt = null;
 
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js').catch(error => {
+        console.warn('TTTC service worker registration failed:', error);
+      });
+    });
+  }
+
   const isStandalone = () =>
     window.matchMedia('(display-mode: standalone)').matches ||
     window.navigator.standalone === true;
