@@ -23,6 +23,7 @@
   loadStyle('desktop-rating-fix.css?v=20260731-1');
   loadStyle('brand-refresh.css?v=20260802-5');
   loadStyle('install-guide.css?v=20260802-1');
+  loadStyle('brand-overhaul.css?v=20260802-1');
 
   loadScript('discover-field-guide.js?v=20260730-2');
   loadScript('choose-explorer.js?v=20260730-2');
