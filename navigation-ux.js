@@ -24,6 +24,7 @@
   loadStyle('install-guide.css?v=20260803-3');
   loadStyle('completion-polish.css?v=20260803-1');
   loadStyle('brand-final.css?v=20260803-1');
+  loadStyle('brand-opening-fix.css?v=20260803-1');
 
   loadScript('discover-field-guide.js?v=20260730-2');
   loadScript('choose-explorer.js?v=20260803-3');
@@ -34,6 +35,7 @@
   loadScript('desktop-rating-fix.js?v=20260731-2');
   loadScript('install-guide.js?v=20260803-4');
   loadScript('brand-final.js?v=20260803-1');
+  loadScript('brand-opening-fix.js?v=20260803-1');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
