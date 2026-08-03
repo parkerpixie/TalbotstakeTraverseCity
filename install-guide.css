@@ -1,0 +1,196 @@
+.install-guide-dialog {
+  width: min(620px, 92vw);
+  max-height: 90vh;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(11, 8, 13, 0.14);
+  border-radius: 28px;
+  background: #f7f5f0;
+  color: #1a1b1e;
+  box-shadow: 0 32px 100px rgba(11, 8, 13, 0.42);
+}
+
+.install-guide-dialog::backdrop {
+  background: rgba(11, 8, 13, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.install-guide-shell {
+  position: relative;
+  padding: clamp(24px, 5vw, 42px);
+  text-align: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.install-guide-shell::after {
+  content: "";
+  position: absolute;
+  right: -10%;
+  bottom: -7%;
+  width: 78%;
+  height: 35%;
+  background: url('brand/pattern.svg') center / contain no-repeat;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.install-guide-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #e6e4e0;
+  color: #1a1b1e;
+  font-size: 27px;
+  line-height: 1;
+}
+
+.install-guide-icon {
+  width: 126px;
+  height: 126px;
+  margin: 0 auto 14px;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 25px rgba(11, 8, 13, 0.18));
+}
+
+.install-guide-eyebrow {
+  margin: 0 0 6px;
+  color: #b80e1a;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.install-guide-dialog h2 {
+  margin: 0;
+  color: #0b080d;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  line-height: 1;
+}
+
+.install-guide-copy {
+  max-width: 480px;
+  margin: 14px auto 22px;
+  color: #555b61;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.install-guide-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.install-guide-actions button {
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 800;
+}
+
+.install-guide-primary {
+  border: 1px solid #b80e1a;
+  background: #b80e1a;
+  color: #fff;
+}
+
+.install-guide-primary:hover,
+.install-guide-primary:focus-visible {
+  background: #43060d;
+  border-color: #43060d;
+  outline: none;
+}
+
+.install-guide-secondary {
+  border: 1px solid #dcd6cc;
+  background: #fff;
+  color: #1a1b1e;
+}
+
+.install-guide-tertiary {
+  border: 0;
+  background: transparent;
+  color: #697077;
+}
+
+.install-guide-steps {
+  display: grid;
+  gap: 12px;
+  max-width: 500px;
+  margin: 22px auto;
+  padding: 0;
+  text-align: left;
+  counter-reset: install-step;
+}
+
+.install-guide-step {
+  position: relative;
+  min-height: 58px;
+  padding: 14px 16px 14px 58px;
+  border: 1px solid #e6e4e0;
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.9);
+  line-height: 1.45;
+  list-style: none;
+  counter-increment: install-step;
+}
+
+.install-guide-step::before {
+  content: counter(install-step);
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #0b080d;
+  color: #fff;
+  font-weight: 800;
+}
+
+.install-guide-note {
+  max-width: 500px;
+  margin: 0 auto 20px;
+  padding: 12px 14px;
+  border-left: 3px solid #b80e1a;
+  background: rgba(184, 14, 26, 0.06);
+  color: #555b61;
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.install-guide-step-panel[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 520px) {
+  .install-guide-shell {
+    padding: 24px 16px 22px;
+  }
+
+  .install-guide-icon {
+    width: 104px;
+    height: 104px;
+  }
+
+  .install-guide-actions {
+    display: grid;
+  }
+
+  .install-guide-actions button {
+    width: 100%;
+  }
+}
