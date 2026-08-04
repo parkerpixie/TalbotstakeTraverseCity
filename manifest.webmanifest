@@ -1,8 +1,9 @@
 {
+  "id": "./?app=tttc-otter-v2",
   "name": "Talbot's Take Traverse City",
   "short_name": "Talbot's Take TC",
   "description": "A CapyQueue Company family trip planner for Traverse City and Sleeping Bear Dunes.",
-  "start_url": "./",
+  "start_url": "./?app=tttc-otter-v2",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f7f5f0",
@@ -10,13 +11,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "07-tttc-app-icon-full-bleed-1024x1024.png",
+      "src": "07-tttc-app-icon-full-bleed-1024x1024.png?v=20260803-3",
       "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "07-tttc-app-icon-full-bleed-1024x1024.png",
+      "src": "07-tttc-app-icon-full-bleed-1024x1024.png?v=20260803-3",
       "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "maskable"
