@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v34';
+const CACHE='talbots-tc-v35';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -25,6 +25,7 @@ const CORE=[
   'your-adventure.css',
   'places-hub.js',
   'places-hub.css',
+  'compact-rating-grid.css',
   'favorite-attribution.js',
   'favorite-attribution.css',
   'heart-rating-dashboard.css',
