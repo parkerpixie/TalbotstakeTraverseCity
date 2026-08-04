@@ -26,6 +26,7 @@
   loadStyle('brand-final.css?v=20260803-1');
   loadStyle('brand-opening-fix.css?v=20260803-1');
   loadStyle('rating-visibility.css?v=20260803-1');
+  loadStyle('compact-rating-grid.css?v=20260803-1');
 
   loadScript('discover-field-guide.js?v=20260730-2');
   loadScript('choose-explorer.js?v=20260803-3');
