@@ -38,7 +38,7 @@
   loadScript('brand-final.js?v=20260803-1');
   loadScript('brand-opening-fix.js?v=20260803-1');
   loadScript('rating-visibility.js?v=20260803-1');
-  loadScript('rating-flow-fix.js?v=20260803-1');
+  loadScript('rating-flow-fix.js?v=20260803-2');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
