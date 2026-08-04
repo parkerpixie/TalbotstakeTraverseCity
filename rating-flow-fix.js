@@ -103,6 +103,12 @@
     savedView = null;
   };
 
+  const scheduleRestore = delay => {
+    window.setTimeout(() => {
+      if (guardActive) restoreView();
+    }, delay);
+  };
+
   const beginFromEvent = event => {
     const trigger = event.target instanceof Element ? event.target.closest(RATING_TRIGGER) : null;
     if (trigger) suppressListRenders();
@@ -114,24 +120,34 @@
     if (event.key === 'Enter' || event.key === ' ') beginFromEvent(event);
   }, true);
 
-  const originalApiOpen = window.TCHeartRatings?.open;
-  if (typeof originalApiOpen === 'function' && !window.TCHeartRatings.__returnFixWrapped) {
-    window.TCHeartRatings.open = id => {
+  const wrapApiWhenReady = () => {
+    const api = window.TCHeartRatings;
+    if (!api?.open || api.__returnFixWrapped) return Boolean(api?.__returnFixWrapped);
+    const originalApiOpen = api.open;
+    api.open = id => {
       suppressListRenders();
       return originalApiOpen(id);
     };
-    window.TCHeartRatings.__returnFixWrapped = true;
+    api.__returnFixWrapped = true;
+    return true;
+  };
+
+  if (!wrapApiWhenReady()) {
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      if (wrapApiWhenReady() || attempts > 80) window.clearInterval(timer);
+    }, 50);
   }
 
   document.addEventListener('tc-ratings-changed', () => {
     committed = true;
-    restoreView();
+    const dialog = document.getElementById('heartRatingDialog');
+    if (!dialog?.open) scheduleRestore(60);
   });
 
   document.addEventListener('close', event => {
     if (event.target?.id !== 'heartRatingDialog' || !guardActive) return;
-    window.setTimeout(() => {
-      if (guardActive && !committed) restoreView();
-    }, 350);
+    scheduleRestore(committed ? 60 : 350);
   }, true);
 })();
