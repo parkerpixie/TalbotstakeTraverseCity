@@ -30,12 +30,8 @@
     const score = placeId && traveler ? Number(ratings?.[placeId]?.[traveler]) || 0 : 0;
     card.classList.toggle('rated-by-current-traveler', score > 0);
 
-    if (score > 0) {
-      card.dataset.currentRating = String(score);
-      card.setAttribute('aria-label', `${card.getAttribute('aria-label') || ''} Rated ${score} out of 5 by ${traveler}`.trim());
-    } else {
-      delete card.dataset.currentRating;
-    }
+    if (score > 0) card.dataset.currentRating = String(score);
+    else delete card.dataset.currentRating;
   };
 
   const refresh = () => {
