@@ -3,8 +3,6 @@
   const header = document.querySelector('.app-header');
   if (!home || !header) return;
 
-  const RATING_GOAL = 10;
-
   const getFavorites = () => {
     try { return JSON.parse(localStorage.getItem('tcFavoritesV3') || localStorage.getItem('tcFavoritesV2') || '[]'); }
     catch { return []; }
@@ -21,10 +19,20 @@
 
   const currentTraveler = () => localStorage.getItem('tcTraveler') || '';
 
+  const allPlaceRecords = () =>
+    typeof allPlaces !== 'undefined' && Array.isArray(allPlaces)
+      ? allPlaces.filter(place => place?.id)
+      : [];
+
+  const totalPlaceCount = () => new Set(allPlaceRecords().map(place => place.id)).size;
+
   const ratedPlaceCount = () => {
     const traveler = currentTraveler();
     if (!traveler) return 0;
-    return Object.values(getRatings()).filter(people => Number(people?.[traveler]) > 0).length;
+    const validIds = new Set(allPlaceRecords().map(place => place.id));
+    return Object.entries(getRatings())
+      .filter(([placeId, people]) => validIds.has(placeId) && Number(people?.[traveler]) > 0)
+      .length;
   };
 
   document.querySelector('.header-actions')?.remove();
@@ -32,7 +40,7 @@
   headerActions.className = 'header-actions rating-header-actions';
   headerActions.innerHTML = `
     <div class="header-rating-progress" id="headerRatingProgress" role="status" aria-live="polite">
-      <strong id="headerRatingCount">0/${RATING_GOAL}</strong>
+      <strong id="headerRatingCount">0/${totalPlaceCount()}</strong>
       <span>Places rated</span>
     </div>`;
   header.appendChild(headerActions);
@@ -100,12 +108,14 @@
 
   const updateProgress = () => {
     const ratingTotal = ratedPlaceCount();
+    const overallTotal = totalPlaceCount();
     let plannedTotal = 0;
     try {
       const savedPlan = JSON.parse(localStorage.getItem('tcPlanV3') || '{}');
       plannedTotal = Object.values(savedPlan).flatMap(day => Object.values(day || {}).flat()).length;
     } catch {}
-    const percent = Math.min(100, 55 + Math.min(25, ratingTotal * 2.5) + Math.min(20, plannedTotal * 4));
+    const ratingShare = overallTotal ? ratingTotal / overallTotal : 0;
+    const percent = Math.min(100, 55 + Math.min(25, ratingShare * 25) + Math.min(20, plannedTotal * 4));
     const fill = document.getElementById('progressFill');
     const value = document.getElementById('progressPercent');
     if (fill) fill.style.width = `${percent}%`;
@@ -118,16 +128,16 @@
 
   const updateRatingProgress = () => {
     const count = ratedPlaceCount();
+    const total = totalPlaceCount();
     const traveler = currentTraveler();
-    const displayed = Math.min(count, RATING_GOAL);
     const countNode = document.getElementById('headerRatingCount');
     const shell = document.getElementById('headerRatingProgress');
-    if (countNode) countNode.textContent = count > RATING_GOAL ? `${RATING_GOAL}+` : `${displayed}/${RATING_GOAL}`;
+    if (countNode) countNode.textContent = `${count}/${total}`;
     if (shell) {
-      shell.classList.toggle('complete', count >= RATING_GOAL);
+      shell.classList.toggle('complete', total > 0 && count >= total);
       shell.setAttribute('aria-label', traveler
-        ? `${traveler} has rated ${count} place${count === 1 ? '' : 's'} toward a goal of ${RATING_GOAL}`
-        : `Choose an adventurer to track ratings toward a goal of ${RATING_GOAL}`);
+        ? `${traveler} has rated ${count} of ${total} restaurants, shops, and activities`
+        : `Choose an adventurer to track ratings across all ${total} restaurants, shops, and activities`);
     }
     updateProgress();
   };
@@ -143,5 +153,6 @@
 
   document.addEventListener('tc-ratings-changed', updateRatingProgress);
   document.addEventListener('tc-shared-ready', updateRatingProgress);
+  window.addEventListener('storage', updateRatingProgress);
   updateRatingProgress();
 })();
