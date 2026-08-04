@@ -1,0 +1,305 @@
+/* Compact mobile Places layout. Presentation only: no rating storage or sync behavior is changed. */
+
+@media (max-width: 720px) {
+  .tab-panel.places-hub.active {
+    gap: 14px !important;
+    padding-bottom: 22px !important;
+  }
+
+  /* Shrink the scenic introduction so the actual choices arrive sooner. */
+  .places-hero,
+  .places-hero-copy {
+    min-height: 210px !important;
+  }
+
+  .places-hero {
+    border-radius: 20px !important;
+    box-shadow: 0 12px 28px rgba(11, 52, 67, 0.13) !important;
+  }
+
+  .places-hero-copy {
+    justify-content: flex-end !important;
+    padding: 18px !important;
+  }
+
+  .places-hero-copy h2 {
+    max-width: 330px;
+    margin: 3px 0 7px !important;
+    font-size: clamp(1.9rem, 9vw, 2.7rem) !important;
+    line-height: 0.98 !important;
+  }
+
+  .places-hero-copy p:last-child {
+    display: -webkit-box;
+    max-width: 390px;
+    overflow: hidden;
+    font-size: 0.78rem !important;
+    line-height: 1.35 !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  /* Three compact mode buttons instead of another horizontal scrolling row. */
+  .places-mode-nav {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    scroll-snap-type: none !important;
+  }
+
+  .places-mode-nav button {
+    min-width: 0 !important;
+    min-height: 72px !important;
+    border-radius: 15px !important;
+    box-shadow: 0 6px 14px rgba(20, 48, 55, 0.08) !important;
+    scroll-snap-align: none !important;
+  }
+
+  .places-mode-nav button:hover,
+  .places-mode-nav button:active {
+    transform: none !important;
+  }
+
+  .places-mode-nav strong {
+    gap: 2px !important;
+    padding: 10px 8px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.86rem !important;
+    line-height: 1.05 !important;
+    text-align: center !important;
+  }
+
+  .places-mode-nav small {
+    display: none !important;
+  }
+
+  .places-mode-stage,
+  .places-mode-panel:not([hidden]) {
+    gap: 11px !important;
+  }
+
+  .places-mode-panel {
+    animation: none !important;
+  }
+
+  .places-mode-panel > .traveler-strip {
+    margin-bottom: 0 !important;
+  }
+
+  .places-mode-panel > .filter-panel {
+    padding: 10px !important;
+    border-radius: 15px !important;
+    box-shadow: none !important;
+  }
+
+  /* The core change: two scannable rating cards across every phone screen. */
+  #restaurantGrid,
+  #shopGrid,
+  #activityGrid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    gap: 9px !important;
+    min-width: 0 !important;
+  }
+
+  #restaurantGrid > *,
+  #shopGrid > *,
+  #activityGrid > * {
+    min-width: 0 !important;
+  }
+
+  .visual-place-card,
+  .places-hub .place-card {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    margin: 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 7px 18px rgba(20, 48, 55, 0.09) !important;
+    transform: none !important;
+  }
+
+  .place-card-media {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  .place-card-media img {
+    transform: none !important;
+  }
+
+  .place-card-media .card-type {
+    top: 7px !important;
+    left: 7px !important;
+    max-width: calc(100% - 14px) !important;
+    padding: 4px 6px !important;
+    border-radius: 999px !important;
+    font-size: 0.56rem !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  .place-card-media .icon-badge {
+    right: 7px !important;
+    bottom: 7px !important;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 1rem !important;
+  }
+
+  .place-card-body {
+    min-width: 0 !important;
+    padding: 10px !important;
+  }
+
+  .place-card-body h3 {
+    display: -webkit-box;
+    min-height: 2.35em;
+    margin: 0 0 4px !important;
+    overflow: hidden;
+    color: #0b3443 !important;
+    font-size: 0.94rem !important;
+    line-height: 1.17 !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .place-card-body .place-sub {
+    display: -webkit-box;
+    min-height: 2.25em;
+    margin-bottom: 5px !important;
+    overflow: hidden;
+    font-size: 0.62rem !important;
+    line-height: 1.2 !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .place-card-body > p {
+    display: -webkit-box;
+    min-height: 3.6em;
+    margin: 0 0 7px !important;
+    overflow: hidden;
+    color: #596166 !important;
+    font-size: 0.69rem !important;
+    line-height: 1.2 !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Keep the decision-making pieces; remove the encyclopedia layer from the card face. */
+  .place-card-body .tag-row,
+  .place-card-body .menu-examples,
+  .place-card-body .saved-by-label {
+    display: none !important;
+  }
+
+  .place-card-body .dog-status {
+    margin: 0 0 7px !important;
+    padding: 5px 6px !important;
+    font-size: 0.59rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .place-card-body .family-rating-summary {
+    min-height: 22px !important;
+    margin: 0 0 6px !important;
+    padding: 4px 5px !important;
+    border-radius: 8px !important;
+    font-size: 0.58rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .place-card-body .family-rating-summary strong {
+    font-size: 0.75rem !important;
+  }
+
+  .place-card-body .card-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    margin-top: auto !important;
+    padding-top: 4px !important;
+  }
+
+  .place-card-body .card-actions a {
+    min-height: 28px !important;
+    padding: 6px 4px !important;
+    font-size: 0.62rem !important;
+    text-align: center !important;
+  }
+
+  .place-card-body .heart-rating-trigger,
+  .place-card-body [data-save] {
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 7px 5px !important;
+    border-radius: 11px !important;
+    font-size: 0.67rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .place-card-body .heart-rating-trigger span,
+  .place-card-body [data-save] span {
+    display: block !important;
+    font-size: 0.72rem !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  .place-card-body .heart-rating-trigger small,
+  .place-card-body [data-save] small {
+    display: block !important;
+    margin-top: 2px !important;
+    font-size: 0.56rem !important;
+    line-height: 1.05 !important;
+  }
+
+  /* Reduce layout shifts and touch-hover wobble. */
+  .place-card,
+  .visual-place-card,
+  .place-card-media img,
+  .places-mode-nav button {
+    transition: border-color 120ms ease, background-color 120ms ease, box-shadow 120ms ease !important;
+  }
+
+  .place-card:hover,
+  .visual-place-card:hover,
+  .place-card:active,
+  .visual-place-card:active {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 360px) {
+  #restaurantGrid,
+  #shopGrid,
+  #activityGrid {
+    gap: 7px !important;
+  }
+
+  .place-card-body {
+    padding: 8px !important;
+  }
+
+  .place-card-body h3 {
+    font-size: 0.84rem !important;
+  }
+
+  .place-card-body > p {
+    font-size: 0.63rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  .places-hub *,
+  .places-hub *::before,
+  .places-hub *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
