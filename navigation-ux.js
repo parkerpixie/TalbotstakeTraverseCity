@@ -34,10 +34,11 @@
   loadScript('places-hub.js?v=20260730-2');
   loadScript('adventure-rating-clarity.js?v=20260730-1');
   loadScript('desktop-rating-fix.js?v=20260731-2');
-  loadScript('install-guide.js?v=20260803-4');
+  loadScript('install-guide.js?v=20260803-5');
   loadScript('brand-final.js?v=20260803-1');
   loadScript('brand-opening-fix.js?v=20260803-1');
   loadScript('rating-visibility.js?v=20260803-1');
+  loadScript('rating-flow-fix.js?v=20260803-1');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
