@@ -19,5 +19,7 @@ jobs:
       - run: node --check family-rating-queue.js
       - run: node --check porter-place-additions.js
       - run: node --check phase-a-explore-metadata.js
+      - run: node --check plan-trip.js
+      - run: test -f plan-trip.css
       - run: test -f "Assets/Raven HIll Discovery Center.jpeg" && test -f "Assets/Boardman Nature River Center.jpeg"
       - run: test -f brand-overhaul.css && test -f brand-refresh.css && test -f brand-refresh.js && test -f index.html
