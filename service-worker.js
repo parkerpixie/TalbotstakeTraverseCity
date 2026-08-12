@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v39';
+const CACHE='talbots-tc-v40';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -7,6 +7,7 @@ const CORE=[
   'planner-upgrades.css',
   'app.js',
   'porter-place-additions.js',
+  'phase-a-explore-metadata.js',
   'presentation-polish.js',
   'presentation-polish.css',
   'gallery-correction.js',
@@ -47,6 +48,8 @@ const CORE=[
   'brand-opening-fix.js',
   'brand-opening-fix.css',
   'manifest.webmanifest?v=20260803-4',
+  'Assets/Raven HIll Discovery Center.jpeg',
+  'Assets/Boardman Nature River Center.jpeg',
   '02-tttc-icon-only-q-transparent-1600x1600.png',
   '03-tttc-favicon-master-q-transparent-256x256.png',
   '05-tttc-monogram-t3c-transparent-1200x1200.png',
