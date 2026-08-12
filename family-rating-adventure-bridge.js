@@ -15,16 +15,19 @@
     const button = document.querySelector('[data-panel="home"] .adventure-next-step');
     if (!button) return;
 
-    const remaining = window.TCFamilyRatingQueue?.remaining(person);
-    button.removeAttribute('data-open-mode');
-    button.dataset.openRatingQueue = person;
+    const remaining = window.TCFamilyRatingQueue?.remaining(person) ?? 0;
+    const desiredTitle = remaining ? `Finish ${person}'s rating queue` : `${person}'s ratings are complete`;
+    const desiredDetail = remaining
+      ? `${remaining} unrated places left. Each card disappears as you rate it.`
+      : 'Every restaurant, shop, and activity has a heart score.';
+
+    if (button.hasAttribute('data-open-mode')) button.removeAttribute('data-open-mode');
+    if (button.dataset.openRatingQueue !== person) button.dataset.openRatingQueue = person;
 
     const title = button.querySelector('.adventure-signal-copy > strong');
     const detail = button.querySelector('.adventure-signal-copy > span');
-    if (title) title.textContent = remaining ? `Finish ${person}'s rating queue` : `${person}'s ratings are complete`;
-    if (detail) detail.textContent = remaining
-      ? `${remaining} unrated places left. Each card disappears as you rate it.`
-      : 'Every restaurant, shop, and activity has a heart score.';
+    if (title && title.textContent !== desiredTitle) title.textContent = desiredTitle;
+    if (detail && detail.textContent !== desiredDetail) detail.textContent = desiredDetail;
   }
 
   document.addEventListener('click', event => {
