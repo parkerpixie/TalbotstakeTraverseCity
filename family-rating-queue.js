@@ -235,15 +235,18 @@
     if (!button) return;
 
     const remaining = remainingFor(traveler).length;
-    button.removeAttribute('data-open-mode');
-    button.dataset.openRatingQueue = traveler;
+    const desiredTitle = remaining ? `Finish ${traveler}'s rating queue` : `${traveler}'s ratings are complete`;
+    const desiredDetail = remaining
+      ? `${remaining} unrated places left. Each card disappears as you rate it.`
+      : 'Every restaurant, shop, and activity has a heart score.';
+
+    if (button.hasAttribute('data-open-mode')) button.removeAttribute('data-open-mode');
+    if (button.dataset.openRatingQueue !== traveler) button.dataset.openRatingQueue = traveler;
 
     const title = button.querySelector('.adventure-signal-copy > strong');
     const detail = button.querySelector('.adventure-signal-copy > span');
-    if (title) title.textContent = remaining ? `Finish ${traveler}'s rating queue` : `${traveler}'s ratings are complete`;
-    if (detail) detail.textContent = remaining
-      ? `${remaining} unrated places left. Each card disappears as you rate it.`
-      : 'Every restaurant, shop, and activity has a heart score.';
+    if (title && title.textContent !== desiredTitle) title.textContent = desiredTitle;
+    if (detail && detail.textContent !== desiredDetail) detail.textContent = desiredDetail;
   }
 
   function render() {
