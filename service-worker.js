@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v35';
+const CACHE='talbots-tc-v36';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -36,6 +36,8 @@ const CORE=[
   'rating-visibility.js',
   'rating-visibility.css',
   'rating-flow-fix.js',
+  'family-rating-queue.js',
+  'family-rating-queue.css',
   'install-guide.js',
   'install-guide.css',
   'completion-polish.css',
