@@ -17,4 +17,5 @@ jobs:
       - run: node --check copy-polish.js
       - run: node --check navigation-ux.js
       - run: node --check family-rating-queue.js
+      - run: node --check porter-place-additions.js
       - run: test -f brand-overhaul.css && test -f brand-refresh.css && test -f brand-refresh.js && test -f index.html
