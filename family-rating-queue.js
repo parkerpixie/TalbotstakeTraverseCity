@@ -63,7 +63,7 @@
     panel.dataset.panel = 'rate';
     panel.innerHTML = `
       <div class="rating-queue-shell">
-        <button type="button" class="rating-queue-back" id="ratingQueueBack">← Back to Home</button>
+        <button type="button" class="rating-queue-back" id="ratingQueueBack">← Back to Adventure</button>
         <div class="rating-queue-intro">
           <div>
             <p class="eyebrow dark">Finish the family shortlist</p>
@@ -113,9 +113,16 @@
     render();
   }
 
-  function openQueue() {
+  function openQueue(person = '') {
     const savedQueuePerson = localStorage.getItem('tcRatingQueuePerson');
-    if (PEOPLE.includes(savedQueuePerson)) activePerson = savedQueuePerson;
+    if (PEOPLE.includes(person)) activePerson = person;
+    else if (PEOPLE.includes(savedQueuePerson)) activePerson = savedQueuePerson;
+    else {
+      const traveler = localStorage.getItem('tcTraveler');
+      if (PEOPLE.includes(traveler)) activePerson = traveler;
+    }
+    localStorage.setItem('tcRatingQueuePerson', activePerson);
+    ensurePanel();
     if (typeof showTab === 'function') showTab('rate');
     if (typeof selectedTraveler !== 'undefined' && selectedTraveler !== activePerson && typeof chooseTraveler === 'function') {
       chooseTraveler(activePerson);
@@ -237,6 +244,11 @@
     ensureLaunch();
     render();
   }
+
+  window.TCFamilyRatingQueue = {
+    open: openQueue,
+    remaining: person => PEOPLE.includes(person) ? remainingFor(person).length : 0
+  };
 
   document.addEventListener('tc-ratings-changed', render);
   document.addEventListener('tc-shared-ready', render);
