@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v36';
+const CACHE='talbots-tc-v37';
 const BASE=self.registration.scope;
 const CORE=[
   '',
