@@ -1,10 +1,12 @@
-const CACHE='talbots-tc-v40';
+const CACHE='talbots-tc-v41';
 const BASE=self.registration.scope;
 const CORE=[
   '',
   'index.html',
   'styles.css',
   'planner-upgrades.css',
+  'plan-trip.css',
+  'plan-trip.js',
   'app.js',
   'porter-place-additions.js',
   'phase-a-explore-metadata.js',
