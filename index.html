@@ -77,13 +77,13 @@
       </section>
 
       <section class="tab-panel" data-panel="explore">
-        <div class="page-heading"><div><p class="eyebrow dark">Explore</p><h2>Choose the adventure before choosing the road.</h2></div><p>Filter by area, activity type, energy level, weather, and whether Luna and Ozzy can join.</p></div>
+        <div class="page-heading"><div><p class="eyebrow dark">Explore</p><h2>Choose the adventure before choosing the road.</h2></div><p>Filter by setting, weather, interaction level, energy, and what sounds genuinely interesting.</p></div>
         <div class="filter-panel activity-filters">
-          <input id="activitySearch" type="search" placeholder="Search beaches, trails, kayaking, lighthouse…" />
+          <input id="activitySearch" type="search" placeholder="Search beaches, trails, science, animals, lighthouse…" />
           <select id="activityTown"><option value="all">All areas</option><option>At the House</option><option>Traverse City</option><option>Old Mission Peninsula</option><option>Suttons Bay</option><option>Leland</option><option>Glen Arbor</option><option>Empire / Sleeping Bear</option></select>
           <select id="activityType"><option value="all">All activities</option><option value="beach">Beach & water</option><option value="hike">Hikes & trails</option><option value="scenic">Scenic drives</option><option value="history">History & landmarks</option><option value="family">Family fun</option><option value="relax">Relaxed</option></select>
         </div>
-        <div class="chip-row" id="activityChips"><button data-tag="dog-friendly">🐾 Dog friendly</button><button data-tag="free">💸 Free</button><button data-tag="rainy-day">☔ Rainy day</button><button data-tag="low-energy">🪶 Low energy</button><button data-tag="active">🥾 Active</button><button data-tag="water">🌊 Water</button><button data-tag="scenic">📸 Scenic</button></div>
+        <div class="chip-row" id="activityChips"><button data-tag="indoor">🏠 Indoor</button><button data-tag="outdoor">🌲 Outdoor</button><button data-tag="rainy-day">☔ Rainy day</button><button data-tag="interactive">🖐️ Interactive</button><button data-tag="animals-nature">🦋 Animals & nature</button><button data-tag="science-discovery">🔬 Science & discovery</button><button data-tag="low-energy">🪶 Low energy</button><button data-tag="unique-offbeat">✨ Unique & offbeat</button></div>
         <p class="results-note" id="activityResultsNote"></p><div class="place-grid" id="activityGrid"></div>
       </section>
 
@@ -125,6 +125,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
   <script src="porter-place-additions.js"></script>
+  <script src="phase-a-explore-metadata.js"></script>
   <script src="supabase-sync.js"></script>
   <script src="presentation-polish.js"></script>
   <script src="gallery-correction.js"></script>
