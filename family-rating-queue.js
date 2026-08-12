@@ -228,12 +228,31 @@
     count.textContent = mark || nancy ? `Mark ${mark} left · Nancy ${nancy} left` : 'Mark + Nancy complete ✓';
   }
 
+  function enhanceAdventureLaunch() {
+    const traveler = localStorage.getItem('tcTraveler');
+    if (!PEOPLE.includes(traveler)) return;
+    const button = document.querySelector('[data-panel="home"] .adventure-next-step');
+    if (!button) return;
+
+    const remaining = remainingFor(traveler).length;
+    button.removeAttribute('data-open-mode');
+    button.dataset.openRatingQueue = traveler;
+
+    const title = button.querySelector('.adventure-signal-copy > strong');
+    const detail = button.querySelector('.adventure-signal-copy > span');
+    if (title) title.textContent = remaining ? `Finish ${traveler}'s rating queue` : `${traveler}'s ratings are complete`;
+    if (detail) detail.textContent = remaining
+      ? `${remaining} unrated places left. Each card disappears as you rate it.`
+      : 'Every restaurant, shop, and activity has a heart score.';
+  }
+
   function render() {
     renderPersonTabs();
     renderProgress();
     renderFilters();
     renderCards();
     updateLaunch();
+    window.setTimeout(enhanceAdventureLaunch, 80);
   }
 
   function init() {
@@ -243,6 +262,13 @@
     ensurePanel();
     ensureLaunch();
     render();
+
+    const home = document.querySelector('[data-panel="home"]');
+    if (home) {
+      new MutationObserver(() => requestAnimationFrame(enhanceAdventureLaunch))
+        .observe(home, { childList: true, subtree: true });
+    }
+    window.setTimeout(enhanceAdventureLaunch, 300);
   }
 
   window.TCFamilyRatingQueue = {
@@ -250,8 +276,23 @@
     remaining: person => PEOPLE.includes(person) ? remainingFor(person).length : 0
   };
 
+  document.addEventListener('click', event => {
+    const button = event.target.closest('[data-open-rating-queue]');
+    if (!button) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    openQueue(button.dataset.openRatingQueue);
+  }, true);
+
   document.addEventListener('tc-ratings-changed', render);
   document.addEventListener('tc-shared-ready', render);
+  document.addEventListener('tc-places-ready', () => window.setTimeout(enhanceAdventureLaunch, 100));
+  document.addEventListener('click', event => {
+    if (event.target.closest('[data-explorer-name], #profilePill, .bottom-nav [data-tab="home"]')) {
+      window.setTimeout(enhanceAdventureLaunch, 220);
+    }
+  });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
