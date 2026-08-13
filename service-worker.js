@@ -88,7 +88,10 @@ self.addEventListener('fetch',event=>{
     event.respondWith(fetch(event.request).then(async response=>{
       const html=await response.text();
       const enhanced=html.includes('family-rating-queue-all.js') ? html : html.replace('</body>',`${QUEUE_SCRIPT}</body>`);
-      const result=new Response(enhanced,{status:response.status,statusText:response.statusText,headers:response.headers});
+      const headers=new Headers(response.headers);
+      headers.delete('content-length');
+      headers.delete('content-encoding');
+      const result=new Response(enhanced,{status:response.status,statusText:response.statusText,headers});
       const copy=result.clone();
       caches.open(CACHE).then(cache=>cache.put(event.request,copy));
       return result;
