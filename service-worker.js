@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v41';
+const CACHE='talbots-tc-v42';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -41,6 +41,7 @@ const CORE=[
   'rating-visibility.css',
   'rating-flow-fix.js',
   'family-rating-queue.js',
+  'family-rating-queue-all.js',
   'family-rating-queue.css',
   'install-guide.js',
   'install-guide.css',
@@ -49,9 +50,18 @@ const CORE=[
   'brand-final.css',
   'brand-opening-fix.js',
   'brand-opening-fix.css',
+  'mani-guide.js',
+  'mani-guide.css',
   'manifest.webmanifest?v=20260803-4',
   'Assets/Raven HIll Discovery Center.jpeg',
   'Assets/Boardman Nature River Center.jpeg',
+  'Assets/Mani-Guide.png',
+  'Assets/Mani-Thinking.png',
+  'Assets/Mani-Nearby.png',
+  'Assets/Mani-Warning.png',
+  'Assets/Mani-Celebrate.png',
+  'Assets/Mani-Rainy-Day.png',
+  'Assets/Mani-Schedule.png',
   '02-tttc-icon-only-q-transparent-1600x1600.png',
   '03-tttc-favicon-master-q-transparent-256x256.png',
   '05-tttc-monogram-t3c-transparent-1200x1200.png',
@@ -67,10 +77,25 @@ const CORE=[
   'tttc-mani-west-bay-scene-transparent-1536x1024.png'
 ].map(path=>new URL(path,BASE).href);
 const FALLBACK=new URL('index.html',BASE).href;
+const QUEUE_SCRIPT='<script src="family-rating-queue-all.js?v=20260813-1"></script>';
+
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET') return;
+
+  if(event.request.mode==='navigate') {
+    event.respondWith(fetch(event.request).then(async response=>{
+      const html=await response.text();
+      const enhanced=html.includes('family-rating-queue-all.js') ? html : html.replace('</body>',`${QUEUE_SCRIPT}</body>`);
+      const result=new Response(enhanced,{status:response.status,statusText:response.statusText,headers:response.headers});
+      const copy=result.clone();
+      caches.open(CACHE).then(cache=>cache.put(event.request,copy));
+      return result;
+    }).catch(()=>caches.match(event.request).then(hit=>hit||caches.match(FALLBACK))));
+    return;
+  }
+
   event.respondWith(fetch(event.request).then(response=>{
     const copy=response.clone();
     caches.open(CACHE).then(cache=>cache.put(event.request,copy));
