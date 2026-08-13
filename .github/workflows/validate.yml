@@ -20,6 +20,8 @@ jobs:
       - run: node --check porter-place-additions.js
       - run: node --check phase-a-explore-metadata.js
       - run: node --check plan-trip.js
-      - run: test -f plan-trip.css
+      - run: node --check mani-guide.js
+      - run: test -f plan-trip.css && test -f mani-guide.css
       - run: test -f "Assets/Raven HIll Discovery Center.jpeg" && test -f "Assets/Boardman Nature River Center.jpeg"
+      - run: test -f "Assets/Mani-Guide.png" && test -f "Assets/Mani-Thinking.png" && test -f "Assets/Mani-Nearby.png" && test -f "Assets/Mani-Warning.png" && test -f "Assets/Mani-Celebrate.png" && test -f "Assets/Mani-Rainy-Day.png" && test -f "Assets/Mani-Schedule.png"
       - run: test -f brand-overhaul.css && test -f brand-refresh.css && test -f brand-refresh.js && test -f index.html
