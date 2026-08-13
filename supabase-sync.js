@@ -9,6 +9,10 @@
 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
   const TABLE = 'trip_app_state';
+  const HEART_KEY = 'heart_ratings';
+  const HEART_LOCAL_KEY = 'tcHeartRatings';
+  const HEART_BACKUP_KEY = 'tcHeartRatingsSafetyBackup';
+  const FAMILY = ['Parker', 'Blake', 'Porter', 'Mark', 'Nancy'];
   const listeners = new Map();
   let ready = false;
 
@@ -16,7 +20,50 @@
     (listeners.get(key) || []).forEach(listener => listener(value));
   };
 
-  const read = async key => {
+  const cleanHeartState = value => {
+    const source = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+    const clean = {};
+    Object.entries(source).forEach(([placeId, people]) => {
+      if (!people || typeof people !== 'object' || Array.isArray(people)) return;
+      FAMILY.forEach(person => {
+        const score = Number(people[person]);
+        if (!Number.isInteger(score) || score < 1 || score > 5) return;
+        clean[placeId] ||= {};
+        clean[placeId][person] = score;
+      });
+    });
+    return clean;
+  };
+
+  const localHeartState = () => {
+    try { return cleanHeartState(JSON.parse(localStorage.getItem(HEART_LOCAL_KEY) || '{}')); }
+    catch { return {}; }
+  };
+
+  const mergeHeartStates = (...states) => {
+    const merged = {};
+    states.forEach(state => {
+      const clean = cleanHeartState(state);
+      Object.entries(clean).forEach(([placeId, people]) => {
+        merged[placeId] ||= {};
+        Object.entries(people).forEach(([person, score]) => {
+          merged[placeId][person] = score;
+        });
+      });
+    });
+    return merged;
+  };
+
+  const preserveHeartBackup = state => {
+    const clean = cleanHeartState(state);
+    if (!Object.keys(clean).length) return;
+    let previous = {};
+    try { previous = JSON.parse(localStorage.getItem(HEART_BACKUP_KEY) || '{}'); }
+    catch { previous = {}; }
+    localStorage.setItem(HEART_BACKUP_KEY, JSON.stringify(mergeHeartStates(previous, clean)));
+  };
+
+  const readRaw = async key => {
     const { data, error } = await client
       .from(TABLE)
       .select('state_value')
@@ -26,11 +73,38 @@
     return data?.state_value;
   };
 
+  const read = async key => {
+    const remote = await readRaw(key);
+    if (key !== HEART_KEY) return remote;
+    const local = localHeartState();
+    const backup = (() => {
+      try { return JSON.parse(localStorage.getItem(HEART_BACKUP_KEY) || '{}'); }
+      catch { return {}; }
+    })();
+    const merged = mergeHeartStates(remote, backup, local);
+    preserveHeartBackup(merged);
+    return merged;
+  };
+
   const write = async (key, value) => {
+    let nextValue = value;
+    if (key === HEART_KEY) {
+      const remote = await readRaw(HEART_KEY);
+      const local = localHeartState();
+      const backup = (() => {
+        try { return JSON.parse(localStorage.getItem(HEART_BACKUP_KEY) || '{}'); }
+        catch { return {}; }
+      })();
+      nextValue = mergeHeartStates(remote, backup, local, value);
+      preserveHeartBackup(nextValue);
+      localStorage.setItem(HEART_LOCAL_KEY, JSON.stringify(nextValue));
+    }
+
     const { error } = await client
       .from(TABLE)
-      .upsert({ state_key: key, state_value: value, updated_at: new Date().toISOString() });
+      .upsert({ state_key: key, state_value: nextValue, updated_at: new Date().toISOString() });
     if (error) throw error;
+    return nextValue;
   };
 
   const subscribe = (key, listener) => {
@@ -93,6 +167,13 @@
       if (!row?.state_key) return;
       if (row.state_key === 'favorites') applyFavorites(row.state_value);
       if (row.state_key === 'plan') applyPlan(row.state_value);
+      if (row.state_key === HEART_KEY) {
+        const merged = mergeHeartStates(row.state_value, localHeartState());
+        preserveHeartBackup(merged);
+        localStorage.setItem(HEART_LOCAL_KEY, JSON.stringify(merged));
+        notify(row.state_key, merged);
+        return;
+      }
       notify(row.state_key, row.state_value);
     })
     .subscribe();
