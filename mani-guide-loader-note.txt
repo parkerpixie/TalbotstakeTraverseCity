@@ -1,0 +1,1 @@
+Mani planner guidance is installed via mani-guide.js and mani-guide.css. This marker can be removed after loader validation.
