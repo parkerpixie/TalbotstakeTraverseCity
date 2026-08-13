@@ -48,9 +48,9 @@
 
   function familyStatus(placeId) {
     const stats = ratingsApi()?.stats?.(placeId);
-    if (!stats?.count) return 'Nobody has rated this one yet.';
+    if (!stats?.count) return 'Nobody else has rated this one yet.';
     const people = stats.entries.map(entry => `${entry.name} ${entry.rating}♥`).join(' · ');
-    return `${stats.count} of 5 rated · ${people}`;
+    return `Family so far: ${people}`;
   }
 
   function ensurePanel() {
@@ -69,10 +69,11 @@
         <button type="button" class="rating-queue-back" id="allRatingQueueBack">← Back to Adventure</button>
         <div class="rating-queue-intro">
           <div>
-            <p class="eyebrow dark">Finish your trip ratings</p>
-            <h2>Only the places you still need to rate.</h2>
+            <p class="eyebrow dark">Your unfinished ratings</p>
+            <h2>These are the ONLY places you still need to rate.</h2>
+            <div style="display:inline-flex;align-items:center;gap:7px;margin-top:8px;padding:7px 11px;border-radius:999px;background:#b20f18;color:#fff;font-size:.72rem;font-weight:900;letter-spacing:.06em;">UNRATED ONLY</div>
           </div>
-          <p>Open the menu or website if you need more context, then use the same five-heart scale. As soon as you rate something, it disappears from your queue.</p>
+          <p>Rated cards never appear here. As soon as you give a place 1–5 hearts, that card disappears from this queue.</p>
         </div>
         <div class="rating-person-tabs" id="allRatingPersonTabs"></div>
         <div class="rating-progress-card">
@@ -147,8 +148,8 @@
     const title = document.getElementById('allRatingProgressTitle');
     const count = document.getElementById('allRatingProgressCount');
     const fill = document.getElementById('allRatingProgressFill');
-    if (title) title.textContent = `${activePerson}'s progress`;
-    if (count) count.textContent = remaining ? `${completed} rated · ${remaining} left` : `${total} rated · complete!`;
+    if (title) title.textContent = `${activePerson}'s unrated queue`;
+    if (count) count.textContent = remaining ? `${remaining} LEFT · ${completed} already rated` : `0 LEFT · ALL ${total} COMPLETE`;
     if (fill) fill.style.width = `${percent}%`;
   }
 
@@ -159,6 +160,7 @@
     return `
       <article class="rating-queue-card" data-all-queue-place="${place.id}">
         <div class="queue-card-top"><div class="queue-icon">${place.icon || '📍'}</div><span class="queue-kind">${kindLabel(place)}</span></div>
+        <div style="display:inline-block;margin:6px 0 2px;padding:5px 8px;border-radius:8px;background:#fff0f0;color:#a3161d;font-size:.64rem;font-weight:900;letter-spacing:.04em;">NOT YET RATED BY ${activePerson.toUpperCase()}</div>
         <h3>${place.name}</h3>
         <p class="queue-area">📍 ${place.area || place.town || 'Traverse City area'}</p>
         <p class="queue-summary">${place.summary || ''}</p>
@@ -167,7 +169,7 @@
         <div class="rating-queue-actions">
           ${officialLink}
           <a class="queue-map" href="${mapUrl(place)}" target="_blank" rel="noopener">Map ↗</a>
-          <button type="button" class="queue-rate" data-all-queue-rate="${place.id}">Rate 1–5 ♥</button>
+          <button type="button" class="queue-rate" data-all-queue-rate="${place.id}">Rate now → card disappears</button>
         </div>
       </article>`;
   }
@@ -185,13 +187,13 @@
         <div class="rating-complete" style="grid-column:1/-1">
           <div class="otter-party">🦦🎉</div>
           <h3>${activePerson} finished every rating!</h3>
-          <p>Your queue is empty. Every restaurant, shop, and activity has a heart score and is ready for family planning.</p>
+          <p>The queue is empty because every restaurant, shop, and activity already has a heart score.</p>
         </div>`;
       return;
     }
 
     if (!filtered.length) {
-      root.innerHTML = `<div class="rating-complete" style="grid-column:1/-1"><div class="otter-party">✓</div><h3>${activePerson} finished this category.</h3><p>Choose another category above to keep going.</p></div>`;
+      root.innerHTML = `<div class="rating-complete" style="grid-column:1/-1"><div class="otter-party">✓</div><h3>${activePerson} finished this category.</h3><p>Choose another category above to see the remaining unrated cards.</p></div>`;
       return;
     }
 
@@ -213,9 +215,9 @@
     const remaining = remainingFor(person).length;
     const title = launch.querySelector('strong');
     const detail = launch.querySelector('small');
-    if (title) title.textContent = 'Finish your ratings';
-    if (detail) detail.textContent = 'See only the places you still need to rate.';
-    count.textContent = remaining ? `${person}: ${remaining} left` : `${person}: complete ✓`;
+    if (title) title.textContent = `Finish ${person}'s ratings`;
+    if (detail) detail.textContent = 'Open an UNRATED ONLY queue. Rated cards are hidden.';
+    count.textContent = remaining ? `${remaining} places left` : `Complete ✓`;
   }
 
   function enhanceAdventureLaunch() {
@@ -227,7 +229,7 @@
     const remaining = remainingFor(traveler).length;
     const desiredTitle = remaining ? `Finish ${traveler}'s rating queue` : `${traveler}'s ratings are complete`;
     const desiredDetail = remaining
-      ? `${remaining} unrated places left. Each card disappears as you rate it.`
+      ? `${remaining} UNRATED places left · rated cards are hidden`
       : 'Every restaurant, shop, and activity has a heart score.';
 
     button.removeAttribute('data-open-mode');
