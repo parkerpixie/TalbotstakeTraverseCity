@@ -29,6 +29,10 @@
     return places().filter(place => !ratingFor(place.id, person));
   }
 
+  function ratedCountFor(person) {
+    return Math.max(0, places().length - remainingFor(person).length);
+  }
+
   function kindLabel(place) {
     if (place.kind === 'restaurant') return 'Restaurant';
     if (place.kind === 'shop') return 'Shop';
@@ -76,6 +80,7 @@
           <p>Rated cards never appear here. As soon as you give a place 1–5 hearts, that card disappears from this queue.</p>
         </div>
         <div class="rating-person-tabs" id="allRatingPersonTabs"></div>
+        <section id="familyRatingHealth" aria-label="Family rating status" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;"></section>
         <div class="rating-progress-card">
           <div class="rating-progress-top"><strong id="allRatingProgressTitle"></strong><span id="allRatingProgressCount"></span></div>
           <div class="rating-progress-track" aria-hidden="true"><div class="rating-progress-fill" id="allRatingProgressFill"></div></div>
@@ -94,9 +99,8 @@
     if (!PEOPLE.includes(person)) return;
     activePerson = person;
     localStorage.setItem('tcRatingQueuePerson', person);
-    if (typeof selectedTraveler !== 'undefined' && selectedTraveler !== person && typeof chooseTraveler === 'function') {
-      chooseTraveler(person);
-    }
+    localStorage.setItem('tcTraveler', person);
+    if (typeof selectedTraveler !== 'undefined') selectedTraveler = person;
   }
 
   function openQueue(person = '') {
@@ -123,21 +127,29 @@
       const remaining = remainingFor(person).length;
       return `<button type="button" class="rating-person-tab ${activePerson === person ? 'active' : ''}" data-all-rating-person="${person}">${person} · ${remaining} left</button>`;
     }).join('');
-    root.querySelectorAll('[data-all-rating-person]').forEach(button => {
-      button.addEventListener('click', () => setPerson(button.dataset.allRatingPerson));
-    });
+  }
+
+  function renderHealth() {
+    const root = document.getElementById('familyRatingHealth');
+    if (!root) return;
+    const total = places().length;
+    root.innerHTML = PEOPLE.map(person => {
+      const rated = ratedCountFor(person);
+      const left = Math.max(0, total - rated);
+      const complete = left === 0;
+      return `<div style="background:${complete ? '#edf7f2' : '#fff'};border:1px solid ${complete ? '#b7d8c8' : '#e2e7e4'};border-radius:14px;padding:10px 11px;min-width:0;">
+        <strong style="display:block;font-size:.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${person}</strong>
+        <span style="display:block;margin-top:3px;font-size:.77rem;color:#66736f;">${rated} rated · ${left} left${complete ? ' ✓' : ''}</span>
+      </div>`;
+    }).join('');
+    if (window.innerWidth < 700) root.style.gridTemplateColumns = 'repeat(2,minmax(0,1fr))';
+    else root.style.gridTemplateColumns = 'repeat(5,minmax(0,1fr))';
   }
 
   function renderFilters() {
     const root = document.getElementById('allRatingFilterRow');
     if (!root) return;
     root.innerHTML = FILTERS.map(filter => `<button type="button" class="${activeFilter === filter.id ? 'active' : ''}" data-all-rating-filter="${filter.id}">${filter.label}</button>`).join('');
-    root.querySelectorAll('[data-all-rating-filter]').forEach(button => {
-      button.addEventListener('click', () => {
-        activeFilter = button.dataset.allRatingFilter;
-        render();
-      });
-    });
   }
 
   function renderProgress() {
@@ -198,12 +210,6 @@
     }
 
     root.innerHTML = filtered.map(cardMarkup).join('');
-    root.querySelectorAll('[data-all-queue-rate]').forEach(button => {
-      button.addEventListener('click', () => {
-        syncTraveler(activePerson);
-        ratingsApi()?.open?.(button.dataset.allQueueRate);
-      });
-    });
   }
 
   function updateQuickLaunch() {
@@ -245,6 +251,7 @@
   function render() {
     ensurePanel();
     renderPersonTabs();
+    renderHealth();
     renderProgress();
     renderFilters();
     renderCards();
@@ -280,6 +287,32 @@
   };
 
   document.addEventListener('click', event => {
+    const personButton = event.target.closest('[data-all-rating-person]');
+    if (personButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      setPerson(personButton.dataset.allRatingPerson);
+      return;
+    }
+
+    const filterButton = event.target.closest('[data-all-rating-filter]');
+    if (filterButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      activeFilter = filterButton.dataset.allRatingFilter;
+      render();
+      return;
+    }
+
+    const rateButton = event.target.closest('[data-all-queue-rate]');
+    if (rateButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      syncTraveler(activePerson);
+      ratingsApi()?.open?.(rateButton.dataset.allQueueRate);
+      return;
+    }
+
     const button = event.target.closest('[data-open-all-rating-queue]');
     if (!button) return;
     event.preventDefault();
@@ -288,7 +321,14 @@
     openQueue(button.dataset.openAllRatingQueue);
   }, true);
 
-  document.addEventListener('tc-ratings-changed', () => window.setTimeout(render, 0));
+  document.addEventListener('tc-ratings-changed', () => window.setTimeout(() => {
+    if (document.querySelector('[data-panel="rate"]')?.classList.contains('active')) {
+      render();
+      if (typeof showTab === 'function') showTab('rate');
+    } else {
+      render();
+    }
+  }, 0));
   document.addEventListener('tc-shared-ready', () => window.setTimeout(render, 0));
   document.addEventListener('tc-places-ready', () => window.setTimeout(render, 120));
   document.addEventListener('click', event => {
@@ -296,6 +336,7 @@
       window.setTimeout(refreshForSelectedTraveler, 320);
     }
   });
+  window.addEventListener('resize', renderHealth);
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
