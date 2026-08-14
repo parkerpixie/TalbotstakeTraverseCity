@@ -1,4 +1,4 @@
-const CACHE='talbots-tc-v42';
+const CACHE='talbots-tc-v43';
 const BASE=self.registration.scope;
 const CORE=[
   '',
@@ -77,7 +77,7 @@ const CORE=[
   'tttc-mani-west-bay-scene-transparent-1536x1024.png'
 ].map(path=>new URL(path,BASE).href);
 const FALLBACK=new URL('index.html',BASE).href;
-const QUEUE_SCRIPT='<script src="family-rating-queue-all.js?v=20260813-1"></script>';
+const QUEUE_SCRIPT='<script src="family-rating-queue-all.js?v=20260813-2"></script>';
 
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
