@@ -100,6 +100,68 @@
     });
   }
 
+  const plannerTypeKey = 'tcPlannerTypeFilter';
+  const plannerTypeChoices = [
+    { id: 'all', label: 'All types' },
+    { id: 'restaurant', label: '🍴 Restaurants' },
+    { id: 'activity', label: '🧭 Activities' },
+    { id: 'shop', label: '🛍 Shopping' }
+  ];
+  let plannerTypeFilter = localStorage.getItem(plannerTypeKey) || 'all';
+  if (!plannerTypeChoices.some(choice => choice.id === plannerTypeFilter)) plannerTypeFilter = 'all';
+
+  function applyPlannerTypeFilter() {
+    const row = document.getElementById('planTypeTabs');
+    const shelfTabs = document.getElementById('planShelfTabs');
+    const list = document.getElementById('planShelfList');
+    if (!row || !shelfTabs || !list) return;
+
+    const wanderActive = !!shelfTabs.querySelector('[data-shelf="wander"].active');
+    row.hidden = wanderActive;
+    row.querySelectorAll('[data-plan-type]').forEach(button => {
+      const active = button.dataset.planType === plannerTypeFilter;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    list.querySelectorAll('.plan-shelf-card[data-plan-id]').forEach(card => {
+      const place = allPlaces.find(item => item.id === card.dataset.planId);
+      card.hidden = !wanderActive && plannerTypeFilter !== 'all' && place?.kind !== plannerTypeFilter;
+    });
+  }
+
+  function installPlannerTypeFilter() {
+    const shelfTabs = document.getElementById('planShelfTabs');
+    const list = document.getElementById('planShelfList');
+    if (!shelfTabs || !list) return false;
+
+    let row = document.getElementById('planTypeTabs');
+    if (!row) {
+      row = document.createElement('div');
+      row.id = 'planTypeTabs';
+      row.className = 'plan-shelf-tabs planner-type-tabs';
+      row.setAttribute('aria-label', 'Filter planner blocks by place type');
+      row.innerHTML = plannerTypeChoices.map(choice => `<button type="button" data-plan-type="${choice.id}">${choice.label}</button>`).join('');
+      shelfTabs.insertAdjacentElement('afterend', row);
+
+      row.querySelectorAll('[data-plan-type]').forEach(button => {
+        button.addEventListener('click', () => {
+          plannerTypeFilter = button.dataset.planType;
+          localStorage.setItem(plannerTypeKey, plannerTypeFilter);
+          applyPlannerTypeFilter();
+        });
+      });
+
+      new MutationObserver(() => requestAnimationFrame(applyPlannerTypeFilter)).observe(list, { childList: true });
+      new MutationObserver(() => requestAnimationFrame(applyPlannerTypeFilter)).observe(shelfTabs, { attributes: true, subtree: true, attributeFilter: ['class'] });
+      shelfTabs.addEventListener('click', () => window.setTimeout(applyPlannerTypeFilter, 0));
+      document.addEventListener('tc-ratings-changed', () => window.setTimeout(applyPlannerTypeFilter, 40));
+    }
+
+    applyPlannerTypeFilter();
+    return true;
+  }
+
   if (typeof renderActivities === 'function') renderActivities();
   if (typeof renderPlanner === 'function') renderPlanner();
   if (typeof updateStats === 'function') updateStats();
@@ -114,6 +176,12 @@
     }
   });
   window.setTimeout(addMuseumImage, 60);
+
+  let plannerFilterTries = 0;
+  const plannerFilterTimer = window.setInterval(() => {
+    plannerFilterTries += 1;
+    if (installPlannerTypeFilter() || plannerFilterTries > 160) window.clearInterval(plannerFilterTimer);
+  }, 50);
 
   document.dispatchEvent(new CustomEvent('tc-places-ready', { detail: { source: 'porter-place-additions' } }));
 })();
