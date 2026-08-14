@@ -31,6 +31,19 @@
       summary: 'Interactive Michigan wildlife and plant exhibits beside the Boardman River, plus a nature playscape and access to the surrounding Natural Education Reserve. Open Tuesday–Friday 10–4 with a suggested $5 donation. Some reserve trails remain closed after the April 2026 flooding, so check current trail status before planning a longer walk.'
     },
     {
+      id: 'gt-butterfly-bug-zoo',
+      name: 'GT Butterfly House & Bug Zoo',
+      town: 'Williamsburg',
+      area: 'Williamsburg / East of Traverse City',
+      type: 'family',
+      icon: '🦋',
+      url: 'https://www.gtbutterflyzoo.com/',
+      tags: ['family', 'rainy-day', 'low-energy', 'unusual', 'animals-nature', 'unique-offbeat'],
+      fit: ['Porter', 'Parker', 'Blake'],
+      dog: 'No pets inside; service animals only',
+      summary: 'A close-up butterfly and insect experience with strong Porter potential and an excellent rainy-day backup.'
+    },
+    {
       id: 'guntzviller-spirit-woods',
       name: "Guntzviller's Spirit of the Woods Museum",
       town: 'Williamsburg',
@@ -103,8 +116,8 @@
   const plannerTypeKey = 'tcPlannerTypeFilter';
   const plannerTypeChoices = [
     { id: 'all', label: 'All types' },
-    { id: 'restaurant', label: '🍴 Restaurants' },
     { id: 'activity', label: '🧭 Activities' },
+    { id: 'restaurant', label: '🍴 Restaurants' },
     { id: 'shop', label: '🛍 Shopping' }
   ];
   let plannerTypeFilter = localStorage.getItem(plannerTypeKey) || 'all';
