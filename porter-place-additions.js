@@ -66,9 +66,54 @@
     }
   });
 
+  const imageUrl = filename => `Assets/${String(filename).split('/').map(encodeURIComponent).join('/')}`;
+
+  function addMuseumImage() {
+    const place = additions.find(item => item.id === 'guntzviller-spirit-woods');
+    if (!place?.image) return;
+
+    const selectors = [
+      `.place-card [data-save="${place.id}"]`,
+      `.rating-queue-card[data-queue-place="${place.id}"]`,
+      `.rating-queue-card[data-all-queue-place="${place.id}"]`
+    ];
+
+    selectors.forEach(selector => {
+      document.querySelectorAll(selector).forEach(match => {
+        const card = match.classList.contains('rating-queue-card') ? match : match.closest('.place-card');
+        if (!card || card.querySelector('.guntzviller-card-image')) return;
+
+        const media = document.createElement('div');
+        media.className = 'guntzviller-card-image';
+        media.style.cssText = 'overflow:hidden;border-radius:16px;margin:10px 0 14px;background:#eee;';
+        const img = document.createElement('img');
+        img.src = imageUrl(place.image);
+        img.alt = `${place.name} museum display`;
+        img.loading = 'lazy';
+        img.style.cssText = 'display:block;width:100%;aspect-ratio:16/9;object-fit:cover;';
+        media.appendChild(img);
+
+        const anchor = card.querySelector('.icon-badge, h3, .queue-card-top');
+        if (anchor?.nextSibling) anchor.parentNode.insertBefore(media, anchor.nextSibling);
+        else card.prepend(media);
+      });
+    });
+  }
+
   if (typeof renderActivities === 'function') renderActivities();
   if (typeof renderPlanner === 'function') renderPlanner();
   if (typeof updateStats === 'function') updateStats();
+
+  const activityGrid = document.getElementById('activityGrid');
+  if (activityGrid) new MutationObserver(() => requestAnimationFrame(addMuseumImage)).observe(activityGrid, { childList: true, subtree: true });
+  document.addEventListener('tc-ratings-changed', () => window.setTimeout(addMuseumImage, 40));
+  document.addEventListener('tc-shared-ready', () => window.setTimeout(addMuseumImage, 40));
+  document.addEventListener('click', event => {
+    if (event.target.closest('[data-open-rating-queue], [data-open-all-rating-queue], [data-rating-person], [data-all-rating-person], [data-rating-filter], [data-all-rating-filter]')) {
+      window.setTimeout(addMuseumImage, 80);
+    }
+  });
+  window.setTimeout(addMuseumImage, 60);
 
   document.dispatchEvent(new CustomEvent('tc-places-ready', { detail: { source: 'porter-place-additions' } }));
 })();
