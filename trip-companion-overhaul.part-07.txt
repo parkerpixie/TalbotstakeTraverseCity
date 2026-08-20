@@ -1,0 +1,86 @@
+    const current = state.weather.current || {};
+    const daily = state.weather.daily || {};
+    const label = weatherLabel(current.weather_code);
+    const rain = Number(daily.precipitation_probability_max?.[0]) || 0;
+    const wet = weatherIsWet();
+    note.innerHTML = `<img src="${wet ? 'Assets/Mani-Rainy-Day.png' : 'Assets/Mani-Guide.png'}" alt="" aria-hidden="true"><div><p class="eyebrow dark">Mani checked the live weather</p><strong>${label.icon} ${label.text} · ${Math.round(Number(current.temperature_2m))}° · ${rain}% rain chance today</strong><p>${wet ? 'I’m treating indoor and rainy-day activities as stronger backup choices right now. The plan stays yours, but the weather gets a vote.' : 'Outdoor plans look reasonable from the current forecast. I’ll still keep rainy-day backups in reach if conditions turn.'}</p>${wet ? '<button type="button" data-weather-activities>Show rainy-day activities</button>' : ''}</div>`;
+    note.querySelector('[data-weather-activities]')?.addEventListener('click', () => {
+      if (typeof showTab === 'function') showTab('explore');
+      else showPanel('explore');
+      const type = $('#activityType');
+      if (type) type.value = 'all';
+      renderActivityDirectory();
+    });
+  }
+
+  function installGlobalRenderers() {
+    window.renderRestaurants = renderRestaurantDirectory;
+    window.renderShops = renderShopDirectory;
+    window.renderActivities = renderActivityDirectory;
+    try { renderRestaurants = renderRestaurantDirectory; } catch {}
+    try { renderShops = renderShopDirectory; } catch {}
+    try { renderActivities = renderActivityDirectory; } catch {}
+  }
+
+  function wireRatingRefresh() {
+    document.addEventListener('tc-ratings-changed', () => {
+      renderAllPlaceViews();
+      renderHome();
+    });
+    document.addEventListener('tc-shared-ready', () => {
+      window.setTimeout(() => {
+        renderAllPlaceViews();
+        renderHome();
+      }, 100);
+    });
+  }
+
+  function setupDirectories() {
+    placePanelShell('restaurant');
+    placePanelShell('shop');
+    placePanelShell('activity');
+    fillFilterOptions();
+    bindDirectoryControls('restaurant');
+    bindDirectoryControls('shop');
+    bindDirectoryControls('activity');
+    installGlobalRenderers();
+    renderAllPlaceViews();
+  }
+
+  async function initialize() {
+    if (state.initialized) return;
+    const placesReady = typeof allPlaces !== 'undefined' && Array.isArray(allPlaces) && allPlaces.length;
+    const legacyReady = !!window.TCPlaces && !!document.querySelector('[data-panel="discover"]');
+    if (!placesReady || !ratingsApi() || !legacyReady) {
+      window.setTimeout(initialize, 100);
+      return;
+    }
+
+    if (sessionStorage.getItem('tcOverhaulReloading') === VERSION) {
+      sessionStorage.removeItem('tcOverhaulReloading');
+    } else if (await applyMarkNancyDefaults()) {
+      return;
+    }
+
+    state.initialized = true;
+    ensureDialogs();
+    restoreSeparatePlacePanels();
+    enforceFiveTabs();
+    setupDirectories();
+    renderHome();
+    decoratePlanWeather();
+    wireRatingRefresh();
+    requestLocation();
+
+    document.documentElement.dataset.tripCompanion = VERSION;
+    document.dispatchEvent(new CustomEvent('tc-trip-companion-ready', { detail: { version: VERSION } }));
+  }
+
+  const style = document.createElement('link');
+  style.rel = 'stylesheet';
+  style.href = `trip-companion-overhaul.css?v=${encodeURIComponent(VERSION)}`;
+  document.head.appendChild(style);
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => window.setTimeout(initialize, 700));
+  else window.setTimeout(initialize, 700);
+})();

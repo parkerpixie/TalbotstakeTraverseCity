@@ -1,0 +1,167 @@
+    if ([71, 73, 75, 77, 85, 86].includes(c)) return { icon: '🌨️', text: 'Snow' };
+    if ([95, 96, 99].includes(c)) return { icon: '⛈️', text: 'Thunderstorms' };
+    return { icon: '🌤️', text: 'Weather' };
+  }
+
+  function weatherIsWet() {
+    if (!state.weather) return false;
+    const code = Number(state.weather.current?.weather_code);
+    const precip = Number(state.weather.daily?.precipitation_probability_max?.[0]) || 0;
+    return precip >= 45 || [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99].includes(code);
+  }
+
+  async function fetchWeather(coords) {
+    try {
+      const url = new URL('https://api.open-meteo.com/v1/forecast');
+      url.searchParams.set('latitude', coords.lat);
+      url.searchParams.set('longitude', coords.lon);
+      url.searchParams.set('current', 'temperature_2m,apparent_temperature,weather_code,wind_speed_10m');
+      url.searchParams.set('daily', 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max');
+      url.searchParams.set('temperature_unit', 'fahrenheit');
+      url.searchParams.set('wind_speed_unit', 'mph');
+      url.searchParams.set('timezone', 'auto');
+      url.searchParams.set('forecast_days', '7');
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Weather ${response.status}`);
+      state.weather = await response.json();
+      window.TCTripWeather = state.weather;
+      renderHome();
+      decoratePlanWeather();
+    } catch (error) {
+      console.warn('Trip weather unavailable:', error.message);
+    }
+  }
+
+  async function fetchRouteEstimate(coords) {
+    try {
+      const url = `https://router.project-osrm.org/route/v1/driving/${coords.lon},${coords.lat};${HOUSE_AREA_POINT.lon},${HOUSE_AREA_POINT.lat}?overview=false`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Route ${response.status}`);
+      const data = await response.json();
+      const route = data?.routes?.[0];
+      if (!route) return;
+      state.route = { miles: route.distance / 1609.344, minutes: route.duration / 60 };
+      renderHome();
+    } catch (error) {
+      console.warn('Drive estimate unavailable:', error.message);
+    }
+  }
+
+  function requestLocation() {
+    if (!navigator.geolocation) {
+      fetchWeather(FALLBACK_POINT);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        state.coords = { lat: position.coords.latitude, lon: position.coords.longitude };
+        state.nearest = nearestAnchor(state.coords);
+        fetchWeather(state.coords);
+        fetchRouteEstimate(state.coords);
+        renderAllPlaceViews();
+        renderHome();
+      },
+      () => fetchWeather(FALLBACK_POINT),
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
+    );
+  }
+
+  async function applyMarkNancyDefaults() {
+    if (localStorage.getItem(MARK_NANCY_MIGRATION) === 'done') return false;
+    if (!ratingsApi() || typeof allPlaces === 'undefined' || !Array.isArray(allPlaces)) return false;
+
+    let current = ratingsApi().all();
+    try {
+      const shared = await window.TCShared?.read?.('heart_ratings');
+      if (shared && typeof shared === 'object' && !Array.isArray(shared)) current = shared;
+    } catch (error) {
+      console.warn('Using local heart ratings for Mark/Nancy defaults:', error?.message);
+    }
+    if (!localStorage.getItem(RATINGS_BACKUP)) {
+      localStorage.setItem(RATINGS_BACKUP, JSON.stringify(current));
+    }
+
+    const places = typeof allPlaces !== 'undefined' ? allPlaces : [];
+    places.filter(place => !place.virtual).forEach(place => {
+      current[place.id] ||= {};
+      current[place.id].Mark = 4;
+      current[place.id].Nancy = 4;
+    });
+
+    localStorage.setItem('tcHeartRatings', JSON.stringify(current));
+    localStorage.setItem(MARK_NANCY_MIGRATION, 'done');
+    try { await window.TCShared?.write?.('heart_ratings', current); }
+    catch (error) { console.warn('Mark and Nancy defaults saved locally only:', error?.message); }
+
+    sessionStorage.setItem('tcOverhaulReloading', VERSION);
+    location.reload();
+    return true;
+  }
+
+  function restoreSeparatePlacePanels() {
+    const stage = $('.tab-stage');
+    if (!stage) return;
+    const planner = stage.querySelector('[data-panel="planner"]');
+    ['eat', 'shop', 'explore'].forEach(name => {
+      if (stage.querySelector(`[data-panel="${name}"]`)) return;
+      const panel = document.createElement('section');
+      panel.className = 'tab-panel';
+      panel.dataset.panel = name;
+      stage.insertBefore(panel, planner || null);
+    });
+    stage.querySelector('[data-panel="places"]')?.remove();
+
+    const router = name => {
+      const target = name === 'places' ? 'eat' : name;
+      showPanel(target);
+    };
+    window.showTab = router;
+    try { showTab = router; } catch {}
+  }
+
+  function enforceFiveTabs() {
+    const nav = $('.bottom-nav');
+    if (!nav) return;
+    const tabs = [
+      ['home', '⌂', 'Home'],
+      ['eat', '🍴', 'Restaurants'],
+      ['shop', '🛍️', 'Shopping'],
+      ['explore', '🧭', 'Activities'],
+      ['planner', '🗓️', 'Plan']
+    ];
+    nav.innerHTML = tabs.map(([id, icon, label]) => `<button type="button" data-tc-tab="${id}"><span>${icon}</span><small>${label}</small></button>`).join('');
+    nav.querySelectorAll('[data-tc-tab]').forEach(button => button.addEventListener('click', () => showPanel(button.dataset.tcTab)));
+    const active = $('.tab-panel.active')?.dataset.panel || 'home';
+    nav.querySelector(`[data-tc-tab="${active}"]`)?.classList.add('active');
+  }
+
+  function showPanel(name) {
+    $$('.tab-panel').forEach(panel => panel.classList.toggle('active', panel.dataset.panel === name));
+    $$('.bottom-nav [data-tc-tab]').forEach(button => button.classList.toggle('active', button.dataset.tcTab === name));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function placePanelShell(kind) {
+    const meta = kind === 'restaurant'
+      ? { panel: 'eat', kicker: 'Restaurants', title: 'Find dinner without opening seventeen browser tabs.', detail: 'Sort by Talbot rating, food type, price and location. Nearby places float upward when location access is on.' }
+      : kind === 'shop'
+        ? { panel: 'shop', kicker: 'Shopping', title: 'Shop by neighborhood, not chaos.', detail: 'Porter-level detail, grouped by area. Anything at 2 hearts or below stays out of the shopping experience.' }
+        : { panel: 'explore', kicker: 'Activities', title: 'Hikes, history, museums and the delightfully strange stuff.', detail: 'Weather-aware, location-aware and ready for scenic drives, rainy-day pivots and taxidermy detours.' };
+
+    const panel = document.querySelector(`[data-panel="${meta.panel}"]`);
+    if (!panel) return;
+    const isRestaurant = kind === 'restaurant';
+    const isShop = kind === 'shop';
+    panel.innerHTML = `
+      <div class="tc-directory-page" data-directory="${kind}">
+        <section class="tc-directory-hero">
+          <div>
+            <p class="eyebrow dark">${meta.kicker}</p>
+            <h2>${meta.title}</h2>
+            <p>${meta.detail}</p>
+          </div>
+          <div class="tc-location-pill" data-location-pill>📍 ${state.nearest?.name || 'Use my location'}</div>
+        </section>
+        <section class="tc-filter-bar">
+          <label class="tc-search"><span>Search</span><input id="${isRestaurant ? 'restaurantSearch' : isShop ? 'shopSearch' : 'activitySearch'}" type="search" placeholder="Name, detail, neighborhood…"></label>
+          <label><span>Location</span><select id="${isRestaurant ? 'restaurantTown' : isShop ? 'shopTown' : 'activityTown'}"><option value="all">Everywhere</option></select></label>

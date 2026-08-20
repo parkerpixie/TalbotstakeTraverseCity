@@ -1,0 +1,105 @@
+          ${isRestaurant ? '<label><span>Food type</span><select id="restaurantCuisine"><option value="all">All food</option></select></label><label><span>Price</span><select id="restaurantPrice"><option value="all">Any price</option><option value="$">$</option><option value="$$">$$</option><option value="$$$">$$$</option></select></label>' : ''}
+          ${isShop ? '<label><span>Shop type</span><select id="shopType"><option value="all">All shops</option></select></label>' : ''}
+          ${!isRestaurant && !isShop ? '<label><span>Activity type</span><select id="activityType"><option value="all">All activities</option></select></label>' : ''}
+          <label><span>Talbot rating</span><select id="${kind}Rating"><option value="all">Any rating</option><option value="4">4+ hearts</option><option value="3">3+ hearts</option><option value="unrated">Not rated yet</option></select></label>
+        </section>
+        <div class="tc-results-head"><p id="${isRestaurant ? 'restaurantResultsNote' : !isShop ? 'activityResultsNote' : 'shopResultsNote'}"></p><button type="button" class="tc-location-refresh" data-refresh-location>Use current location</button></div>
+        <div class="tc-card-grid" id="${isRestaurant ? 'restaurantGrid' : isShop ? 'shopGrid' : 'activityGrid'}"></div>
+        ${isShop ? '' : `<details class="tc-deep-bench" id="${kind}DeepBench"><summary>🛟 Bottom-of-the-barrel backup options <span data-deep-count></span></summary><p>These averaged 2 hearts or below. They are preserved, searchable and available if the good ideas somehow run out.</p><div class="tc-card-grid tc-deep-grid" data-deep-grid></div></details>`}
+      </div>`;
+  }
+
+  function fillFilterOptions() {
+    const configs = [
+      { select: '#restaurantTown', values: restaurants?.map(neighborhoodFor) || [] },
+      { select: '#shopTown', values: shops?.map(neighborhoodFor) || [] },
+      { select: '#activityTown', values: activities?.map(neighborhoodFor) || [] },
+      { select: '#restaurantCuisine', values: restaurants?.map(cuisineFor) || [] },
+      { select: '#shopType', values: shops?.map(place => place.type || 'other') || [] },
+      { select: '#activityType', values: activities?.map(place => place.type || 'other') || [] }
+    ];
+    configs.forEach(({ select, values }) => {
+      const root = $(select);
+      if (!root) return;
+      [...new Set(values.filter(Boolean))].sort().forEach(value => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = String(value).replaceAll('-', ' ').replace(/\b\w/g, char => char.toUpperCase());
+        root.appendChild(option);
+      });
+    });
+  }
+
+  function placeCardMarkup(place) {
+    const stats = ratingStats(place);
+    const traveler = currentTraveler();
+    const myRating = Number(ratingsApi()?.get?.(place.id, traveler)) || 0;
+    const dist = distanceFromUser(place);
+    const nearby = dist !== null && dist < 100 ? `<span class="tc-nearby-badge">📍 ${dist < 1 ? 'Under 1' : Math.round(dist)} mi away</span>` : '';
+    const cuisine = place.kind === 'restaurant' ? cuisineFor(place) : '';
+    const type = place.kind === 'shop' ? place.type : place.kind === 'activity' ? place.type : '';
+    const price = place.price ? `<span>${safe(place.price)}</span>` : '';
+    const siteLabel = place.kind === 'restaurant' ? 'Menu / website' : place.kind === 'shop' ? 'Store website' : 'Official info';
+    const ratingMarkup = stats.count
+      ? `<span class="tc-rating-score"><strong>${stats.average.toFixed(1)}</strong> ♥ <small>${stats.count} rated</small></span>`
+      : '<span class="tc-rating-score tc-unrated">Not rated</span>';
+    const photo = imageFor(place);
+    const detailLine = [cuisine || type, price, neighborhoodFor(place)].filter(Boolean).map(value => typeof value === 'string' ? safe(value) : value).join(' · ');
+    return `
+      <article class="place-card tc-place-card kind-${safe(place.kind)}" data-place-id="${safe(place.id)}">
+        <div class="tc-card-media"><img src="${photo}" alt="${safe(place.name)}" loading="lazy" onerror="this.parentElement.classList.add('image-failed');this.remove()"><span class="tc-card-icon">${place.icon || '📍'}</span></div>
+        <div class="tc-card-body">
+          <div class="tc-card-topline">${ratingMarkup}${nearby}</div>
+          <h3>${safe(place.name)}</h3>
+          <p class="tc-card-meta">${detailLine}</p>
+          <p class="tc-card-summary">${safe(place.summary || '')}</p>
+          ${place.menu ? `<p class="tc-menu-snapshot"><strong>Good to know:</strong> ${safe(place.menu)}</p>` : ''}
+          ${place.duration ? `<p class="tc-mini-detail">⏱ ${safe(place.duration)}</p>` : ''}
+          <div class="card-actions tc-card-actions">
+            ${place.url && place.url !== '#' ? `<a href="${safe(place.url)}" target="_blank" rel="noopener">${siteLabel} ↗</a>` : ''}
+            <a href="${mapsSearchUrl(place)}" target="_blank" rel="noopener">Map ↗</a>
+            <button type="button" class="save-place heart-rating-trigger" data-save="${safe(place.id)}"><span>${myRating ? '♥'.repeat(myRating) + '♡'.repeat(5 - myRating) : '♡♡♡♡♡'}</span><small>${myRating ? `My rating: ${myRating}` : 'Rate it'}</small></button>
+          </div>
+        </div>
+      </article>`;
+  }
+
+  function renderRestaurantDirectory() {
+    if (typeof restaurants === 'undefined') return;
+    const search = ($('#restaurantSearch')?.value || '').toLowerCase().trim();
+    const location = $('#restaurantTown')?.value || 'all';
+    const cuisine = $('#restaurantCuisine')?.value || 'all';
+    const price = $('#restaurantPrice')?.value || 'all';
+    const rating = $('#restaurantRating')?.value || 'all';
+    const pool = restaurants.map(place => ({ ...place, kind: 'restaurant' }));
+    const deep = pool.filter(isDeepBench);
+    const visible = pool.filter(place => !isDeepBench(place))
+      .filter(place => location === 'all' || neighborhoodFor(place) === location)
+      .filter(place => cuisine === 'all' || cuisineFor(place) === cuisine)
+      .filter(place => price === 'all' || place.price === price)
+      .filter(place => ratingFilterMatch(place, rating))
+      .filter(place => `${place.name} ${place.summary} ${place.menu || ''} ${place.area} ${cuisineFor(place)}`.toLowerCase().includes(search))
+      .sort(smartSort);
+    const grid = $('#restaurantGrid');
+    if (grid) grid.innerHTML = visible.map(placeCardMarkup).join('') || '<div class="tc-empty-state">No exact matches. Loosen one filter and the dinner universe may reopen.</div>';
+    const note = $('#restaurantResultsNote');
+    if (note) note.textContent = `${visible.length} restaurant${visible.length === 1 ? '' : 's'} showing${state.nearest ? ` · nearest to ${state.nearest.name} first` : ''}.`;
+    renderDeepBench('restaurant', deep, search, location, rating);
+  }
+
+  function renderShopDirectory() {
+    if (typeof shops === 'undefined') return;
+    const search = ($('#shopSearch')?.value || '').toLowerCase().trim();
+    const location = $('#shopTown')?.value || 'all';
+    const type = $('#shopType')?.value || 'all';
+    const rating = $('#shopRating')?.value || 'all';
+    const pool = shops.map(place => ({ ...place, kind: 'shop', tags: place.tags || [place.type], price: place.price || '' }));
+    const visible = pool.filter(place => !isDeepBench(place))
+      .filter(place => location === 'all' || neighborhoodFor(place) === location)
+      .filter(place => type === 'all' || place.type === type)
+      .filter(place => ratingFilterMatch(place, rating))
+      .filter(place => `${place.name} ${place.summary} ${place.area} ${place.type}`.toLowerCase().includes(search))
+      .sort(smartSort);
+
+    const groups = visible.reduce((acc, place) => {
+      const group = neighborhoodFor(place);

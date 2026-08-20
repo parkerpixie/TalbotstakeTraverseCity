@@ -1,0 +1,181 @@
+    { name: 'Trip DJ Challenge', icon: '🎧', text: 'Pick a category such as “song with a place name” or “song that belongs on a lake.” Everyone nominates one, then vote.' },
+    { name: 'Spot the Weird', icon: '🦌', text: 'First person to notice an odd roadside attraction, strange statue, giant object or questionable taxidermy-adjacent sign gets the point.' },
+    { name: 'Would You Rather: Up North Edition', icon: '🌲', text: 'Make the choices local: lighthouse keeper or fish tug captain? Dune hike or stormy museum day? Cherry everything or no cherries at all?' }
+  ];
+
+  const CUISINE_RULES = [
+    ['Italian', /pasta|italian|gnocchi|pizza|brick oven/i],
+    ['Burgers + American', /burger|tavern|pub|american|steak|wings/i],
+    ['Seafood + Great Lakes', /whitefish|perch|fish|seafood|salmon|scallop/i],
+    ['Mexican', /taco|burrito|mexican|spanglish/i],
+    ['Breakfast + Brunch', /brunch|breakfast|pancake|egg/i],
+    ['Coffee + Bakery', /coffee|bakery|bread|café|cafe/i],
+    ['Ice Cream + Sweets', /ice cream|candy|sweet|dessert/i],
+    ['Winery + Brewery', /wine|winery|brewery|taproom/i]
+  ];
+
+  const state = {
+    coords: null,
+    nearest: null,
+    weather: null,
+    route: null,
+    factIndex: Math.floor(Math.random() * FUN_FACTS.length),
+    deepRestaurantOpen: false,
+    deepActivityOpen: false,
+    initialized: false
+  };
+
+  const $ = selector => document.querySelector(selector);
+  const $$ = selector => [...document.querySelectorAll(selector)];
+  const safe = value => String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+
+  function assetPath(filename) {
+    return `Assets/${String(filename).split('/').map(encodeURIComponent).join('/')}`;
+  }
+
+  function distanceMiles(a, b) {
+    const toRad = value => value * Math.PI / 180;
+    const earth = 3958.8;
+    const dLat = toRad(b.lat - a.lat);
+    const dLon = toRad(b.lon - a.lon);
+    const x = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2;
+    return 2 * earth * Math.asin(Math.sqrt(x));
+  }
+
+  function anchorForPlace(place) {
+    const text = `${place?.area || ''} ${place?.town || ''}`.toLowerCase();
+    return ANCHORS.find(anchor => anchor.keys.some(key => text.includes(key))) || ANCHORS.find(anchor => anchor.id === 'downtown');
+  }
+
+  function neighborhoodFor(place) {
+    return anchorForPlace(place)?.name || place.area || place.town || 'Traverse City area';
+  }
+
+  function cuisineFor(place) {
+    const haystack = `${place.name || ''} ${place.summary || ''} ${place.menu || ''} ${(place.tags || []).join(' ')}`;
+    return CUISINE_RULES.find(([, matcher]) => matcher.test(haystack))?.[0] || 'Other / Local';
+  }
+
+  function imageFor(place) {
+    if (place?.image) return assetPath(place.image);
+    if (IMAGE_BY_ID[place?.id]) return assetPath(IMAGE_BY_ID[place.id]);
+    const anchor = anchorForPlace(place);
+    return assetPath(AREA_IMAGES[anchor?.id] || AREA_IMAGES.traverse || AREA_IMAGES.default);
+  }
+
+  function ratingsApi() {
+    return window.TCHeartRatings || null;
+  }
+
+  function ratingStats(place) {
+    return ratingsApi()?.stats?.(place.id) || { entries: [], count: 0, average: 0 };
+  }
+
+  function decisionStats(place) {
+    const entries = ratingStats(place).entries.filter(entry => ['Parker', 'Blake', 'Porter'].includes(entry.name));
+    if (!entries.length) return { entries: [], count: 0, average: 0 };
+    const values = entries.map(entry => Number(entry.rating)).filter(Number.isFinite);
+    return { entries, count: values.length, average: values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0 };
+  }
+
+  function isDeepBench(place) {
+    const meaningful = decisionStats(place);
+    return meaningful.count > 0 && Number(meaningful.average) <= 2;
+  }
+
+  function ratingText(place) {
+    const stats = ratingStats(place);
+    if (!stats.count) return 'Not rated yet';
+    return `${stats.average.toFixed(1)} ♥ · ${stats.count} rated`;
+  }
+
+  function ratingFilterMatch(place, value) {
+    const stats = ratingStats(place);
+    if (value === 'unrated') return !stats.count;
+    if (!value || value === 'all') return true;
+    const threshold = Number(value);
+    return stats.count > 0 && stats.average >= threshold;
+  }
+
+  function currentTraveler() {
+    const stored = localStorage.getItem('tcTraveler');
+    if (FAMILY.includes(stored)) return stored;
+    if (typeof selectedTraveler !== 'undefined' && FAMILY.includes(selectedTraveler)) return selectedTraveler;
+    return 'Parker';
+  }
+
+  function tripDateKey(date = new Date()) {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Detroit', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(date).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {});
+    return `${parts.year}-${parts.month}-${parts.day}`;
+  }
+
+  function tripMoment() {
+    const now = new Date();
+    const key = tripDateKey(now);
+    const day = TRIP_DATES[key];
+    if (day) return { mode: 'during', ...day, key };
+    if (now < TRIP_START) {
+      const days = Math.max(0, Math.ceil((TRIP_START - now) / 86400000));
+      return { mode: 'before', label: `${days} day${days === 1 ? '' : 's'} to go`, note: 'Traverse City is getting very close.' };
+    }
+    if (now > TRIP_END) return { mode: 'after', label: 'Trip complete', note: 'The plan is now a memory book with receipts.' };
+    return { mode: 'during', label: 'Traverse City day', note: 'Use the plan, weather and nearby picks to shape today.' };
+  }
+
+  function timeGreeting() {
+    const hour = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Detroit', hour: 'numeric', hour12: false }).format(new Date()));
+    if (hour < 11) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
+
+  function mapsSearchUrl(place) {
+    const query = encodeURIComponent(`${place.name} ${place.town || place.area || 'Traverse City'} Michigan`);
+    return `https://www.google.com/maps/search/?api=1&query=${query}`;
+  }
+
+  function houseMapsUrl() {
+    const exact = localStorage.getItem(HOUSE_ADDRESS_KEY)?.trim();
+    const destination = encodeURIComponent(exact || 'West Grand Traverse Bay Traverse City Michigan');
+    return `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+  }
+
+  function nearestAnchor(coords) {
+    return ANCHORS
+      .map(anchor => ({ ...anchor, miles: distanceMiles(coords, anchor) }))
+      .sort((a, b) => a.miles - b.miles)[0];
+  }
+
+  function distanceFromUser(place) {
+    if (!state.coords) return null;
+    const anchor = anchorForPlace(place);
+    if (!anchor) return null;
+    return distanceMiles(state.coords, anchor);
+  }
+
+  function smartSort(a, b) {
+    const aDist = distanceFromUser(a);
+    const bDist = distanceFromUser(b);
+    if (aDist !== null && bDist !== null && Math.min(aDist, bDist) < 80) {
+      if (Math.abs(aDist - bDist) > 2) return aDist - bDist;
+    }
+    const aRating = ratingStats(a).average || 0;
+    const bRating = ratingStats(b).average || 0;
+    return bRating - aRating || a.name.localeCompare(b.name);
+  }
+
+  function weatherLabel(code) {
+    const c = Number(code);
+    if (c === 0) return { icon: '☀️', text: 'Clear' };
+    if ([1, 2].includes(c)) return { icon: '🌤️', text: 'Partly cloudy' };
+    if (c === 3) return { icon: '☁️', text: 'Cloudy' };
+    if ([45, 48].includes(c)) return { icon: '🌫️', text: 'Foggy' };
+    if ([51, 53, 55, 56, 57].includes(c)) return { icon: '🌦️', text: 'Drizzle' };
+    if ([61, 63, 65, 66, 67, 80, 81, 82].includes(c)) return { icon: '🌧️', text: 'Rain' };

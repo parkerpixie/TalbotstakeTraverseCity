@@ -1,0 +1,125 @@
+    return `<div class="tc-house-line"><span class="tc-house-pin">🏠</span><div><strong>Sunrise Shores Retreat</strong><span>${address ? safe(address) : 'Exact street address kept private on this device'}</span></div></div><div class="tc-house-actions"><a href="${houseMapsUrl()}" target="_blank" rel="noopener">Directions in Google Maps ↗</a><button type="button" data-house-address>${address ? 'Change address' : 'Add private address'}</button><button type="button" data-open-house>House photos</button></div>`;
+  }
+
+  function renderHome() {
+    const panel = $('[data-panel="home"]');
+    if (!panel) return;
+    const traveler = currentTraveler();
+    const moment = tripMoment();
+    const wet = weatherIsWet();
+    const fieldImage = wet ? 'Assets/Mani-Rainy-Day.png' : 'tttc-mani-west-bay-scene-transparent-1536x1024.png';
+    panel.innerHTML = `
+      <div class="tc-home-page">
+        <section class="tc-home-hero">
+          <div class="tc-home-hero-copy">
+            <p class="eyebrow">${safe(moment.label)}</p>
+            <h1>${timeGreeting()}, ${safe(traveler)}.</h1>
+            <p>${safe(moment.note)}</p>
+            ${moment.mode === 'during' ? `<span class="tc-day-badge">Day ${moment.number} of 5 · ${safe(moment.label)}</span>` : ''}
+          </div>
+          <img src="${fieldImage}" alt="Mani, the Traverse City trip guide" />
+        </section>
+
+        <section class="tc-home-grid tc-home-grid-primary">
+          <article class="tc-home-card tc-weather-card"><div class="tc-card-label">Weather right here</div>${weatherMarkup()}</article>
+          <article class="tc-home-card tc-location-card"><div class="tc-card-label">Where are we?</div>${locationMarkup()}</article>
+        </section>
+
+        <section class="tc-home-card tc-today-card">
+          <div class="tc-section-title"><div><p class="tc-card-label">Today</p><h2>${moment.mode === 'during' ? safe(moment.label) : 'The trip plan'}</h2></div><button type="button" data-tc-tab="planner">Open full plan →</button></div>
+          ${currentPlanMarkup()}
+        </section>
+
+        <section class="tc-home-grid">
+          <article class="tc-home-card tc-fact-card">
+            <div class="tc-card-label">Mani’s Michigan field note</div>
+            <p id="tcFunFact">${safe(FUN_FACTS[state.factIndex])}</p>
+            <div class="tc-card-button-row"><button type="button" data-new-fact>Give me another fact</button><button type="button" data-open-guide>Open the full field guide</button></div>
+          </article>
+          <article class="tc-home-card tc-road-card">
+            <div class="tc-card-label">Car survival kit</div>
+            <h3>Need something to do on the drive?</h3>
+            <p>License plates, road-story nonsense, Michigan 20 Questions and more.</p>
+            <button type="button" class="tc-primary-button" data-car-game>Pick a car game</button>
+          </article>
+        </section>
+
+        <section class="tc-home-card tc-house-card"><div class="tc-card-label">Home base</div>${houseMarkup()}</section>
+
+        <section class="tc-nearby-launches">
+          <button type="button" data-tc-tab="eat"><span>🍴</span><strong>Restaurants</strong><small>${state.nearest ? `Near ${safe(state.nearest.name)} first` : 'Filter dinner fast'}</small></button>
+          <button type="button" data-tc-tab="shop"><span>🛍️</span><strong>Shopping</strong><small>Grouped by neighborhood</small></button>
+          <button type="button" data-tc-tab="explore"><span>🧭</span><strong>Activities</strong><small>${wet ? 'Rainy-day picks are boosted' : 'Find the right adventure'}</small></button>
+        </section>
+      </div>`;
+    bindHomeActions();
+  }
+
+  function bindHomeActions() {
+    $('[data-new-fact]')?.addEventListener('click', () => {
+      let next = state.factIndex;
+      while (FUN_FACTS.length > 1 && next === state.factIndex) next = Math.floor(Math.random() * FUN_FACTS.length);
+      state.factIndex = next;
+      const target = $('#tcFunFact');
+      if (target) target.textContent = FUN_FACTS[next];
+    });
+    $('[data-open-guide]')?.addEventListener('click', () => typeof showTab === 'function' ? showTab('discover') : showPanel('discover'));
+    $('[data-car-game]')?.addEventListener('click', openCarGame);
+    $('[data-get-location]')?.addEventListener('click', requestLocation);
+    $('[data-house-address]')?.addEventListener('click', openHouseAddressDialog);
+    $('[data-open-house]')?.addEventListener('click', () => typeof showTab === 'function' ? showTab('house') : showPanel('house'));
+    $$('[data-panel="home"] [data-tc-tab]').forEach(button => button.addEventListener('click', () => showPanel(button.dataset.tcTab)));
+  }
+
+  function ensureDialogs() {
+    if (!$('#tcCarGameDialog')) {
+      const dialog = document.createElement('dialog');
+      dialog.id = 'tcCarGameDialog';
+      dialog.className = 'tc-overhaul-dialog';
+      dialog.innerHTML = '<button type="button" class="tc-dialog-close" data-close-dialog>×</button><div id="tcCarGameContent"></div>';
+      document.body.appendChild(dialog);
+      dialog.querySelector('[data-close-dialog]').addEventListener('click', () => dialog.close());
+    }
+    if (!$('#tcHouseAddressDialog')) {
+      const dialog = document.createElement('dialog');
+      dialog.id = 'tcHouseAddressDialog';
+      dialog.className = 'tc-overhaul-dialog';
+      dialog.innerHTML = `<button type="button" class="tc-dialog-close" data-close-dialog>×</button><p class="eyebrow dark">Private house address</p><h2>Keep the rental out of public GitHub.</h2><p>This address is stored only in this browser on this device. It is used to build the Google Maps directions button.</p><form method="dialog" id="tcHouseAddressForm"><label>Street address<input id="tcHouseAddressInput" autocomplete="street-address" placeholder="Paste the Traverse City rental address"></label><div class="tc-dialog-actions"><button type="submit" value="cancel">Cancel</button><button type="button" class="tc-primary-button" data-save-house-address>Save privately</button></div></form>`;
+      document.body.appendChild(dialog);
+      dialog.querySelector('[data-close-dialog]').addEventListener('click', () => dialog.close());
+      dialog.querySelector('[data-save-house-address]').addEventListener('click', () => {
+        const value = $('#tcHouseAddressInput')?.value.trim();
+        if (value) localStorage.setItem(HOUSE_ADDRESS_KEY, value);
+        else localStorage.removeItem(HOUSE_ADDRESS_KEY);
+        dialog.close();
+        renderHome();
+      });
+    }
+  }
+
+  function openCarGame() {
+    ensureDialogs();
+    const game = CAR_GAMES[Math.floor(Math.random() * CAR_GAMES.length)];
+    $('#tcCarGameContent').innerHTML = `<div class="tc-game-icon">${game.icon}</div><p class="eyebrow dark">Road game generator</p><h2>${safe(game.name)}</h2><p>${safe(game.text)}</p><button type="button" class="tc-primary-button" data-another-game>Give us another</button>`;
+    $('#tcCarGameContent [data-another-game]').addEventListener('click', openCarGame);
+    const dialog = $('#tcCarGameDialog');
+    if (!dialog.open) dialog.showModal();
+  }
+
+  function openHouseAddressDialog() {
+    ensureDialogs();
+    $('#tcHouseAddressInput').value = localStorage.getItem(HOUSE_ADDRESS_KEY) || '';
+    $('#tcHouseAddressDialog').showModal();
+  }
+
+  function decoratePlanWeather() {
+    const panel = $('[data-panel="planner"]');
+    if (!panel || !state.weather) return;
+    let note = $('#tcPlanWeatherNote');
+    if (!note) {
+      note = document.createElement('section');
+      note.id = 'tcPlanWeatherNote';
+      note.className = 'tc-plan-weather-note';
+      const hero = panel.querySelector('.plan-trip-hero') || panel.firstElementChild;
+      hero?.insertAdjacentElement('afterend', note);
+    }

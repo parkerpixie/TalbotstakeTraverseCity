@@ -1,0 +1,104 @@
+(() => {
+  const VERSION = '2026-08-20-v1';
+  const FAMILY = ['Parker', 'Blake', 'Porter', 'Mark', 'Nancy'];
+  const TRIP_DATES = {
+    '2026-08-23': { id: 'sun23', label: 'Arrival Day', number: 1, note: 'Driving day + check-in' },
+    '2026-08-24': { id: 'mon24', label: 'First Full Day', number: 2, note: 'Vacation mode: fully activated' },
+    '2026-08-25': { id: 'tue25', label: 'Adventure Day', number: 3, note: 'Build around the weather and one great anchor' },
+    '2026-08-26': { id: 'wed26', label: 'Choose Our Favorite', number: 4, note: 'Parker has a morning webinar block' },
+    '2026-08-27': { id: 'thu27', label: 'Departure Day', number: 5, note: 'One last good stop, then home' }
+  };
+  const TRIP_START = new Date('2026-08-23T00:00:00');
+  const TRIP_END = new Date('2026-08-27T23:59:59');
+  const FALLBACK_POINT = { lat: 44.7631, lon: -85.6206, name: 'Traverse City' };
+  const HOUSE_AREA_POINT = { lat: 44.86, lon: -85.68, name: 'West Bay house area' };
+  const MARK_NANCY_MIGRATION = 'tcMarkNancyDefault4MigrationV1';
+  const RATINGS_BACKUP = 'tcHeartRatingsBeforeMarkNancyDefaults';
+  const HOUSE_ADDRESS_KEY = 'tcHouseAddressPrivate';
+
+  const ANCHORS = [
+    { id: 'house', name: 'West Bay', lat: 44.86, lon: -85.68, keys: ['at the house', 'west bay'] },
+    { id: 'downtown', name: 'Downtown Traverse City', lat: 44.763, lon: -85.621, keys: ['downtown'] },
+    { id: 'commons', name: 'Grand Traverse Commons', lat: 44.742, lon: -85.641, keys: ['grand traverse commons', 'commons'] },
+    { id: 'west_tc', name: 'Traverse City West Side', lat: 44.765, lon: -85.66, keys: ['west side'] },
+    { id: 'south_tc', name: 'Traverse City South Side', lat: 44.715, lon: -85.62, keys: ['south side'] },
+    { id: 'east_tc', name: 'Traverse City East Side', lat: 44.755, lon: -85.56, keys: ['east side'] },
+    { id: 'boardman', name: 'Boardman River', lat: 44.715, lon: -85.58, keys: ['boardman'] },
+    { id: 'old_mission', name: 'Old Mission Peninsula', lat: 44.94, lon: -85.49, keys: ['old mission'] },
+    { id: 'suttons', name: 'Suttons Bay', lat: 44.976, lon: -85.651, keys: ['suttons bay'] },
+    { id: 'leland', name: 'Leland + Fishtown', lat: 45.023, lon: -85.760, keys: ['leland', 'fishtown'] },
+    { id: 'glen_arbor', name: 'Glen Arbor', lat: 44.897, lon: -85.986, keys: ['glen arbor'] },
+    { id: 'sleeping_bear', name: 'Sleeping Bear + Empire', lat: 44.87, lon: -86.05, keys: ['sleeping bear', 'empire'] },
+    { id: 'williamsburg', name: 'Williamsburg', lat: 44.78, lon: -85.40, keys: ['williamsburg', 'east of traverse'] },
+    { id: 'east_jordan', name: 'East Jordan', lat: 45.158, lon: -85.129, keys: ['east jordan'] }
+  ];
+
+  const IMAGE_BY_ID = {
+    arts: 'Art Tavern Building.jpeg',
+    'cherry-public': 'Cherry Republic - Cherry Public House and Great Hall of the Repbulic Glen Arbor.webp',
+    'rpm-records': 'RPM Records.jpeg',
+    'top-comics': 'Top Comics Outside.jpeg',
+    horizon: 'Horizon Books.jpeg',
+    'laughing-fish': 'Laughing Fish Gallery.jpeg',
+    'cherry-republic-tc': 'Cherry Republic Traverse City.jpg',
+    'cherry-republic-ga': 'Cherry Republic Glen Arbor.jpg',
+    fishtown: 'Fishtown - Leelanau Artisan - Local goods.webp',
+    'house-water': 'Traverse City - Pier and Beach access.webp',
+    'clinch-park': 'Clinch Park Beach at Sunset.jpg',
+    'commons-trails': 'Grand Traverse Commons - Scenic Walking Trail.webp',
+    'old-mission-drive': 'Cherry Orchard 1.jpeg',
+    'mission-point': 'Mission Point Lighthouse.webp',
+    'suttons-bay-walk': 'Suttons Bay Marina.jpeg',
+    'fishtown-walk': 'Fishtown - Shantys on Canal.jpg',
+    'empire-bluff': 'Sleeping Bear Dunes from the Lake View.jpeg',
+    'pyramid-point': 'Sleeping Bear Dunes Steep Dune Blue Water.webp',
+    'dune-climb': 'Sleeping Bear Dunes - Dune Climb.webp',
+    'pierce-stocking': 'Pierce Stocking Scenic Drive.jpg',
+    'rainy-commons': 'Grand Traverse Commons 1.jpg',
+    'commons-botanic': 'Grand Traverse Commons - Botanical Garden 1.jpg',
+    'commons-tunnel-tour': 'Grand Traverse Common Tunnel.webp',
+    'commons-arboretum': 'Grand Traverse Commons Historic image.webp',
+    'music-house': 'The Music House Museum Outside Image.jpeg',
+    moomers: 'Moomers Ice Cream Building.jpg',
+    'sara-hardy-market': 'Sara Hardy Farmers Market.jpeg',
+    'glen-haven-beach': 'Glen Haven Beach 1.jpeg',
+    'brys-secret-garden': 'Brys Estate - Secret Garden Lavender.webp',
+    'village-store': 'Grand Travese Commons - The Village Store.webp',
+    'raven-hill-discovery': 'Raven HIll Discovery Center.jpeg',
+    'boardman-river-nature-center': 'Boardman Nature River Center.jpeg',
+    'guntzviller-spirit-woods': 'GuntzViller Taxidery Museum.jpg'
+  };
+
+  const AREA_IMAGES = {
+    commons: 'Grand Traverse Common Shopping.jpg',
+    downtown: 'Downtown Traverse City From Above.jpeg',
+    traverse: 'Downtown Traverse City Shopping.jpeg',
+    suttons: 'Suttons Bay Marina.jpeg',
+    leland: 'Fishtown - Shantys on Canal 2.webp',
+    glen_arbor: 'Sleeping Bear Dunes Sunset Cloudy Sky.jpg',
+    sleeping_bear: 'Sleeping Bear Dunes Nataional Lakeshore Ariel Image.jpg',
+    old_mission: 'Cherry Orchard 1.jpeg',
+    house: 'Traverse City - Pier and Beach access.webp',
+    default: 'Downtown Traverse City From Above.jpeg'
+  };
+
+  const FUN_FACTS = [
+    'The last glacier left the Sleeping Bear area about 11,800 years ago, so the dunes and bluffs are geologically brand-new.',
+    'Sleeping Bear’s famous perched dunes are windblown sand sitting on top of much thicker glacial moraines.',
+    'Dry loose dune sand naturally settles near a 34-degree angle of repose. Add more sand and tiny avalanches begin.',
+    'Petoskey stones are fossil colonial coral from a warm shallow sea that covered this region roughly 350 million years ago.',
+    'Lake Michigan can look turquoise because pale shallow sand reflects light while water absorbs red wavelengths faster than blue and green.',
+    'The Grand Traverse region remains an Anishinaabe homeland. The Grand Traverse Band of Ottawa and Chippewa Indians is a present-day sovereign nation.',
+    'The Manitou Passage was a Great Lakes shipping shortcut, but storms, fog and shoals also made it a major shipwreck corridor.',
+    'Leland Blue is not a natural gemstone. It is slag from old iron-smelting operations that became a regional treasure after industrial history met Lake Michigan.',
+    'Northern Michigan cherry orchards benefit from lake-effect temperature moderation, which can delay spring warming and reduce some frost risk.',
+    'Moving dunes can bury forests. Later erosion exposes old trunks and soil layers, creating ghost forests that record earlier landscapes.',
+    'Quartz dominates beach sand because it survives weathering well, but you can also find dark magnetite and hornblende plus garnet and feldspar.',
+    'Long before modern roads, bays, rivers, shorelines and islands were transportation routes connecting Great Lakes communities.'
+  ];
+
+  const CAR_GAMES = [
+    { name: 'License Plate Hunt', icon: '🚙', text: 'Keep a family list of states and provinces. One point each, two points for a plate nobody else spotted first.' },
+    { name: 'Alphabet Signs', icon: '🔤', text: 'Find A through Z in order on road signs, storefronts and plates. Skip nothing. Q is where confidence goes to die.' },
+    { name: 'Michigan 20 Questions', icon: '🕵️', text: 'Pick something tied to the trip: a dune, cherry, lighthouse, fish tug, Petoskey stone or town. Everyone gets yes/no questions.' },
+    { name: 'One-Sentence Road Story', icon: '📚', text: 'One person starts a story with one sentence. Go around the car adding exactly one sentence each until it becomes beautifully unhinged.' },

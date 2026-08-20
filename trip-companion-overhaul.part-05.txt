@@ -1,0 +1,110 @@
+      (acc[group] ||= []).push(place);
+      return acc;
+    }, {});
+    const orderedGroups = Object.entries(groups).sort(([, a], [, b]) => smartSort(a[0], b[0]));
+    const grid = $('#shopGrid');
+    if (grid) grid.innerHTML = orderedGroups.length
+      ? orderedGroups.map(([group, places]) => `<section class="tc-neighborhood-group"><div class="tc-neighborhood-heading"><h3>${safe(group)}</h3><span>${places.length} stop${places.length === 1 ? '' : 's'}</span></div><div class="tc-card-grid">${places.map(placeCardMarkup).join('')}</div></section>`).join('')
+      : '<div class="tc-empty-state">No shops match those filters. This may be the universe telling us we do not need another tote bag.</div>';
+    const note = $('#shopResultsNote');
+    if (note) note.textContent = `${visible.length} shop${visible.length === 1 ? '' : 's'} showing. 2-heart-and-below shopping is intentionally hidden.`;
+  }
+
+  function renderActivityDirectory() {
+    if (typeof activities === 'undefined') return;
+    const search = ($('#activitySearch')?.value || '').toLowerCase().trim();
+    const location = $('#activityTown')?.value || 'all';
+    const type = $('#activityType')?.value || 'all';
+    const rating = $('#activityRating')?.value || 'all';
+    const pool = activities.map(place => ({ ...place, kind: 'activity', price: place.price || '' }));
+    const deep = pool.filter(isDeepBench);
+    const rainyBoost = weatherIsWet();
+    const visible = pool.filter(place => !isDeepBench(place))
+      .filter(place => location === 'all' || neighborhoodFor(place) === location)
+      .filter(place => type === 'all' || place.type === type)
+      .filter(place => ratingFilterMatch(place, rating))
+      .filter(place => `${place.name} ${place.summary} ${place.area} ${(place.tags || []).join(' ')}`.toLowerCase().includes(search))
+      .sort((a, b) => {
+        if (rainyBoost) {
+          const aRain = (a.tags || []).some(tag => ['indoor', 'rainy-day'].includes(tag)) ? 1 : 0;
+          const bRain = (b.tags || []).some(tag => ['indoor', 'rainy-day'].includes(tag)) ? 1 : 0;
+          if (aRain !== bRain) return bRain - aRain;
+        }
+        return smartSort(a, b);
+      });
+    const grid = $('#activityGrid');
+    if (grid) grid.innerHTML = visible.map(placeCardMarkup).join('') || '<div class="tc-empty-state">Nothing matches exactly. Try another activity type or location.</div>';
+    const note = $('#activityResultsNote');
+    if (note) note.textContent = `${visible.length} activit${visible.length === 1 ? 'y' : 'ies'} showing${rainyBoost ? ' · indoor/rainy-day options boosted for the weather' : state.nearest ? ` · nearest to ${state.nearest.name} first` : ''}.`;
+    renderDeepBench('activity', deep, search, location, rating);
+  }
+
+  function renderDeepBench(kind, deep, search, location, rating) {
+    const details = $(`#${kind}DeepBench`);
+    if (!details) return;
+    const filtered = deep
+      .filter(place => location === 'all' || neighborhoodFor(place) === location)
+      .filter(place => ratingFilterMatch(place, rating))
+      .filter(place => `${place.name} ${place.summary || ''} ${place.area || ''}`.toLowerCase().includes(search))
+      .sort(smartSort);
+    details.querySelector('[data-deep-count]').textContent = `(${deep.length})`;
+    details.querySelector('[data-deep-grid]').innerHTML = filtered.map(placeCardMarkup).join('') || '<p class="tc-empty-state">No emergency options match the current filters.</p>';
+  }
+
+  function bindDirectoryControls(kind) {
+    const panel = $(`[data-directory="${kind}"]`);
+    if (!panel) return;
+    panel.querySelectorAll('input, select').forEach(control => control.addEventListener('input', () => {
+      if (kind === 'restaurant') renderRestaurantDirectory();
+      if (kind === 'shop') renderShopDirectory();
+      if (kind === 'activity') renderActivityDirectory();
+    }));
+    panel.querySelector('[data-refresh-location]')?.addEventListener('click', requestLocation);
+  }
+
+  function renderAllPlaceViews() {
+    try { renderRestaurantDirectory(); } catch (error) { console.warn(error); }
+    try { renderShopDirectory(); } catch (error) { console.warn(error); }
+    try { renderActivityDirectory(); } catch (error) { console.warn(error); }
+    $$('[data-location-pill]').forEach(pill => { pill.textContent = `📍 ${state.nearest?.name || 'Use my location'}`; });
+  }
+
+  function currentPlanMarkup() {
+    const moment = tripMoment();
+    if (moment.mode !== 'during' || !moment.id || typeof plan === 'undefined') {
+      return '<p class="tc-home-muted">Your daily itinerary appears here once the trip starts.</p>';
+    }
+    const day = plan[moment.id];
+    if (!day) return '<p class="tc-home-muted">Nothing scheduled yet.</p>';
+    const slots = ['morning', 'afternoon', 'evening'];
+    const items = slots.flatMap(slot => (day[slot] || []).map(id => ({ slot, place: allPlaces.find(place => place.id === id) })).filter(item => item.place));
+    if (!items.length) return '<p class="tc-home-muted">Today is still gloriously open. Add an anchor in the Plan tab.</p>';
+    return `<div class="tc-today-list">${items.map(item => `<button type="button" data-tc-tab="planner"><span>${item.slot === 'morning' ? '☀️' : item.slot === 'afternoon' ? '🌤️' : '🌙'}</span><div><strong>${safe(item.place.name)}</strong><small>${safe(neighborhoodFor(item.place))}</small></div></button>`).join('')}</div>`;
+  }
+
+  function weatherMarkup() {
+    if (!state.weather) return `<div class="tc-weather-loading"><span>🌤️</span><div><strong>Loading weather</strong><small>Using Traverse City until location is available.</small></div></div>`;
+    const current = state.weather.current || {};
+    const daily = state.weather.daily || {};
+    const label = weatherLabel(current.weather_code);
+    const high = Math.round(Number(daily.temperature_2m_max?.[0]));
+    const low = Math.round(Number(daily.temperature_2m_min?.[0]));
+    const rain = Number(daily.precipitation_probability_max?.[0]) || 0;
+    const lat = state.coords?.lat || FALLBACK_POINT.lat;
+    const lon = state.coords?.lon || FALLBACK_POINT.lon;
+    return `<div class="tc-weather-main"><span class="tc-weather-icon">${label.icon}</span><div><div class="tc-weather-temp">${Math.round(Number(current.temperature_2m))}°</div><strong>${label.text}</strong><small>Feels ${Math.round(Number(current.apparent_temperature))}° · H ${high}° / L ${low}° · ${rain}% rain</small></div></div><a class="tc-inline-link" href="https://forecast.weather.gov/MapClick.php?lat=${lat}&lon=${lon}" target="_blank" rel="noopener">Open detailed forecast ↗</a>`;
+  }
+
+  function locationMarkup() {
+    if (!state.coords) return '<p class="tc-home-muted">Allow location to bump nearby Leland, Commons, Fishtown and other options toward the top.</p><button type="button" class="tc-secondary-button" data-get-location>Use my location</button>';
+    const near = state.nearest;
+    const onRoad = near?.miles > 45;
+    const route = state.route;
+    const routeText = route
+      ? `${Math.round(route.miles)} road mi · about ${Math.round(route.minutes / 5) * 5} min to the West Bay area`
+      : 'Calculating the road trip remainder…';
+    return `<div class="tc-location-status"><strong>${onRoad ? '🚙 On the road' : `📍 Near ${safe(near.name)}`}</strong><span>${safe(routeText)}</span><small>In-app drive estimate targets the West Bay area. Google Maps handles the exact house route.</small></div>`;
+  }
+
+  function houseMarkup() {
+    const address = localStorage.getItem(HOUSE_ADDRESS_KEY)?.trim();
