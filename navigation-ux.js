@@ -45,6 +45,7 @@
   loadScript('trip-companion-overhaul.js?v=20260820-1');
   loadScript('vacation-mode.js?v=20260821-1');
   loadScript('road-trip-games-map.js?v=20260821-1');
+  loadScript('road-trip-order-fix.js?v=20260821-1');
 
   const appShell = document.getElementById('appShell');
   const appHeader = document.querySelector('.app-header');
