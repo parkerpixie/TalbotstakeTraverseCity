@@ -24,9 +24,11 @@ jobs:
       - run: node --check trip-companion-overhaul.js
       - run: cat trip-companion-overhaul.part-*.txt > /tmp/trip-companion-overhaul.js && node --check /tmp/trip-companion-overhaul.js
       - run: node --check vacation-mode.js
+      - run: node --check road-trip-games-map.js
       - run: test -f plan-trip.css && test -f mani-guide.css
       - run: test -f trip-companion-overhaul.css
       - run: test -f vacation-mode.css
+      - run: test -f road-trip-games-map.css
       - run: test -f "Assets/Raven HIll Discovery Center.jpeg" && test -f "Assets/Boardman Nature River Center.jpeg"
       - run: test -f "Assets/Mani-Guide.png" && test -f "Assets/Mani-Thinking.png" && test -f "Assets/Mani-Nearby.png" && test -f "Assets/Mani-Warning.png" && test -f "Assets/Mani-Celebrate.png" && test -f "Assets/Mani-Rainy-Day.png" && test -f "Assets/Mani-Schedule.png"
       - run: test -f brand-overhaul.css && test -f brand-refresh.css && test -f brand-refresh.js && test -f index.html

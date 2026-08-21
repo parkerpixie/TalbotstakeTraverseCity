@@ -1,0 +1,367 @@
+/* Road-trip map + car-game breathing-room pass · 2026-08-21 */
+
+html[data-vacation-mode] .road-trip-map-block {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 28px !important;
+  padding: 28px !important;
+}
+
+html[data-vacation-mode] .road-trip-favorites-strip {
+  width: 100%;
+  padding: 0 !important;
+}
+
+html[data-vacation-mode] .road-trip-favorites-strip .vacay-favorites-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+html[data-vacation-mode] .road-trip-favorites-strip .vacay-favorite {
+  min-height: 92px;
+}
+
+html[data-vacation-mode] .road-trip-map-main {
+  width: 100%;
+  padding: 24px !important;
+  border: 1px solid rgba(18, 56, 71, .13);
+  border-radius: 24px;
+  background: #f8fbfa;
+}
+
+html[data-vacation-mode] .road-trip-map-main .vacay-card-head {
+  margin-bottom: 14px;
+}
+
+html[data-vacation-mode] .road-trip-map-main .vacay-map-frame {
+  min-height: 520px !important;
+  height: min(58vh, 620px) !important;
+  border-radius: 20px !important;
+  overflow: hidden;
+  box-shadow: 0 12px 34px rgba(18, 56, 71, .11);
+}
+
+html[data-vacation-mode] .road-trip-map-main .vacay-map-frame iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  border: 0;
+}
+
+.road-trip-map-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #e6f1ef;
+  color: #123847;
+}
+
+.road-trip-map-actions a {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #123847;
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.road-trip-map-actions span {
+  font-size: .9rem;
+  line-height: 1.4;
+  color: #365866;
+}
+
+.road-game-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+  align-items: center;
+  gap: 44px;
+  margin-top: 54px !important;
+  padding: 34px 36px !important;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(220, 239, 240, .85), transparent 34%),
+    #fffdfa;
+}
+
+.road-game-copy h2 {
+  margin: 4px 0 10px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.55rem);
+  line-height: 1.05;
+  color: #123847;
+}
+
+.road-game-copy > p:not(.vacay-label) {
+  margin: 0;
+  max-width: 700px;
+  color: #526c76;
+  line-height: 1.55;
+}
+
+.road-game-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(18, 56, 71, .12);
+  color: #526c76;
+}
+
+.road-game-summary strong {
+  color: #b80f1c;
+}
+
+.road-game-summary small {
+  color: #7b8e95;
+}
+
+.road-game-cta-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 210px;
+  padding: 24px;
+  border-radius: 24px;
+  background: #123847;
+  color: #fff;
+  text-align: center;
+}
+
+.road-game-dice {
+  display: block;
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.road-game-cta {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  min-height: 48px;
+  padding: 12px 20px;
+  background: #fff;
+  color: #123847;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .14);
+}
+
+.road-game-cta:hover {
+  transform: translateY(-1px);
+}
+
+.road-game-cta-wrap small {
+  max-width: 240px;
+  opacity: .76;
+  line-height: 1.4;
+}
+
+.road-game-deck-dialog {
+  width: min(680px, calc(100vw - 30px));
+  max-height: min(760px, calc(100vh - 30px));
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: #fffdfa;
+  color: #123847;
+  box-shadow: 0 30px 90px rgba(10, 35, 44, .28);
+}
+
+.road-game-deck-dialog::backdrop {
+  background: rgba(11, 29, 36, .62);
+  backdrop-filter: blur(4px);
+}
+
+#tcRoadGameDeckBody {
+  padding: 34px;
+}
+
+.road-game-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: #eef2ef;
+  color: #123847;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.road-game-icon {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 16px;
+  border-radius: 22px;
+  background: #e6f1ef;
+  font-size: 2.25rem;
+}
+
+#tcRoadGameDeckBody h2 {
+  margin: 4px 0 12px;
+  padding-right: 46px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.05;
+}
+
+.road-game-rules {
+  margin: 0 0 24px;
+  color: #526c76;
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+.road-game-player-picker {
+  padding: 18px;
+  border-radius: 18px;
+  background: #f5f1ea;
+}
+
+.road-game-player-picker > strong {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.road-game-player-picker > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.road-game-player-picker label {
+  cursor: pointer;
+}
+
+.road-game-player-picker input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.road-game-player-picker span {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  padding: 9px 13px;
+  border: 1px solid rgba(18, 56, 71, .16);
+  border-radius: 999px;
+  background: #fff;
+  font-weight: 750;
+}
+
+.road-game-player-picker input:checked + span {
+  background: #123847;
+  color: #fff;
+  border-color: #123847;
+}
+
+.road-game-error {
+  margin: 10px 0 0;
+  color: #b80f1c;
+  font-weight: 750;
+}
+
+.road-game-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.road-game-actions button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid rgba(18, 56, 71, .16);
+  border-radius: 999px;
+  background: #fff;
+  color: #123847;
+  font: inherit;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.road-game-actions .road-game-primary {
+  border-color: #123847;
+  background: #123847;
+  color: #fff;
+}
+
+@media (max-width: 860px) {
+  html[data-vacation-mode] .road-trip-favorites-strip .vacay-favorites-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .road-trip-map-actions,
+  .road-game-section {
+    grid-template-columns: 1fr;
+  }
+
+  .road-trip-map-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .road-game-section {
+    gap: 24px;
+    margin-top: 40px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  html[data-vacation-mode] .road-trip-map-block {
+    gap: 20px !important;
+    padding: 18px !important;
+  }
+
+  html[data-vacation-mode] .road-trip-favorites-strip .vacay-favorites-list {
+    grid-template-columns: 1fr;
+  }
+
+  html[data-vacation-mode] .road-trip-map-main {
+    padding: 16px !important;
+  }
+
+  html[data-vacation-mode] .road-trip-map-main .vacay-map-frame,
+  html[data-vacation-mode] .road-trip-map-main .vacay-map-frame iframe {
+    min-height: 430px !important;
+    height: 430px !important;
+  }
+
+  .road-game-section {
+    margin-top: 34px !important;
+    padding: 24px 20px !important;
+  }
+
+  #tcRoadGameDeckBody {
+    padding: 28px 20px 22px;
+  }
+
+  .road-game-actions {
+    flex-direction: column;
+  }
+
+  .road-game-actions button {
+    width: 100%;
+  }
+}
