@@ -25,6 +25,15 @@
   <link rel="stylesheet" href="favorite-attribution.css" />
   <link rel="stylesheet" href="family-rating-queue.css" />
   <link rel="stylesheet" href="room-selection-gallery.css" />
+  <style>
+    .countdown.countdown-hours-first { grid-template-columns: minmax(0, 1fr) minmax(0, .72fr); max-width: 430px; }
+    .countdown.countdown-hours-first > div:first-child strong { font-size: clamp(3rem, 10vw, 5.8rem); line-height: .85; }
+    .countdown.countdown-hours-first > div:first-child span { font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .countdown-start-note { margin: 10px 0 0; font-size: .78rem !important; opacity: .82; letter-spacing: .04em; }
+    @media (max-width: 640px) {
+      .countdown.countdown-hours-first { max-width: 100%; }
+    }
+  </style>
 </head>
 <body>
   <section class="landing" id="landing">
@@ -34,7 +43,8 @@
       <p class="eyebrow">August 23–27, 2026 · West Bay</p>
       <h1>The Talbots Take<br><em>Traverse City</em></h1>
       <p>One shared place to discover, save, and arrange the whole vacation without zigzagging across northern Michigan like a confused seagull.</p>
-      <div class="countdown"><div><strong id="days">0</strong><span>days</span></div><div><strong id="hours">0</strong><span>hours</span></div><div><strong id="minutes">0</strong><span>minutes</span></div></div>
+      <div class="countdown countdown-hours-first"><div><strong id="days">0</strong><span>hours to vacation</span></div><div><strong id="hours">0</strong><span>minutes</span></div><div hidden><strong id="minutes">0</strong><span>seconds</span></div></div>
+      <p class="countdown-start-note" id="vacationStartNote">Vacation officially starts Sunday at 6:00 AM Central.</p>
       <button class="primary" id="enterApp">Open Trip Planner</button>
     </div>
   </section>
@@ -140,6 +150,33 @@
   <script src="plan-trip.js"></script>
   <script src="guided-planner-decisions.js"></script>
   <script>
+    (() => {
+      const vacationStart = new Date('2026-08-23T06:00:00-05:00');
+      const hoursEl = document.getElementById('days');
+      const minutesEl = document.getElementById('hours');
+      const secondsEl = document.getElementById('minutes');
+      const noteEl = document.getElementById('vacationStartNote');
+      const renderVacationCountdown = () => {
+        const remaining = Math.max(0, vacationStart.getTime() - Date.now());
+        if (remaining <= 0) {
+          if (hoursEl) hoursEl.textContent = '0';
+          if (minutesEl) minutesEl.textContent = '0';
+          if (secondsEl) secondsEl.textContent = '0';
+          if (noteEl) noteEl.textContent = 'VACATION MODE IS OFFICIALLY ON. 🧳✨';
+          return;
+        }
+        const totalHours = Math.floor(remaining / 3600000);
+        const minutes = Math.floor((remaining % 3600000) / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
+        if (hoursEl) hoursEl.textContent = String(totalHours);
+        if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+        if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+        if (noteEl) noteEl.textContent = 'Vacation officially starts Sunday at 6:00 AM Central.';
+      };
+      renderVacationCountdown();
+      setInterval(renderVacationCountdown, 1000);
+    })();
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./service-worker.js?v=20260821-1')
