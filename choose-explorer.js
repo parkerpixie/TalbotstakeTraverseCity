@@ -7,6 +7,7 @@
     { name: 'Nancy', icon: '🍒', note: 'Shops, scenery and memorable meals' }
   ];
 
+  const VACATION_START = new Date('2026-08-23T06:00:00-05:00');
   const landing = document.getElementById('landing');
   const appShell = document.getElementById('appShell');
   const profilePill = document.getElementById('profilePill');
@@ -33,11 +34,12 @@
       <p class="eyebrow">August 23–27, 2026 · Traverse City & Sleeping Bear Dunes</p>
       <h1>Talbot's Take<br><em>Traverse City</em></h1>
       <p class="explorer-opening-copy">A family field guide for discovering places, sharing priorities, and building an adventure that sounds like all five of you.</p>
-      <div class="explorer-countdown" aria-label="Trip countdown">
-        <div><strong id="days">0</strong><span>days</span></div>
-        <div><strong id="hours">0</strong><span>hours</span></div>
-        <div><strong id="minutes">0</strong><span>minutes</span></div>
+      <div class="explorer-countdown" aria-label="Time until vacation" style="grid-template-columns:repeat(2,minmax(96px,1fr));max-width:360px;width:100%;">
+        <div><strong id="days">0</strong><span>hours</span></div>
+        <div><strong id="hours">00</strong><span>minutes</span></div>
+        <div hidden><strong id="minutes">00</strong><span>seconds</span></div>
       </div>
+      <p class="countdown-start-note" id="vacationStartNote">Vacation officially starts Sunday at 6:00 AM Central.</p>
       <div class="explorer-divider" aria-hidden="true"></div>
       <p class="explorer-kicker">Meet Captain Manitou, Mani for short</p>
       <h2>Choose Your Adventurer</h2>
@@ -126,15 +128,30 @@
   if (explorers.some(person => person.name === saved)) updateProfileLabel(saved);
 
   const updateCountdown = () => {
-    const diff = Math.max(0, new Date('2026-08-23T16:00:00') - new Date());
-    const days = landing.querySelector('#days');
-    const hours = landing.querySelector('#hours');
-    const minutes = landing.querySelector('#minutes');
-    if (days) days.textContent = Math.floor(diff / 86400000);
-    if (hours) hours.textContent = Math.floor((diff % 86400000) / 3600000);
-    if (minutes) minutes.textContent = Math.floor((diff % 3600000) / 60000);
+    const remaining = Math.max(0, VACATION_START.getTime() - Date.now());
+    const hoursEl = landing.querySelector('#days');
+    const minutesEl = landing.querySelector('#hours');
+    const secondsEl = landing.querySelector('#minutes');
+    const noteEl = landing.querySelector('#vacationStartNote');
+
+    if (remaining <= 0) {
+      if (hoursEl) hoursEl.textContent = '0';
+      if (minutesEl) minutesEl.textContent = '00';
+      if (secondsEl) secondsEl.textContent = '00';
+      if (noteEl) noteEl.textContent = 'VACATION MODE IS OFFICIALLY ON. 🧳✨';
+      return;
+    }
+
+    const totalHours = Math.floor(remaining / 3600000);
+    const minutes = Math.floor((remaining % 3600000) / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
+
+    if (hoursEl) hoursEl.textContent = String(totalHours);
+    if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+    if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+    if (noteEl) noteEl.textContent = 'Vacation officially starts Sunday at 6:00 AM Central.';
   };
 
   updateCountdown();
-  setInterval(updateCountdown, 60000);
+  setInterval(updateCountdown, 1000);
 })();
