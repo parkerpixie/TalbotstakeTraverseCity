@@ -8,6 +8,12 @@
   ];
 
   const VACATION_START = new Date('2026-08-23T06:00:00-05:00');
+  const HOUSE_ADDRESS = '7900 S W Bay Shore Dr, Traverse City, MI 49684';
+  const ROUTE_ORIGINS = {
+    madison: { label: 'Madison', address: '7133 Gladstone Drive, Madison, WI' },
+    cumberland: { label: 'Cumberland', address: '1500 Elm Street, Cumberland, WI' }
+  };
+
   const landing = document.getElementById('landing');
   const appShell = document.getElementById('appShell');
   const profilePill = document.getElementById('profilePill');
@@ -126,6 +132,76 @@
 
   const saved = localStorage.getItem('tcTraveler');
   if (explorers.some(person => person.name === saved)) updateProfileLabel(saved);
+
+  function routeUrl(origin) {
+    return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(HOUSE_ADDRESS)}&travelmode=driving`;
+  }
+
+  function patchVacationHome() {
+    const home = document.querySelector('[data-panel="home"] .tc-vacation-home');
+    if (!home) return;
+
+    const routeCard = home.querySelector('.vacay-route-card');
+    if (routeCard) {
+      const activeOriginButton = routeCard.querySelector('[data-vacay-origin].active');
+      const originId = activeOriginButton?.dataset.vacayOrigin || 'madison';
+      const origin = ROUTE_ORIGINS[originId] || ROUTE_ORIGINS.madison;
+      const routeCopy = routeCard.querySelector('.vacay-route-copy');
+      if (routeCopy) {
+        routeCopy.innerHTML = `<span>Starting at</span><strong id="vacayOriginAddress">${origin.address}</strong><span>Driving to</span><strong>${HOUSE_ADDRESS}</strong>`;
+      }
+      const primary = routeCard.querySelector('#vacayDirectionsLink');
+      if (primary) primary.href = routeUrl(origin.address);
+      routeCard.querySelector('[data-vacay-house-address]')?.remove();
+      routeCard.querySelector('.vacay-note')?.remove();
+    }
+
+    const mapSide = home.querySelector('.vacay-map-side');
+    if (mapSide && !mapSide.querySelector('#familyHouseInfo')) {
+      const info = document.createElement('section');
+      info.id = 'familyHouseInfo';
+      info.className = 'vacay-card';
+      info.style.marginTop = '18px';
+      info.innerHTML = `
+        <p class="vacay-label">Home base</p>
+        <h2>Sunrise Shores Retreat</h2>
+        <p style="font-weight:700;margin:.35rem 0 1rem;">${HOUSE_ADDRESS}</p>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px;">
+          <div><span class="vacay-label">Check-in</span><strong style="display:block;">Aug 23 · 4:00 PM</strong></div>
+          <div><span class="vacay-label">Check-out</span><strong style="display:block;">Aug 27 · 10:00 AM</strong></div>
+        </div>
+        <div class="vacay-actions" style="display:flex;flex-wrap:wrap;gap:10px;">
+          <a href="${routeUrl(ROUTE_ORIGINS.madison.address)}" target="_blank" rel="noopener">Route from Madison ↗</a>
+          <a href="${routeUrl(ROUTE_ORIGINS.cumberland.address)}" target="_blank" rel="noopener">Route from Cumberland ↗</a>
+        </div>`;
+      mapSide.appendChild(info);
+    }
+
+    const lowerHome = [...home.querySelectorAll('.vacay-lower-grid .vacay-card')].find(card => /Home base/i.test(card.textContent || ''));
+    if (lowerHome) {
+      const paragraph = lowerHome.querySelector('p:not(.vacay-label)');
+      if (paragraph) paragraph.textContent = HOUSE_ADDRESS;
+      const link = lowerHome.querySelector('a');
+      if (link) link.href = routeUrl((ROUTE_ORIGINS[localStorage.getItem('tcVacationOriginV1')] || ROUTE_ORIGINS.madison).address);
+    }
+  }
+
+  const homePanel = document.querySelector('[data-panel="home"]');
+  if (homePanel) {
+    patchVacationHome();
+    const homeObserver = new MutationObserver(() => requestAnimationFrame(patchVacationHome));
+    homeObserver.observe(homePanel, { childList: true, subtree: true });
+  } else {
+    const waitForHome = new MutationObserver(() => {
+      const panel = document.querySelector('[data-panel="home"]');
+      if (!panel) return;
+      waitForHome.disconnect();
+      patchVacationHome();
+      const homeObserver = new MutationObserver(() => requestAnimationFrame(patchVacationHome));
+      homeObserver.observe(panel, { childList: true, subtree: true });
+    });
+    waitForHome.observe(document.body, { childList: true, subtree: true });
+  }
 
   const updateCountdown = () => {
     const remaining = Math.max(0, VACATION_START.getTime() - Date.now());
