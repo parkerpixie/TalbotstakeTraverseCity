@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Talbot's Take TC" />
   <title>Talbot's Take Traverse City</title>
-  <link rel="manifest" href="manifest.webmanifest?v=20260803-3" />
+  <link rel="manifest" href="manifest.webmanifest?v=20260821-1" />
   <link rel="icon" type="image/png" sizes="1024x1024" href="07-tttc-app-icon-full-bleed-1024x1024.png?v=20260803-3" />
   <link rel="shortcut icon" type="image/png" href="07-tttc-app-icon-full-bleed-1024x1024.png?v=20260803-3" />
   <link rel="apple-touch-icon" sizes="1024x1024" href="07-tttc-app-icon-full-bleed-1024x1024.png?v=20260803-3" />
@@ -139,5 +139,13 @@
   <script src="family-rating-queue.js"></script>
   <script src="plan-trip.js"></script>
   <script src="guided-planner-decisions.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js?v=20260821-1')
+          .catch(error => console.error('Service worker registration failed:', error));
+      });
+    }
+  </script>
 </body>
 </html>
